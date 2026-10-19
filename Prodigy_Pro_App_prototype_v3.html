@@ -408,7 +408,8 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover{transform:translateY(-2p
 .map{border:0;border-radius:24px}
 .map button.lk{border-radius:10px}
 
-/* ---------- interactive USP walkthrough ---------- */
+/* ---------- walkthrough ---------- */
+.wk-art{margin:0 0 28px;border-radius:28px;overflow:hidden;line-height:0;box-shadow:var(--shadow)}
 .wk-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;height:34px;border-radius:999px;font-size:12px;font-weight:600;color:var(--mute);background:var(--tint);transition:all .2s}
 .wk-tab svg{width:15px;height:15px}
 .wk-tab.on{background:var(--brand);color:#fff;box-shadow:0 4px 12px rgba(0,14,124,.25)}
@@ -915,74 +916,20 @@ SCR.splash=()=>({sbar:'white',cls:'splash',html:`<div class="body" style="displa
 /* ---------- Interactive USP walkthrough: AI first, then advice, then family ---------- */
 function countUp(el,to,f=v=>fmt(v),ms=900){if(!el)return;const from=+(el.dataset.v||0);el.dataset.v=to;const t0=performance.now();
  const step=t=>{if(!el.isConnected)return;const k=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-k,3);el.textContent=f(from+(to-from)*e);if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
-const WK={run:0,risk:1,cmp:0,fam:[]};
-const WK_RISK=[['Safe',8,[30,60,10]],['Balanced',10.5,[55,35,10]],['Growth',12.5,[75,15,10]]];
-const WK_FAM=[['Priya','Spouse','#08A35B',410000,'Retirement'],['Kabir','Son, minor','#F29A1F',120000,'Education'],['Sunita','Mother','#C27803',260000,'Health cover']];
-
-function wkAI(){return `<div class="wk-card" id="aiDemo">
-  <div class="row sb"><div class="row" style="gap:8px"><div class="av"><img src="${LOGO_MARK}" alt=""></div><b>Prodigy AI</b></div><span class="tag b" id="aiState">Demo</span></div>
-  <div class="ailine mt12" id="aiLine" style="opacity:0;border-radius:9px"></div>
-  <div id="aiBody" class="mt12">
-   ${[['HDFC Bank','Savings ••4521'],['State Bank of India','Savings ••9012']].map((b,k)=>`<div class="bank-row" id="bk${k}"><span class="pill-ic" style="background:var(--brand-soft);color:var(--brand-fg)">${ic('bank')}</span><div class="grow"><div class="t-s t-b">${b[0]}</div><div class="t-xs mute">${b[1]}</div></div><span class="bk-st t-xs mute">Not linked</span></div>`).join('')}
-   <button class="btn block mt12 wk-pulse" id="aiGo">${ic('sparkle')}See Prodigy AI in action</button>
-   <div class="t-xs mute mt8" style="text-align:center">Sample data. Real linking uses RBI-regulated Account Aggregators.</div>
-  </div></div>`}
-async function runAI(el){const id=++WK.run,ok=()=>id===WK.run&&el.isConnected,body=$('#aiBody',el);
- $('#aiGo',el).remove();$('.t-xs.mute.mt8',body)?.remove();$('#aiState',el).textContent='Reading securely…';$('#aiLine',el).style.opacity=1;
- for(const k of [0,1]){await sleep(550);if(!ok())return;const r=$('#bk'+k,el);r.classList.add('on');r.querySelector('.bk-st').innerHTML=`<span class="up row" style="gap:3px">${ic('check')}Linked</span>`}
- await sleep(450);if(!ok())return;
- const ins=[['wallet','Salary of ₹68,000 lands on the 1st'],['trend','You spend about ₹47,500 a month'],['zap','₹1.2 L is sitting idle, earning almost nothing']];
- for(const [i,t] of ins){const d=document.createElement('div');d.className='ins';d.innerHTML=`<span class="typing" style="padding:4px 0"><i></i><i></i><i></i></span>`;body.appendChild(d);
-  await sleep(500);if(!ok())return;d.innerHTML=`<span class="ins-ic">${ic(i)}</span><span class="t-s">${t}</span>`;d.classList.add('in')}
- await sleep(400);if(!ok())return;$('#aiLine',el).style.opacity=0;$('#aiState',el).textContent='Plan ready';$('#aiState',el).className='tag g';
- $$('.bank-row',body).forEach(x=>x.remove());const lk=document.createElement('div');lk.className='bank-row on mini';lk.innerHTML=`<span class="pill-ic" style="background:var(--surface);color:var(--green)">${ic('check')}</span><span class="t-s t-b grow">2 bank accounts linked</span><span class="t-xs mute">12 months read</span>`;body.prepend(lk);$$('.ins',body).forEach(x=>x.classList.add('mini'));
- const p=document.createElement('div');p.className='plan-pop';p.innerHTML=`<div class="t-xs mute">Your starter plan · ₹10,000 a month</div>
-  <div class="row mt8" style="gap:6px" id="rk">${WK_RISK.map((r,k)=>`<button class="chip ${k===WK.risk?'on':''}" style="height:30px;font-size:12.5px" data-k="${k}">${r[0]}</button>`).join('')}</div>
-  <div class="stack mt12" id="alc">${['var(--brand)','var(--green)','var(--amber)'].map(c=>`<i style="background:${c};transition:flex-basis .5s cubic-bezier(.2,.8,.2,1)"></i>`).join('')}</div>
-  <div class="row t-xs mute mt8" style="gap:12px" id="alcL"></div>
-  <div class="row sb mt12" style="align-items:flex-end"><div><div class="t-xs mute">Could grow to, in 10 years</div><div class="t-l num br" id="prj">₹0</div></div><button class="btn xs soft" id="aiRe">${ic('refresh')}Replay</button></div>`;
- body.appendChild(p);
- const upd=()=>{const r=WK_RISK[WK.risk];$$('#alc i',p).forEach((x,k)=>x.style.flexBasis=r[2][k]+'%');$('#alcL',p).innerHTML=['Equity','Debt','Gold'].map((l,k)=>`<span class="row" style="gap:4px"><span class="dot" style="background:${['var(--brand)','var(--green)','var(--amber)'][k]}"></span>${l} ${r[2][k]}%</span>`).join('');
-  countUp($('#prj',p),fv(10000,10,r[1]).v,v=>inrS(Math.round(v)));$$('#rk .chip',p).forEach((c,k)=>c.classList.toggle('on',k===WK.risk))};
- $$('#rk .chip',p).forEach(c=>c.onclick=()=>{WK.risk=+c.dataset.k;upd()});$('#aiRe',p).onclick=()=>{rerender()};
- requestAnimationFrame(upd)}
-
-function wkAdv(){return `<div class="wk-card">
-  <div class="grid3">${[['1000','₹','+ Cr','Assets under advice'],['22','','+ yrs','In Indian markets']].map(s=>`<div class="wk-stat"><div class="t-m num"><span>${s[1]}</span><span class="cu" data-to="${s[0]}">0</span><span>${s[2]}</span></div><div class="t-xs mute">${s[3]}</div></div>`).join('')}<div class="wk-stat"><div class="t-m br">SEBI</div><div class="t-xs mute">Registered adviser</div></div></div>
-  <div class="seg mt12" id="cmpSeg"><button data-k="0">Typical app</button><button data-k="1">Prodigy Pro ${ic('sparkle')}</button></div>
-  <div id="cmpL" class="mt12"></div>
-  </div>`}
-const CMP=[['Picks funds by last year’s returns','Advice from a SEBI Registered Investment Adviser'],['Same fund list for everyone','A plan matched to your income, spends and risk'],['You work out your goals alone','Every rupee linked to a goal you can track'],['Chatbot FAQs when you’re stuck','Real experts behind Prodigy AI']];
-function initAdv(el){$$('.cu',el).forEach(c=>countUp(c,+c.dataset.to,v=>fmt(Math.round(v)),1100));
- const draw=()=>{const k=WK.cmp;$$('#cmpSeg button',el).forEach(b=>b.classList.toggle('on',+b.dataset.k===k));
-  $('#cmpL',el).innerHTML=CMP.map((r,i)=>`<div class="cmp-row ${k?'good':'bad'}" style="animation-delay:${i*70}ms"><span class="cmp-ic">${ic(k?'check':'close')}</span><span class="t-s">${r[k]}</span></div>`).join('')};
- $$('#cmpSeg button',el).forEach(b=>b.onclick=()=>{WK.cmp=+b.dataset.k;draw()});draw();
- if(!WK.cmpSeen){WK.cmpSeen=1;const id=WK.run;setTimeout(()=>{if(id===WK.run&&el.isConnected&&WK.cmp===0){WK.cmp=1;draw()}},1600)}}
-
-function wkFam(){const tot=860000+WK.fam.reduce((a,k)=>a+WK_FAM[k][3],0);return `<div class="wk-card">
-  <div class="row sb"><div><div class="t-xs mute">The Mehta Family</div><div class="t-l num" id="famT" data-v="${tot}">${inrS(tot)}</div></div><div class="row" id="famAv">${[['A','#3D4FD8'],...WK.fam.map(k=>[WK_FAM[k][0][0],WK_FAM[k][2]])].map((a,i)=>`<span class="fam-av" style="background:${a[1]};margin-left:${i?-10:0}px">${a[0]}</span>`).join('')}</div></div>
-  <div class="mt12" id="famL">${famRow('Aarav','Self','#3D4FD8',860000,'House',62)}${WK.fam.map(k=>famRow(...WK_FAM[k],[34,48,71][k])).join('')}</div>
-  <div id="famAdd" class="row mt12" style="gap:8px;flex-wrap:wrap">${WK_FAM.map((m,k)=>WK.fam.includes(k)?'':`<button class="chip add-chip" data-k="${k}">${ic('plus')}${m[0]} · ${m[1]}</button>`).join('')}</div>
-  ${WK.fam.length===3?`<div class="fam-done mt12">${ic('heart')}Everyone’s covered, from one login</div>`:`<div class="t-xs mute mt8">Tap to add a family member</div>`}</div>`}
-function famRow(n,r,c,v,g,pc){return `<div class="fam-row"><span class="amc sm" style="background:${c};border-radius:50%">${n[0]}</span><div class="grow"><div class="t-s t-b">${n} <span class="mute t-xs" style="font-weight:400">${r}</span></div><div class="row t-xs mute" style="gap:6px"><span class="bar" style="flex:1;height:5px;max-width:90px"><i style="width:${pc}%"></i></span>${g} ${pc}%</div></div><b class="num t-s">${inrS(v)}</b></div>`}
-function initFam(el){$$('.add-chip',el).forEach(b=>b.onclick=()=>{const k=+b.dataset.k,prev=+($('#famT',el).dataset.v);WK.fam.push(k);
-  const st=$('#wkStage',el);st.innerHTML=wkFam();const t=$('#famT',st),to=+t.dataset.v;t.dataset.v=prev;t.textContent=inrS(prev);countUp(t,to,v=>inrS(Math.round(v)),700);
-  const rows=$$('.fam-row',st);rows[rows.length-1].classList.add('pop');initFam(el)})}
-
 const WALK=[
- {eb:'Prodigy AI',ic:'sparkle',t:'Your plan, built from your real money',d:'Link your bank or mutual funds with consent. Prodigy AI reads your income and spending, then builds a plan around your goals in under a minute.',v:wkAI,init:el=>{$('#aiGo',el).onclick=()=>runAI(el)}},
- {eb:'Expert advice',ic:'shield',t:'Real advice, not just a fund list',d:'BFC Capital has guided families through every market cycle for 22+ years. Prodigy AI is backed by those same SEBI-registered advisers.',v:wkAdv,init:initAdv},
- {eb:'Whole family',ic:'users',t:'One login for the whole family',d:'Invest and track goals for your spouse, parents and children, all in one place, with one family view.',v:wkFam,init:initFam}
+ {art:'sip',t:'Your plan, built from your real money',d:'Prodigy AI builds a plan around your goals in under a minute.',pts:[['sparkle','Personal plan from your income and spending'],['target','Goals with a clear monthly amount']]},
+ {art:'adv',t:'Real advice, not just a fund list',d:'Backed by BFC Capital’s SEBI-registered advisers, guiding families for 22+ years.',pts:[['shield','Funds picked for your risk profile'],['heartbeat','Regular portfolio health checks']]},
+ {art:'share',t:'One login for the whole family',d:'Invest and track goals for your spouse, parents and children in one place.',pts:[['users','One family view of all investments'],['lock','Secure, consent-based data sharing']]}
 ];
-SCR.walk=(p)=>{const i=p.i||0,w=WALK[i];WK.run++;return{sbar:'surface',html:`<div class="body pad" style="display:flex;flex-direction:column;background:var(--bg)" id="wk">
+SCR.walk=(p)=>{const i=p.i||0,w=WALK[i],last=i===WALK.length-1;return{sbar:'surface',html:`<div class="body pad" style="display:flex;flex-direction:column;background:var(--bg)" id="wk">
  <div class="row sb"><img src="${LOGO_MARK}" alt="Prodigy Pro" style="width:34px"><button class="btn ghost sm" onclick="go('login',{},{replace:true})">Skip</button></div>
- <div class="row mt12" style="gap:6px">${WALK.map((x,k)=>`<button class="wk-tab ${k===i?'on':''}" onclick="go('walk',{i:${k}},{replace:true})">${ic(x.ic)}<span>${x.eb}</span></button>`).join('')}</div>
- <div style="flex:1;display:flex;align-items:center;padding:10px 0" id="wkStage">${w.v()}</div>
- <div class="t-l wk-title" style="font-size:24px">${w.t}</div><p class="ink2 t-s mt4" style="line-height:1.5">${w.d}</p>
- <div class="row sb mt12"><div class="row" style="gap:6px">${WALK.map((_,k)=>`<i style="width:${k===i?22:7}px;height:7px;border-radius:9px;background:${k===i?'var(--brand)':'var(--line)'};transition:width .2s"></i>`).join('')}</div>
- <div class="row" style="gap:8px">${i>0?`<button class="btn soft sm" onclick="go('walk',{i:${i-1}},{replace:true})" aria-label="Previous">${ic('back')}</button>`:''}<button class="btn" onclick="${i<2?`go('walk',{i:${i+1}},{replace:true})`:`go('login',{},{replace:true})`}">${i<2?'Next':'Get started'}</button></div></div>
- <div class="t-xs mute mt8" style="text-align:center">SEBI Registered Investment Adviser, INA000021669</div></div>`,
- after:el=>{w.init(el);let x0=null;const b=$('#wk',el);b.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});b.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(dx<-50&&i<2)go('walk',{i:i+1},{replace:true});if(dx>50&&i>0)go('walk',{i:i-1},{replace:true});x0=null})}}};
+ <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:12px 0 20px"><div class="wk-art">${art(w.art,230)}</div>
+ <div class="t-l" style="font-size:26px">${w.t}</div><p class="ink2 mt8" style="line-height:1.5">${w.d}</p>
+ <div class="col gap12 mt12">${w.pts.map(x=>`<div class="row t-s" style="gap:12px"><span class="pill-ic" style="background:var(--brand-soft);color:var(--brand-fg)">${ic(x[0])}</span><span class="ink2">${x[1]}</span></div>`).join('')}</div></div>
+ <div class="row sb"><div class="row" style="gap:6px">${WALK.map((_,k)=>`<i style="width:${k===i?22:7}px;height:7px;border-radius:9px;background:${k===i?'var(--brand)':'var(--line)'}"></i>`).join('')}</div>
+ <button class="btn" onclick="${last?`go('login',{},{replace:true})`:`go('walk',{i:${i+1}},{replace:true})`}">${last?'Get started':'Next'}</button></div>
+ <div class="t-xs mute mt12" style="text-align:center">SEBI Registered Investment Adviser, INA000021669</div></div>`,
+ after:el=>{let x0=null;const b=$('#wk',el);b.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});b.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(dx<-50&&!last)go('walk',{i:i+1},{replace:true});if(dx>50&&i>0)go('walk',{i:i-1},{replace:true});x0=null})}}};
 
 /* ============ login + otp ============ */
 SCR.login=()=>({sbar:'surface',html:`<div class="body pad" style="background:var(--surface)">
