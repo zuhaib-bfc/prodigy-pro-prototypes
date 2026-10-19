@@ -116,7 +116,7 @@ p{margin:0 0 8px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 6px}
-.hs{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:2px 20px 8px;scroll-snap-type:x mandatory}
+.hs{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:2px 20px 8px;scroll-snap-type:x mandatory;scroll-padding:0 20px}
 .hs::-webkit-scrollbar{display:none}
 .hs>*{flex:none;scroll-snap-align:start}
 
@@ -503,6 +503,28 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover{transform:translateY(-2p
 .gbar{height:5px;border-radius:99px;background:var(--tint);overflow:hidden;max-width:160px}
 .gbar i{display:block;height:100%;border-radius:99px;animation:growW .9s cubic-bezier(.2,.8,.2,1) both .2s}
 .li.hold{align-items:center}
+.wl-sum{width:100%;text-align:left;display:block}
+.wl-t{flex:none;width:148px;border-radius:20px;padding:14px;background:var(--surface);box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;gap:2px;transition:transform .15s,box-shadow .15s}
+.wl-t:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.wl-t .pill-ic{width:38px;height:38px;border-radius:12px;margin-bottom:8px}
+.wl-t .pill-ic svg{width:20px;height:20px}
+.wl-t.add{width:118px;align-items:center;justify-content:center;gap:6px;color:var(--brand-fg);background:transparent;box-shadow:none;border:2px dashed color-mix(in srgb,var(--brand-fg) 35%,transparent)}
+.ord-eta{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;background:var(--amber-soft);color:var(--amber)}
+.ord-eta .t-s{color:var(--ink)}
+.otl{display:flex;flex-direction:column}
+.otl-i{display:flex;gap:12px;position:relative;padding-bottom:18px}
+.otl-i:last-child{padding-bottom:0}
+.otl-i::before{content:"";position:absolute;left:11px;top:24px;bottom:0;width:2px;background:var(--line)}
+.otl-i:last-child::before{display:none}
+.otl-i.done::before{background:var(--green)}
+.otl-d{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;border:2px solid var(--line);background:var(--surface);color:#fff}
+.otl-d svg{width:14px;height:14px;stroke-width:3}
+.otl-i.done .otl-d{background:var(--green);border-color:var(--green)}
+.otl-i.now .otl-d{border-color:var(--brand-fg);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand-fg) 18%,transparent)}
+.otl-i.now .otl-d::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--brand-fg);animation:dotp 1.6s ease-in-out infinite}
+.otl-i:not(.done):not(.now) b{color:var(--mute);font-weight:500}
+.sipmore{width:30px;height:30px;border-radius:50%;margin-left:auto;background:var(--brand-soft);color:var(--brand-fg)}
+.sipmore svg{width:18px;height:18px}
 .osteps{display:flex;gap:4px}
 .osteps span{flex:1;display:flex;flex-direction:column;gap:4px;font-size:10.5px;color:var(--mute)}
 .osteps i{height:4px;border-radius:9px;background:var(--tint)}
@@ -836,7 +858,7 @@ function seedGoals(){S.goals=S.journey==='existing'?[
  {id:'g3',n:'Europe trip',t:'trip',target:400000,yrs:2,cur:121000,sip:6000,linked:['earb']}
 ]:[];
  S.sips=S.journey==='existing'?EXIST.filter(h=>h.sip).map((h,i)=>({id:'s'+i,fid:h.fid,amt:h.sip,date:[5,10,15,5,20][i]||10,st:'active',next:`${[5,10,15,5,20][i]||10} Nov 2026`,inst:[38,32,28,30,48][i]||12})):[];
- S.orders=S.journey==='existing'?[{id:'ORD-88123',fid:'nlc',type:'SIP',amt:5000,dt:'05 Oct 2026',st:'Allotted'},{id:'ORD-88004',fid:'nsc',type:'SIP',amt:5000,dt:'15 Sep 2026',st:'Allotted'},{id:'ORD-87731',fid:'sgold',type:'Lumpsum',amt:10000,dt:'02 Sep 2026',st:'Allotted'},{id:'ORD-87590',fid:'aelss',type:'Redemption',amt:12000,dt:'21 Aug 2026',st:'Credited'}]:[];
+ S.orders=S.journey==='existing'?[{id:'ORD-88231',fid:'hfc',type:'Lumpsum',amt:15000,dt:'19 Oct 2026',st:'Payment received'},{id:'ORD-88123',fid:'nlc',type:'SIP',amt:5000,dt:'05 Oct 2026',st:'Allotted'},{id:'ORD-88004',fid:'nsc',type:'SIP',amt:5000,dt:'15 Sep 2026',st:'Allotted'},{id:'ORD-87731',fid:'sgold',type:'Lumpsum',amt:10000,dt:'02 Sep 2026',st:'Allotted'},{id:'ORD-87590',fid:'aelss',type:'Redemption',amt:12000,dt:'21 Aug 2026',st:'Credited'}]:[];
  S.pending=[];S.linked={DEPOSIT:S.journey==='new',MUTUAL_FUNDS:S.journey==='existing'};
 }
 seedGoals();
@@ -1547,7 +1569,7 @@ SCR.basket=p=>{const b=BASKETS.find(x=>x.id===p.id),amt=p.amt||Math.max(b.min,50
   <div class="card"><b>Funds in this basket</b><div class="row gap12 mt12">${donut(b.funds.map((f,i)=>({v:f[1],c:SECC[i],l:fund(f[0]).n.replace(' Fund','')})),110,16,'')}<div class="grow">${legend(b.funds.map((f,i)=>({l:fund(f[0]).n.replace(' Fund',''),v:f[1]+'%',c:SECC[i]})))}</div></div>
    <div class="mt8">${b.funds.map(([id,w])=>{const f=fund(id);return `<button class="li" onclick="go('fund',{id:'${id}'})">${amcB(f.a,1)}<div class="grow"><div class="t-s t-b ell">${f.n}</div><div class="t-xs mute">${f.s} · 3Y ${f.r[1]}%</div></div><b class="t-s">${w}%</b></button>`}).join('')}</div></div>
   <div class="card"><b>Sector mix</b><div class="col gap8 mt12">${SE.map((s,i)=>`<div><div class="row sb t-s"><span>${s[0]}</span><b class="num">${s[1].toFixed(1)}%</b></div><div class="bar mt4" style="height:6px"><i style="width:${s[1]/SE[0][1]*100}%;background:${SECC[i]}"></i></div></div>`).join('')}</div></div>
-  <div class="card"><b>Your monthly SIP</b><div class="row mt8" style="gap:8px">${[b.min,5000,10000,25000].map(v=>`<button class="chip ${amt===v?'on':''}" onclick="go('basket',{id:'${b.id}',amt:${v}},{replace:true})">${inr(v)}</button>`).join('')}</div>
+  <div class="card"><b>Your monthly SIP</b><div class="hs mt8" style="gap:8px;padding-bottom:4px">${[b.min,5000,10000,25000].map(v=>`<button class="chip ${amt===v?'on':''}" onclick="go('basket',{id:'${b.id}',amt:${v}},{replace:true})">${inr(v)}</button>`).join('')}</div>
    <div class="col gap4 mt12">${b.funds.map(([id,w])=>`<div class="row sb t-s"><span class="ink2">${fund(id).n.replace(' Fund','')}</span><b class="num">${inr(Math.round(amt*w/100/10)*10)}</b></div>`).join('')}</div></div>
   <p class="note">Past returns are for the basket’s current funds and weights, simulated over 5 years. Mutual fund investments are subject to market risks.</p><div style="height:6px"></div></div></div>
  <div class="foot"><button class="btn line" onclick="startInvest(${JSON.stringify(b.funds.map(([id,w])=>[id,Math.round(amt*w/100/10)*10*20])).replace(/"/g,"'")},'lump')">One-time</button><button class="btn grow" onclick="startInvest(${JSON.stringify(b.funds.map(([id,w])=>[id,Math.round(amt*w/100/10)*10])).replace(/"/g,"'")},'sip',{goal:''})">Start ${inr(amt)} SIP</button></div>`}};
@@ -1558,8 +1580,8 @@ SCR.more=()=>{const row=(i,t,s,on)=>`<button class="li" onclick="${on}"><div cla
  <button class="card row" style="width:100%;text-align:left" onclick="go('profile')"><div class="amc" style="background:var(--brand);border-radius:50%;width:52px;height:52px;font-size:18px">${ini(S.full)}</div><div class="grow"><b class="t-m">${esc(S.full)}</b><div class="t-xs mute">PAN ${S.pan.slice(0,5)}••••${S.pan[9]}, UCC ${S.ucc}</div><span class="tag b mt4">${S.profile}</span></div><span class="chev">${ic('chev')}</span></button>
  <h2 class="sec">${esc(S.family)} <button onclick="renameFamily()">Rename</button></h2>
  <div class="hs">${S.members.map((m,k)=>`<button class="goalc" style="width:150px;text-align:left;${m.on?'border-color:var(--ink)':''}" onclick="S.members.forEach(x=>x.on=false);S.members[${k}].on=true;rerender();toast('Switched to ${esc(m.n)}')"><div class="amc sm" style="background:${['#3D4FD8','#08A35B','#F29A1F','#7C4DFF'][k%4]};border-radius:50%">${ini(m.n)}</div><div class="t-s t-b mt8 ell">${esc(m.n)}</div><div class="t-xs mute ell">${m.rel}</div><div class="t-xs mt8 ${m.on?'up':'br'}">${m.on?'Viewing now':'Switch profile'}</div></button>`).join('')}<button class="goalc" style="width:150px;display:grid;place-items:center;border-style:dashed;color:var(--brand-fg)" onclick="addMember()"><div style="text-align:center">${ic('plus')}<div class="t-s t-b mt4">Add member</div></div></button></div>
- <h2 class="sec">Your wealth</h2><div class="card" style="padding:4px 16px">${row('layers','Linked assets','Bank, FDs, stocks, NPS, insurance and more',"go('assets')")}${row(S.journey==='existing'?'heartbeat':'sparkle','Financial health analysis','Recalculated whenever you link an asset',"go('analysis')")}${row('target','Goals',S.goals.length+' active',"go('goals')")}${row('calendar','SIPs and orders','',"go('portfolio',{t:'sips'},{reset:true})")}</div>
- <h2 class="sec">Tools</h2><div class="card" style="padding:4px 16px">${row('shield','Risk profile',S.profile+'. Retake anytime',"go('retake')")}${row('calc','Financial calculators','SIP, lump sum, step-up, goal',"go('calc')")}${row('basket','Product baskets','',"go('baskets')")}${row('swap','Compare funds','',"go('compare')")}</div>
+ ${wealthSec()}<div class="card mt12" style="padding:4px 16px">${row(S.journey==='existing'?'heartbeat':'sparkle','Financial health analysis','Recalculated whenever you link an asset',"go('analysis')")}${row('target','Goals',S.goals.length+' active',"go('goals')")}${row('calendar','SIPs and orders','',"go('portfolio',{t:'sips'},{reset:true})")}</div>
+ <h2 class="sec">Tools</h2><div class="card" style="padding:4px 16px">${row('shield','Risk profile',S.profile+'. Retake anytime',"go('retake')")}${row('calc','Financial calculators','SIP, lump sum, step-up, goal',"go('calc')")}${row('basket','Product baskets','',"go('baskets')")}${row('swap','Compare funds','',"go('compare')")}${row('grid','Add-on products','Insurance, FDs, gold, NPS and more',"go('products')")}</div>
  <h2 class="sec">Services</h2><div class="card" style="padding:4px 16px">${row('umbrella','Emergency fund','Instant withdrawal up to ₹50,000',"go('emergency')")}${row('hand','Loan against mutual funds','',"go('loan')")}${row('rocket','New fund offers','',"go('nfo')")}${row('layers','Specialised Investment Funds','',"go('sif')")}${row('brief','PMS and AIF','Coming soon',"go('soon')")}</div>
  <h2 class="sec">Help</h2><div class="card" style="padding:4px 16px">${row('q','Help and support','Chat, call or email your advisor',"go('assistant')")}${row('doc','Disclosures and investor charter','',"disclosures()")}${row('grid','Prototype screen map','Jump to any screen',"mapSheet()")}${row('logout','Log out','',"go('login',{},{reset:true})")}</div>
  <p class="note mt16" style="text-align:center">Prodigy Pro, version 3.0 prototype<br>BFC Capital Private Limited, SEBI RIA INA000021669</p></div>`}};
@@ -1782,8 +1804,7 @@ SCR.home=()=>{const T=totals(),isNew=T.n===0,act=S.sips.filter(s=>s.st==='active
   <h2 class="sec">Product baskets <button onclick="go('baskets')">View all</button></h2>
   <div class="hs">${BASKETS.map(b=>`<button class="basket" style="text-align:left" onclick="go('basket',{id:'${b.id}'})"><div class="row sb"><span style="width:36px;height:36px;border-radius:11px;background:${b.bg};display:grid;place-items:center;color:#fff">${ic('basket')}</span><span class="tag">${RISK[b.risk]}</span></div><div class="t-xs mute mt12">${b.tag}</div><div class="t-m mt4">${b.n}</div><div class="t-s" style="opacity:.85">${b.goal}</div><div class="row sb mt16"><div><div class="t-xs" style="opacity:.7">3Y returns</div><b class="num">${b.r3}% a year</b></div><div style="text-align:right"><div class="t-xs" style="opacity:.7">Min. SIP</div><b class="num">${inr(b.min)}</b></div></div></button>`).join('')}</div>
 
-  <h2 class="sec">Your products <button onclick="go('products')">Add more</button></h2>
-  <div class="hs">${PRD.filter(x=>S.prod.includes(x[0])).map(x=>`<button class="gart" style="width:160px" onclick="openProd('${x[0]}')">${art(x[3],64)}<div style="padding:10px 12px;text-align:left"><b class="t-s">${x[1]}</b><div class="t-xs mute">${x[4]}</div></div></button>`).join('')}<button class="gart add" onclick="go('products')">${ic('plus')}<b class="t-s">Add product</b></button></div>
+  ${wealthSec()}
 
   <h2 class="sec">Start a SIP <button onclick="go('recommended')">More</button></h2>
   <div class="card" style="padding:4px 16px">${recFunds().slice(0,3).map(f=>`<div class="li">${amcB(f.a,1)}<button class="grow" style="text-align:left;min-width:0" onclick="go('fund',{id:'${f.id}'})"><div class="t-s t-b ell">${f.n}</div><div class="t-xs mute">${f.s} · 3Y <span class="up">${f.r[1]}%</span></div></button><button class="btn xs soft" onclick="startInvest([['${f.id}',${Math.max(f.sip,1000)}]],'sip')">SIP ${inr(f.sip)}+</button></div>`).join('')}</div>
@@ -1816,9 +1837,9 @@ SCR.portfolio=p=>{const t=p.t||'hold',T=totals(),H=holdings(),hid=S.hide;
  if(t==='sips'){const act=S.sips.filter(s=>s.st==='active'),mo=act.reduce((a,s)=>a+s.amt,0);
   b=S.sips.length?`<div class="card soft row mt4"><div class="grow"><div class="t-xs mute">${act.length} active SIPs</div><b class="t-m num">${inr(mo)} a month</b></div><button class="btn sm" onclick="go('sips')">Manage & top-up</button></div>${S.sips.map((s,k)=>{const f=fund(s.fid);return `<div class="card"><div class="row">${amcB(f.a,1)}<div class="grow" style="min-width:0"><div class="t-s t-b ell">${f.n}</div><div class="t-xs mute">${s.st==='active'?'Next: '+s.next:s.st==='paused'?'Paused till '+s.till:'Stopped'} · Top-up: ${tuDesc(s.tu)}</div></div><span class="tag ${s.st==='active'?'g':s.st==='paused'?'a':'r'}">${s.st[0].toUpperCase()+s.st.slice(1)}</span></div>
    <div class="grid3 mt12"><div class="stat"><span class="k">Amount</span><span class="v t-s">${inr(s.amt)}</span></div><div class="stat"><span class="k">Date</span><span class="v t-s">${s.date}th monthly</span></div><div class="stat"><span class="k">Instalments</span><span class="v t-s">${s.inst}</span></div></div>
-   ${s.st!=='stopped'?`<div class="row mt12" style="gap:8px">${s.st==='active'?`<button class="btn xs soft" onclick="pauseSip(${k})">${ic('pause')}Pause</button>`:`<button class="btn xs soft" onclick="S.sips[${k}].st='active';rerender();toast('SIP resumed')">Resume</button>`}<button class="btn xs soft" onclick="topSheet(${k})">${ic('trend')}Top-up</button><button class="btn xs soft" onclick="modSip(${k})">${ic('edit')}Modify</button><button class="btn xs ghost dn" onclick="stopSip(${k})">${ic('stop')}Stop</button></div>`:''}</div>`}).join('')}`
+   ${s.st!=='stopped'?`<div class="row mt12" style="gap:8px"><button class="btn xs soft" onclick="topSheet(${k})">${ic('trend')}Top-up</button><button class="btn xs soft" onclick="modSip(${k})">${ic('edit')}Modify</button><button class="ib sipmore" onclick="sipMore(${k})" aria-label="More SIP actions">${ic('kebab')}</button></div>`:''}</div>`}).join('')}`
   :`<div class="empty">${art('sip',110).replace('class="art"','class="art" style="border-radius:22px"')}<div class="t-m mt16">No SIPs yet</div><p class="mute t-s">A SIP invests a fixed amount every month, so you buy more when markets are low.</p><button class="btn mt8" onclick="go('recommended')">Find a fund for SIP</button></div>`}
- if(t==='orders')b=S.orders.length?`<div class="card mt4" style="padding:4px 16px">${S.orders.map(o=>{const f=fund(o.fid),st=OST(o.st);return `<div class="li" style="align-items:flex-start">${amcB(f.a,1)}<div class="grow" style="min-width:0"><div class="t-s t-b ell">${f.n}</div><div class="t-xs mute">${o.type} · ${o.dt} · ${o.id}</div><div class="osteps mt8">${['Placed','Paid','Allotted'].map((n,i)=>`<span class="${i<st?'on':''}"><i></i>${n}</span>`).join('')}</div></div><div style="text-align:right"><div class="t-s t-b num">${inr(o.amt)}</div><span class="tag ${st===3?'g':'a'} mt4">${o.st}</span></div></div>`}).join('')}</div>`:`<div class="empty">${art('tax',110).replace('class="art"','class="art" style="border-radius:22px"')}<div class="t-m mt16">No orders yet</div><p class="mute t-s">Orders you place will show here with their status.</p></div>`;
+ if(t==='orders')b=S.orders.length?`<div class="card mt4" style="padding:4px 16px">${S.orders.map(o=>{const f=fund(o.fid),st=OST(o.st);return `<button class="li" style="align-items:flex-start" onclick="go('order',{id:'${o.id}'})">${amcB(f.a,1)}<div class="grow" style="min-width:0"><div class="t-s t-b ell">${f.n}</div><div class="t-xs mute">${o.type} · ${o.dt} · ${o.id}</div><div class="osteps mt8">${(o.type==='Redemption'?['Requested','Processed','Credited']:['Placed','Paid','Allotted']).map((n,i)=>`<span class="${i<st?'on':''}"><i></i>${n}</span>`).join('')}</div></div><div style="text-align:right"><div class="t-s t-b num">${inr(o.amt)}</div><span class="tag ${st===3?'g':'a'} mt4">${o.st}</span></div></button>`}).join('')}</div>`:`<div class="empty">${art('tax',110).replace('class="art"','class="art" style="border-radius:22px"')}<div class="t-m mt16">No orders yet</div><p class="mute t-s">Orders you place will show here with their status.</p></div>`;
  return{sbar:'surface',nav:'portfolio',html:`<header class="hdr"><h1 style="padding-left:6px">Portfolio</h1><button class="ib" onclick="S.hide=!S.hide;rerender()" aria-label="Hide values">${ic(hid?'eyeoff':'eye')}</button><button class="ib" onclick="reportsSheet()" aria-label="Reports">${ic('download')}</button></header>
  <div class="body"><div class="pad" style="padding-top:6px">
   <div class="heroCard"><div class="row sb"><span class="t-s mute">Current value</span><span class="t-xs mute">As on 18 Oct 2026</span></div>
@@ -1834,6 +1855,44 @@ SCR.portfolio=p=>{const t=p.t||'hold',T=totals(),H=holdings(),hid=S.hide;
  <div class="tabs" style="position:sticky;top:0;z-index:2">${[['hold','Holdings ('+H.length+')'],['sips','SIPs ('+S.sips.filter(s=>s.st!=='stopped').length+')'],['orders','Orders ('+S.orders.length+')']].map(x=>`<button class="${t===x[0]?'on':''}" onclick="go('portfolio',{t:'${x[0]}'},{replace:true})">${x[1]}</button>`).join('')}</div>
  <div class="pad" style="padding-top:12px">${b}<p class="note mt16">Values use the latest available NAV. Mutual fund investments are subject to market risks.</p></div></div>`}};
 CUF.p10=v=>'+'+(v/10).toFixed(1)+'%';
+IC.kebab='<circle cx="12" cy="5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/>';
+/* ---------- Your wealth: linked assets at a glance + quick links ---------- */
+const WLC=['var(--c1)','var(--c2)','var(--c4)','var(--c3)','var(--c5)','var(--c6)'];
+function wealthSec(){const K=Object.keys(FI),L=K.filter(k=>S.linked[k]),U=K.filter(k=>!S.linked[k]),nw=L.reduce((a,k)=>a+assetVal(k),0);
+ const tile=(k,i)=>{const c=WLC[i%6],n=FI[k].acc.filter(a=>a[2]).length;return `<button class="wl-t" onclick="go('asset',{fi:'${k}'})"><span class="pill-ic" style="background:color-mix(in srgb,${c} 16%,transparent);color:${c}">${ic(FI[k].ic)}</span><span class="t-xs mute ell">${FI[k].n}</span><b class="num">${money(assetVal(k))}</b><span class="t-xs mute">${n} account${n>1?'s':''}</span></button>`};
+ const quick=U.slice(0,U.length>8?7:8).map(k=>`<button class="svc" onclick="go('aa',{fi:'${k}',next:'asset'})"><span class="si">${ic(FI[k].ic)}</span><span class="ell" style="max-width:100%">${FI[k].n.replace(' & debentures','').replace('Government securities','G-Secs').replace('Insurance policies','Insurance').replace('Recurring deposits','RDs').replace('Fixed deposits','FDs')}</span></button>`).join('')+(U.length>8?`<button class="svc" onclick="go('assets')"><span class="si">${ic('grid')}</span>All ${U.length}</button>`:'');
+ return `<h2 class="sec">Your wealth <button onclick="go('assets')">See all</button></h2>
+ <button class="card wl-sum" onclick="go('assets')"><div class="row sb"><span class="t-s mute">Net worth tracked</span><span class="tag b">${L.length} of ${K.length} linked</span></div><div class="t-xl num mt4" style="font-size:30px">${money(nw)}</div>
+  ${L.length?`<div class="stack mt12">${L.map((k,i)=>`<i style="width:${assetVal(k)/nw*100}%;background:${WLC[i%6]}"></i>`).join('')}</div><div class="row t-xs mute mt8" style="gap:6px 12px;flex-wrap:wrap">${L.map((k,i)=>`<span class="row" style="gap:5px"><span class="dot" style="background:${WLC[i%6]}"></span>${FI[k].n} ${Math.round(assetVal(k)/nw*100)}%</span>`).join('')}</div>`:`<p class="t-s ink2 mt8" style="margin:8px 0 0">Link your bank, FDs, stocks and more to see everything you own in one place.</p>`}</button>
+ <div class="hs mt12">${L.map(tile).join('')}<button class="wl-t add" onclick="go('assets')">${ic('plus')}<b class="t-s">Link an asset</b></button></div>
+ ${U.length?`<div class="card mt12"><div class="row sb"><b class="t-s">Link more assets</b><span class="t-xs mute">About a minute each</span></div><div class="grid4 mt16">${quick}</div><div class="row t-xs mute mt12" style="gap:6px">${ic('lock')}Shared securely via an RBI-regulated Account Aggregator</div></div>`:''}`}
+
+/* ---------- Order details + processing timeline ---------- */
+const ODT=d=>{const x=new Date(d);return isNaN(x)?new Date(2026,9,19):x};
+const bizAdd=(d,n)=>{const x=new Date(d);while(n>0){x.setDate(x.getDate()+1);if(x.getDay()%6)n--}return x};
+const dFmt=d=>`${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]}, ${d.getDate()} ${MON[d.getMonth()]}`;
+SCR.order=p=>{const o=S.orders.find(x=>x.id===p.id)||S.orders[0];if(!o)return SCR.portfolio({t:'orders'});
+ const f=fund(o.fid),red=o.type==='Redemption',st=OST(o.st),d0=ODT(o.dt),nav=f.nav,units=(o.amt/nav).toFixed(3),h=holdings().find(x=>x.fid===o.fid),sp=S.sips.find(s=>s.fid===o.fid);
+ const steps=red?[
+  ['Redemption requested',dFmt(d0)+', 11:08 am',`${units} units from folio ${h?h.folio:'—'}`],
+  ['Sent to AMC',dFmt(d0)+', 2:30 pm','Before the 3 pm cut-off, so today’s NAV applies'],
+  ['NAV applied',dFmt(d0)+', evening',`${inr(nav,2)} per unit`],
+  ['Money credited',dFmt(bizAdd(d0,2)),`To HDFC Bank ••4521`]]:[
+  ['Order placed',dFmt(d0)+', 10:42 am',o.type==='SIP'?'Auto-debit instalment':'Lump sum purchase'],
+  ['Payment received',dFmt(d0)+', 10:43 am',o.type==='SIP'?'Autopay mandate, HDFC Bank ••4521':'UPI from HDFC Bank ••4521'],
+  ['Sent to AMC',dFmt(d0)+', 2:30 pm','Via BSE StAR MF, before the 3 pm cut-off'],
+  ['Units allotted',dFmt(bizAdd(d0,1)),`${units} units at ${inr(nav,2)} NAV of ${dFmt(d0)}`]];
+ const done=red?(st===3?4:2):(st===3?4:st);
+ const eta=steps[steps.length-1][1];
+ return{sbar:'surface',html:`${hdr('Order details',{right:`<button class="ib" onclick="toast('Order confirmation emailed to ${esc(S.email)}')" aria-label="Download confirmation">${ic('download')}</button>`})}<div class="body pad">
+ <div class="card"><div class="row">${amcB(f.a,1)}<div class="grow" style="min-width:0"><div class="t-s t-b ell">${f.n}</div><div class="t-xs mute">${f.s} · ${o.type}</div></div></div>
+  <div class="row sb mt16" style="align-items:flex-end"><div><div class="t-xs mute">${red?'Redemption amount':'Amount'}</div><div class="t-xl num mt4" style="font-size:30px">${inr(o.amt)}</div></div><span class="tag ${done===4?'g':'a'}">${done===4?o.st:'In progress'}</span></div>
+  ${done<4?`<div class="ord-eta mt16">${ic('clock')}<div class="grow"><b class="t-s">${red?'Money expected':'Units expected'} by ${eta}</b><div class="t-xs mute">We’ll notify you at each step</div></div></div>`:''}</div>
+ <h2 class="sec">Processing timeline</h2><div class="card"><div class="otl">${steps.map((s,i)=>`<div class="otl-i ${i<done?'done':i===done?'now':''}"><span class="otl-d">${i<done?ic('check'):''}</span><div class="grow"><div class="row sb" style="gap:8px"><b class="t-s">${s[0]}</b><span class="t-xs ${i<done?'mute':i===done?'br':'mute'}">${i<done?s[1]:i===done?'Expected '+s[1].split(',').slice(0,2).join(','):s[1].split(',').slice(0,2).join(',')}</span></div><div class="t-xs mute mt4">${s[2]}</div></div></div>`).join('')}</div></div>
+ <h2 class="sec">Order information</h2><div class="card">${[['Order ID',o.id],['Exchange order no.','BSE '+(4410000+parseInt(o.id.replace(/\D/g,''))*3)],['Folio',h?h.folio:'New folio on allotment'],['Order date',o.dt],[red?'Credit to':'Paid from','HDFC Bank ••4521'],['NAV',done>=(red?3:4)?inr(nav,2):'Applied on allotment'],['Units',done>=(red?3:4)?units:'≈ '+units],...(red?[['Exit load','Nil'],['Tax (TDS)','Nil for resident investors']]:[['Stamp duty',inr(o.amt*.00005,2)]])].map(r=>`<div class="kv"><span>${r[0]}</span><span class="num">${r[1]}</span></div>`).join('')}</div>
+ <div class="col gap8 mt16">${!red&&sp?`<button class="btn soft block" onclick="go('portfolio',{t:'sips'},{reset:true})">${ic('calendar')}View SIP</button>`:''}<button class="btn line block" onclick="go('holding',{id:'${o.fid}'})">View holding</button><button class="btn ghost block" onclick="go('assistant')">${ic('q')}Need help with this order?</button></div>
+ <p class="note mt12">Cut-off is 3 pm on business days. Orders after cut-off or on holidays get the next business day’s NAV.</p></div>`}};
+function sipMore(k){const s=S.sips[k];sheet('SIP options',`${s.st==='active'?`<button class="li" onclick="closeSheet();pauseSip(${k})"><div class="ic">${ic('pause')}</div><div class="grow"><b class="t-s">Pause SIP</b><div class="t-xs mute">Skip 1 to 6 instalments, restarts automatically</div></div>${ic('chev','mute')}</button>`:`<button class="li" onclick="S.sips[${k}].st='active';closeSheet();rerender();toast('SIP resumed')"><div class="ic">${ic('play')}</div><div class="grow"><b class="t-s">Resume SIP</b><div class="t-xs mute">Restart from the next SIP date</div></div>${ic('chev','mute')}</button>`}<button class="li" onclick="closeSheet();stopSip(${k})"><div class="ic" style="background:var(--red-soft);color:var(--red)">${ic('stop')}</div><div class="grow"><b class="t-s dn">Cancel SIP</b><div class="t-xs mute">Stop future instalments. Units stay invested</div></div>${ic('chev','mute')}</button>`)}
 
 /* ---------- SIPs & top-up ---------- */
 SCR.sips=()=>{const act=S.sips.filter(s=>s.st==='active'),mo=act.reduce((a,s)=>a+s.amt,0),in5=act.reduce((a,s)=>a+amtIn(s.amt,s.tu,5),0);
@@ -1917,8 +1976,7 @@ SCR.prod=p=>{const x=PRD.find(y=>y[0]===p.id)||PRD[2],has=S.reqs.some(r=>r.pid==
 
 /* ---------- More: new entries ---------- */
 const _more=SCR.more;SCR.more=()=>{const r=_more();
- r.html=r.html.replace('<h2 class="sec">Your wealth</h2>',`<h2 class="sec">Your products <button onclick="go('products')">Edit</button></h2><div class="hs">${PRD.filter(x=>S.prod.includes(x[0])).map(x=>`<button class="gart" style="width:160px" onclick="openProd('${x[0]}')">${art(x[3],64)}<div style="padding:10px 12px;text-align:left"><b class="t-s">${x[1]}</b><div class="t-xs mute">${x[4]}</div></div></button>`).join('')}<button class="gart add" onclick="go('products')">${ic('plus')}<b class="t-s">Add product</b></button></div><h2 class="sec">Your wealth</h2>`)
- .replace(`<h2 class="sec">Tools</h2><div class="card" style="padding:4px 16px">`,`<h2 class="sec">Tools</h2><div class="card" style="padding:4px 16px"><button class="li" onclick="go('risk')"><div class="ic">${ic('heartbeat')}</div><div class="grow"><b class="t-s">Risk analysis</b><div class="t-xs mute">Your profile vs your portfolio, stress test</div></div><span class="chev">${ic('chev')}</span></button><button class="li" onclick="go('sips')"><div class="ic">${ic('trend')}</div><div class="grow"><b class="t-s">SIPs and yearly top-ups</b></div><span class="chev">${ic('chev')}</span></button>`)
+ r.html=r.html.replace(`<h2 class="sec">Tools</h2><div class="card" style="padding:4px 16px">`,`<h2 class="sec">Tools</h2><div class="card" style="padding:4px 16px"><button class="li" onclick="go('risk')"><div class="ic">${ic('heartbeat')}</div><div class="grow"><b class="t-s">Risk analysis</b><div class="t-xs mute">Your profile vs your portfolio, stress test</div></div><span class="chev">${ic('chev')}</span></button><button class="li" onclick="go('sips')"><div class="ic">${ic('trend')}</div><div class="grow"><b class="t-s">SIPs and yearly top-ups</b></div><span class="chev">${ic('chev')}</span></button>`)
  .replace(`<h2 class="sec">Help</h2><div class="card" style="padding:4px 16px">`,`<h2 class="sec">Help</h2><div class="card" style="padding:4px 16px"><button class="li" onclick="go('refer')"><div class="ic">${ic('users')}</div><div class="grow"><b class="t-s">Refer and grow together</b><div class="t-xs mute">Invite people you know</div></div><span class="chev">${ic('chev')}</span></button>`);return r};
 
 /* ---------- Goal detail: illustration banner ---------- */
