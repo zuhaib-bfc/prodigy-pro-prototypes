@@ -490,12 +490,14 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover{transform:translateY(-2p
 .gart.add{width:110px;align-items:center;justify-content:center;gap:6px;color:var(--brand-fg);background:transparent;box-shadow:none;border:2px dashed color-mix(in srgb,var(--brand-fg) 35%,transparent)}
 .art-wrap,.goal-art{border-radius:24px;overflow:hidden;line-height:0}
 .goal-art{margin:12px 20px 0;border-radius:22px}
-.mkt{flex:none;width:128px;padding:14px}
 .refer-card{background:linear-gradient(120deg,var(--surface) 55%,var(--green-soft))}
 /* portfolio */
 .ret{display:flex;flex-direction:column;gap:2px;padding:16px;margin:0!important}
 .ret .t-l{font-size:24px}
 .grid2 .card+.card{margin-top:0}
+/* consistent gap between stacked card-like blocks (zero specificity: explicit mt* classes still win) */
+:where(.card,.heroCard,.aiCard,.grid2,.grid3,.hs)+:where(.card,.heroCard,.aiCard){margin-top:14px}
+.hs>*{margin-top:0}
 .rmeter{position:relative;height:10px;border-radius:99px;background:linear-gradient(90deg,var(--green),#E3C11B,var(--amber),var(--red))}
 .rmeter u{position:absolute;top:-3px;bottom:-3px;border:2px solid var(--ink);border-radius:6px;opacity:.35}
 .rmeter i{position:absolute;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:var(--surface);border:4px solid var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.2);animation:slideKnob .9s cubic-bezier(.2,.8,.2,1) both .2s}
@@ -504,11 +506,11 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover{transform:translateY(-2p
 .gbar i{display:block;height:100%;border-radius:99px;animation:growW .9s cubic-bezier(.2,.8,.2,1) both .2s}
 .li.hold{align-items:center}
 .wl-sum{width:100%;text-align:left;display:block}
-.wl-t{flex:none;width:148px;border-radius:20px;padding:14px;background:var(--surface);box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;gap:2px;transition:transform .15s,box-shadow .15s}
+.wl-t{flex:none;width:136px;border-radius:20px;padding:14px;background:var(--surface);box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;gap:2px;transition:transform .15s,box-shadow .15s}
 .wl-t:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
 .wl-t .pill-ic{width:38px;height:38px;border-radius:12px;margin-bottom:8px}
 .wl-t .pill-ic svg{width:20px;height:20px}
-.wl-t.add{width:118px;align-items:center;justify-content:center;gap:6px;color:var(--brand-fg);background:transparent;box-shadow:none;border:2px dashed color-mix(in srgb,var(--brand-fg) 35%,transparent)}
+.wl-t.add{width:112px;align-items:center;justify-content:center;gap:6px;color:var(--brand-fg);background:transparent;box-shadow:none;border:2px dashed color-mix(in srgb,var(--brand-fg) 35%,transparent)}
 .ord-eta{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;background:var(--amber-soft);color:var(--amber)}
 .ord-eta .t-s{color:var(--ink)}
 .otl{display:flex;flex-direction:column}
@@ -1609,12 +1611,16 @@ SCR.consents=()=>({sbar:'surface',html:`${hdr('Data and consents')}<div class="b
 /* ============ linked assets (AA wealth management) ============ */
 const AV={DEPOSIT:184320,TERM_DEPOSIT:350000,RECURRING_DEPOSIT:60000,EQUITIES:245600,ETF:48000,BONDS:100000,GOVT_SECURITIES:75000,NPS:312000,INSURANCE_POLICIES:210000,REIT:22000,INVIT:18000,AIF:0};
 const assetVal=k=>k==='MUTUAL_FUNDS'?totals().cur:AV[k];
-SCR.assets=()=>{const G=[['Banking',['DEPOSIT','TERM_DEPOSIT','RECURRING_DEPOSIT']],['Investments',['MUTUAL_FUNDS','EQUITIES','ETF','BONDS','GOVT_SECURITIES']],['Retirement and insurance',['NPS','INSURANCE_POLICIES']],['Alternatives',['REIT','INVIT','AIF']]];
- const L=Object.keys(FI).filter(k=>S.linked[k]),nw=L.reduce((a,k)=>a+assetVal(k),0);
- return{sbar:'surface',html:`${hdr('Linked assets')}<div class="body pad">
- <div class="card blue"><div class="t-s" style="opacity:.8">Net worth tracked</div><div class="t-xl num mt4">${inrS(nw)}</div><div class="t-s mt4" style="opacity:.8">${L.length} of ${Object.keys(FI).length} asset types linked</div>${L.length?`<div class="stack mt16">${L.map((k,i)=>`<i style="width:${assetVal(k)/nw*100}%;background:${['#3D4FD8','#08A35B','#F2B21B','#7C4DFF','#00A3C4','#E8622C'][i%6]}"></i>`).join('')}</div>`:''}</div>
- <p class="t-s ink2 mt12">Link everything you own to get one view of your wealth. Your financial health analysis is recalculated each time you add an asset.</p>
- ${G.map(g=>`<h2 class="sec">${g[0]}</h2><div class="card" style="padding:4px 16px">${g[1].map(k=>`<button class="li" onclick="${S.linked[k]?`go('asset',{fi:'${k}'})`:`go('aa',{fi:'${k}',next:'asset'})`}"><div class="ic">${ic(FI[k].ic)}</div><div class="grow"><b class="t-s">${FI[k].n}</b><div class="t-xs mute">${S.linked[k]?FI[k].acc.filter(a=>a[2]).length+' linked':'Not linked'}</div></div>${S.linked[k]?`<b class="t-s num">${inrS(assetVal(k))}</b>`:`<span class="btn xs soft">Link</span>`}</button>`).join('')}</div>`).join('')}<div style="height:8px"></div></div>`}};
+SCR.assets=()=>{const L=Object.keys(FI).filter(k=>S.linked[k]).sort((x,y)=>assetVal(y)-assetVal(x)),nw=L.reduce((a,k)=>a+assetVal(k),0),U=AG.map(g=>[g[0],g[1].filter(k=>!S.linked[k])]).filter(g=>g[1].length);
+ const col=k=>WLC[Object.keys(FI).filter(x=>S.linked[x]).indexOf(k)%6];
+ return{sbar:'surface',html:`${hdr('Your wealth',{right:`<button class="ib" onclick="toast('Refreshing data from your accounts…')" aria-label="Refresh">${ic('refresh')}</button>`})}<div class="body pad">
+ <div class="heroCard"><div class="row sb"><span class="t-s mute">Net worth tracked</span><span class="t-xs mute">Updated today, 10:42 am</span></div><div class="t-xl num mt4" style="font-size:36px">${money(nw)}</div>
+  <div class="row t-s mt8" style="gap:8px"><span class="chg"><span class="mute">${L.length} of ${Object.keys(FI).length} asset types linked</span></span></div>
+  ${L.length?`<div class="stack mt16" style="background:rgba(255,255,255,.12)">${L.map(k=>`<i style="width:${assetVal(k)/nw*100}%;background:${col(k)}"></i>`).join('')}</div>`:''}</div>
+ ${L.length?`<div class="card mt12"><div class="row sb"><b>Where it sits</b><span class="t-xs mute">${L.length} asset types</span></div><div class="row mt12" style="gap:18px">${donut(L.map(k=>({v:assetVal(k),c:col(k),l:FI[k].n})),120,16,`<div><b class="t-s num">${inrS(nw)}</b><div class="t-xs mute">Total</div></div>`)}<div class="grow col gap8">${L.map(k=>`<div class="row t-s"><span class="dot" style="background:${col(k)}"></span><span class="grow ink2 ell">${FI[k].n}</span><b class="num">${Math.round(assetVal(k)/nw*100)}%</b></div>`).join('')}</div></div></div>
+ <h2 class="sec">Linked assets</h2><div class="card" style="padding:4px 16px">${L.map(k=>`<button class="li" onclick="go('asset',{fi:'${k}'})"><span class="pill-ic" style="width:40px;height:40px;border-radius:12px;background:color-mix(in srgb,${col(k)} 16%,transparent);color:${col(k)}">${ic(FI[k].ic)}</span><div class="grow" style="min-width:0"><b class="t-s">${FI[k].n}</b><div class="t-xs mute ell">${linkCount(k)} · ${FI[k].acc.filter(a=>a[2]).map(a=>a[0]).filter((v,i,A)=>A.indexOf(v)===i).join(', ')}</div></div><div style="text-align:right"><b class="t-s num">${money(assetVal(k))}</b><div class="t-xs mute num">${Math.round(assetVal(k)/nw*100)}%</div></div></button>`).join('')}</div>`:`<div class="empty">${art('share',110).replace('class="art"','class="art" style="border-radius:22px"')}<div class="t-m mt16">Nothing linked yet</div><p class="mute t-s">Link your bank, FDs, stocks and more to see your full net worth.</p></div>`}
+ ${U.length?`<h2 class="sec">Link more <button onclick="linkSheet()">All options</button></h2><div class="card" style="padding:4px 16px">${U.flatMap(g=>g[1]).slice(0,4).map(k=>`<button class="li" onclick="go('aa',{fi:'${k}',next:'asset'})"><div class="ic">${ic(FI[k].ic)}</div><div class="grow"><b class="t-s">${FI[k].n}</b><div class="t-xs mute">${FI[k].acc.map(a=>a[0]).filter((v,i,A)=>A.indexOf(v)===i).slice(0,2).join(', ')}</div></div><span class="btn xs soft">Link</span></button>`).join('')}</div>`:''}
+ <p class="note mt16">Values come from your linked accounts via the Account Aggregator and are refreshed up to once a day.</p></div>`}};
 SCR.asset=p=>{const f=FI[p.fi];return{sbar:'surface',html:`${hdr(f.n)}<div class="body pad">
  ${p.fresh?`<div class="card" style="border-color:var(--green)"><div class="row">${ic('check','up')}<div><b class="t-s">${f.n} linked</b><div class="t-xs mute">Prodigy AI is recalculating your financial health with this data.</div></div></div><div class="ailine mt12" style="border-radius:9px"></div></div>`:''}
  <div class="card"><div class="t-s mute">Total value</div><div class="t-xl num mt4">${inr(assetVal(p.fi))}</div><div class="t-xs mute mt4">Updated today, 10:42 AM</div></div>
@@ -1761,7 +1767,6 @@ const NUDGES=()=>S.journey==='existing'?[
  ['risk','shield','See what shapes your risk profile','Open',"go('risk')",'g'],
  ['ins','umbrella','Protect your goals with the right cover','Check cover',"go('ins')",'a'],
  ['ref','users','Invest with friends and family','Invite',"go('refer')",'b']];
-const MKT=[['Nifty 50','24,310','+0.4%',1],['Sensex','79,880','+0.3%',1],['Bank Nifty','52,140','−0.2%',0],['Gold','₹78,200','+0.1%',1]];
 
 SCR.home=()=>{const T=totals(),isNew=T.n===0,act=S.sips.filter(s=>s.st==='active'),nx=act[0],p=HP[S.hp],chg=Math.round(T.cur-T.cur/(1+p/100));
  const nds=NUDGES().filter(n=>!S.nd.includes(n[0]));const g=S.goals[0];
@@ -1776,7 +1781,7 @@ SCR.home=()=>{const T=totals(),isNew=T.n===0,act=S.sips.filter(s=>s.st==='active
   <div class="row" style="gap:12px"><button class="amc" style="background:var(--ink);border-radius:50%;width:44px;height:44px" onclick="go('profile')" aria-label="Profile">${ini(S.full)}</button>
    <button class="grow" style="text-align:left;min-width:0" onclick="familySheet()"><div class="t-xs mute row" style="gap:2px">${esc(S.family)}<span style="display:inline-flex">${ic('chevd')}</span></div><div class="hello">Hi, ${esc(S.name)} <span class="hi-wave">👋</span></div></button>
    <button class="ib" style="background:var(--tint)" onclick="go('assistant')" aria-label="Ask Prodigy AI"><img src="${LOGO_MARK}" alt="" style="width:22px"></button><button class="ib bellb" onclick="S.unread=0;$('.bellb b')?.remove();notifSheet()" aria-label="Notifications">${ic('bell')}${S.unread?`<b>${S.unread}</b>`:''}</button></div>
-  ${isNew?`<div class="mt20 heroCard"><div class="t-s mute">Your portfolio</div><div class="t-xl num mt4" style="font-size:48px">₹0</div><p class="ink2 mt8" style="max-width:300px">Every big portfolio starts at zero, and that’s okay. ₹15,000 a month could grow to <b style="color:#fff" data-cu="${fv(10000,10,10.2).v+fv(5000,10,6.8,0,100000).v}" data-f="inrS">${inrS(fv(10000,10,10.2).v+fv(5000,10,6.8,0,100000).v)}</b> in 10 years.</p>
+  ${isNew?`<div class="mt20 heroCard"><div class="t-s mute">Your portfolio</div><div class="t-xl num mt4" style="font-size:48px">₹0</div><p class="ink2 mt8" style="max-width:300px">Every big portfolio starts at zero, and that’s okay. ₹15,000 a month could grow to <b style="color:#fff">${inrS(fv(10000,10,10.2).v+fv(5000,10,6.8,0,100000).v)}</b> in 10 years.</p>
    <div class="row mt20" style="gap:10px"><button class="btn sm" onclick="go('analysis')">See my plan</button><button class="btn sm soft" onclick="tab('explore')">Explore funds</button></div></div>`
   :`<div class="mt20 heroCard"><div class="row sb"><span class="t-s mute">Current value${S.pending.length?', incl. orders in progress':''}</span><button class="ib" style="width:34px;height:34px" onclick="S.hide=!S.hide;rerender()" aria-label="Hide values">${ic(S.hide?'eyeoff':'eye')}</button></div>
    <div class="t-xl num" style="font-size:42px"${cuA(T.cur)}>${money(T.cur)}</div>
@@ -1798,8 +1803,6 @@ SCR.home=()=>{const T=totals(),isNew=T.n===0,act=S.sips.filter(s=>s.st==='active
   ${S.goals.length?`<div class="hs">${S.goals.map(x=>{const pc=Math.min(100,Math.round(x.cur/x.target*100));return `<button class="gart" onclick="go('goal',{id:'${x.id}'})">${art(GART[x.t]||'sip',64)}<div style="padding:10px 12px 12px;text-align:left"><b class="t-s ell" style="display:block">${esc(x.n)}</b><div class="bar mt8" style="height:6px"><i style="width:${pc}%"></i></div><div class="t-xs mute mt4">${pc}% · ${inr(x.sip)}/mo</div></div></button>`}).join('')}<button class="gart add" onclick="newGoal()">${ic('plus')}<b class="t-s">New goal</b></button></div>${goalWhatIf}`
   :`<div class="card"><b>Plan for what matters</b><p class="t-s mute mt4">Name a goal, set an amount and date, and we’ll tell you exactly how much to invest each month.</p><div class="grid3 mt12">${['edu','house','car','ret','trip','wed'].map(t=>`<button class="svc" onclick="newGoal('${t}')"><span class="si" style="width:44px;height:44px">${ic(GT[t][0])}</span>${GT[t][1]}</button>`).join('')}</div></div>`}
 
-  <h2 class="sec">Markets today <span class="t-xs mute" style="font-weight:500">Sample data</span></h2>
-  <div class="hs">${MKT.map(m=>`<div class="card mkt"><div class="t-xs mute">${m[0]}</div><b class="num">${m[1]}</b><div class="t-xs num ${m[3]?'up':'dn'}">${m[2]}</div></div>`).join('')}</div>
 
   <h2 class="sec">Product baskets <button onclick="go('baskets')">View all</button></h2>
   <div class="hs">${BASKETS.map(b=>`<button class="basket" style="text-align:left" onclick="go('basket',{id:'${b.id}'})"><div class="row sb"><span style="width:36px;height:36px;border-radius:11px;background:${b.bg};display:grid;place-items:center;color:#fff">${ic('basket')}</span><span class="tag">${RISK[b.risk]}</span></div><div class="t-xs mute mt12">${b.tag}</div><div class="t-m mt4">${b.n}</div><div class="t-s" style="opacity:.85">${b.goal}</div><div class="row sb mt16"><div><div class="t-xs" style="opacity:.7">3Y returns</div><b class="num">${b.r3}% a year</b></div><div style="text-align:right"><div class="t-xs" style="opacity:.7">Min. SIP</div><b class="num">${inr(b.min)}</b></div></div></button>`).join('')}</div>
@@ -1858,14 +1861,17 @@ CUF.p10=v=>'+'+(v/10).toFixed(1)+'%';
 IC.kebab='<circle cx="12" cy="5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/>';
 /* ---------- Your wealth: linked assets at a glance + quick links ---------- */
 const WLC=['var(--c1)','var(--c2)','var(--c4)','var(--c3)','var(--c5)','var(--c6)'];
-function wealthSec(){const K=Object.keys(FI),L=K.filter(k=>S.linked[k]),U=K.filter(k=>!S.linked[k]),nw=L.reduce((a,k)=>a+assetVal(k),0);
- const tile=(k,i)=>{const c=WLC[i%6],n=FI[k].acc.filter(a=>a[2]).length;return `<button class="wl-t" onclick="go('asset',{fi:'${k}'})"><span class="pill-ic" style="background:color-mix(in srgb,${c} 16%,transparent);color:${c}">${ic(FI[k].ic)}</span><span class="t-xs mute ell">${FI[k].n}</span><b class="num">${money(assetVal(k))}</b><span class="t-xs mute">${n} account${n>1?'s':''}</span></button>`};
- const quick=U.slice(0,U.length>8?7:8).map(k=>`<button class="svc" onclick="go('aa',{fi:'${k}',next:'asset'})"><span class="si">${ic(FI[k].ic)}</span><span class="ell" style="max-width:100%">${FI[k].n.replace(' & debentures','').replace('Government securities','G-Secs').replace('Insurance policies','Insurance').replace('Recurring deposits','RDs').replace('Fixed deposits','FDs')}</span></button>`).join('')+(U.length>8?`<button class="svc" onclick="go('assets')"><span class="si">${ic('grid')}</span>All ${U.length}</button>`:'');
- return `<h2 class="sec">Your wealth <button onclick="go('assets')">See all</button></h2>
- <button class="card wl-sum" onclick="go('assets')"><div class="row sb"><span class="t-s mute">Net worth tracked</span><span class="tag b">${L.length} of ${K.length} linked</span></div><div class="t-xl num mt4" style="font-size:30px">${money(nw)}</div>
-  ${L.length?`<div class="stack mt12">${L.map((k,i)=>`<i style="width:${assetVal(k)/nw*100}%;background:${WLC[i%6]}"></i>`).join('')}</div><div class="row t-xs mute mt8" style="gap:6px 12px;flex-wrap:wrap">${L.map((k,i)=>`<span class="row" style="gap:5px"><span class="dot" style="background:${WLC[i%6]}"></span>${FI[k].n} ${Math.round(assetVal(k)/nw*100)}%</span>`).join('')}</div>`:`<p class="t-s ink2 mt8" style="margin:8px 0 0">Link your bank, FDs, stocks and more to see everything you own in one place.</p>`}</button>
- <div class="hs mt12">${L.map(tile).join('')}<button class="wl-t add" onclick="go('assets')">${ic('plus')}<b class="t-s">Link an asset</b></button></div>
- ${U.length?`<div class="card mt12"><div class="row sb"><b class="t-s">Link more assets</b><span class="t-xs mute">About a minute each</span></div><div class="grid4 mt16">${quick}</div><div class="row t-xs mute mt12" style="gap:6px">${ic('lock')}Shared securely via an RBI-regulated Account Aggregator</div></div>`:''}`}
+const AG=[['Banking',['DEPOSIT','TERM_DEPOSIT','RECURRING_DEPOSIT']],['Investments',['MUTUAL_FUNDS','EQUITIES','ETF','BONDS','GOVT_SECURITIES']],['Retirement and insurance',['NPS','INSURANCE_POLICIES']],['Alternatives',['REIT','INVIT','AIF']]];
+/* what's linked, without values: "9 folios", "2 linked" */
+const linkCount=k=>{const A=FI[k].acc.filter(a=>a[2]);if(k==='MUTUAL_FUNDS'){const n=A.reduce((t,a)=>t+(+((a[1].match(/(\d+) folio/)||[0,1])[1])),0);return n+' folio'+(n>1?'s':'')}return A.length+' linked'};
+function wealthSec(){const L=Object.keys(FI).filter(k=>S.linked[k]);
+ const tile=(k,i)=>{const c=WLC[i%6];return `<button class="wl-t" onclick="go('asset',{fi:'${k}'})"><span class="pill-ic" style="background:color-mix(in srgb,${c} 16%,transparent);color:${c}">${ic(FI[k].ic)}</span><b class="t-s ell">${FI[k].n}</b><span class="t-xs mute">${linkCount(k)}</span></button>`};
+ return `<h2 class="sec">Your wealth <button onclick="go('assets')">View all</button></h2>
+ <div class="hs">${L.map(tile).join('')}<button class="wl-t add" onclick="linkSheet()">${ic('plus')}<b class="t-s">Link an asset</b></button></div>`}
+function linkSheet(){const U=AG.map(g=>[g[0],g[1].filter(k=>!S.linked[k])]).filter(g=>g[1].length);
+ sheet('Link an asset',`<p class="t-s mute" style="margin:0 0 4px">Bring everything you own into one view. Your financial health updates each time you link something.</p>
+ ${U.length?U.map(g=>`<div class="t-xs mute mt16" style="font-weight:600;letter-spacing:.02em">${g[0].toUpperCase()}</div><div class="grid4 mt8" style="gap:12px 6px">${g[1].map(k=>`<button class="svc" onclick="closeSheet();go('aa',{fi:'${k}',next:'asset'})"><span class="si">${ic(FI[k].ic)}</span><span>${FI[k].n.replace(' & debentures','').replace('Government securities','G-Secs').replace('Insurance policies','Insurance').replace('Recurring deposits','RDs').replace('Fixed deposits','FDs').replace('Bank accounts','Bank')}</span></button>`).join('')}</div>`).join(''):`<p class="t-s ink2 mt12">You’ve linked every asset type we support.</p>`}
+ <div class="card soft row mt16" style="padding:12px 14px">${ic('lock','br')}<div class="t-xs ink2">Shared securely through an RBI-regulated Account Aggregator. Read-only access, you can revoke it anytime.</div></div>`)}
 
 /* ---------- Order details + processing timeline ---------- */
 const ODT=d=>{const x=new Date(d);return isNaN(x)?new Date(2026,9,19):x};
