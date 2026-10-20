@@ -472,7 +472,16 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover{transform:translateY(-2p
 .kinfo:hover{color:#fff;background:rgba(255,255,255,.14)}
 .kinfo svg{width:14px;height:14px}
 .heroCard.fam-tot{padding:18px;border-radius:24px}
-.fam-c{display:block;width:100%;text-align:left;padding:14px;border-radius:20px;background:var(--surface-2);border:1.5px solid transparent;transition:border-color .15s}
+.fam-c{border-radius:20px;background:var(--surface-2);border:1.5px solid transparent;transition:border-color .15s}
+.fam-h{display:flex;align-items:center;gap:10px;padding:14px;cursor:pointer;border-radius:18px}
+.fam-chev{color:var(--mute);display:grid;place-items:center;transition:transform .25s}
+.fam-chev svg{width:18px;height:18px}
+.fam-c.open .fam-chev{transform:rotate(180deg)}
+.fam-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease}
+.fam-b>div{overflow:hidden;padding:0 14px}
+.fam-c.open .fam-b{grid-template-rows:1fr}
+.fam-c.open .fam-b>div{padding-bottom:14px}
+.fam-g{border-top:1px solid var(--line);padding-top:12px}
 .fam-c.on{border-color:var(--brand-fg);background:var(--brand-soft)}
 .fam-c .tag svg{width:12px;height:12px}
 .fam-g{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
@@ -902,8 +911,8 @@ function render(anim='',keep=false){
   r.after&&r.after($('.scr',v));markMap();
 }
 const rerender=()=>render('',true);
-function navBar(a){const it=[['home','Home','home'],['explore','Explore','compass'],['ai','Ask AI','sparkle'],['portfolio','Portfolio','pie'],['more','More','grid']];
- return `<nav class="nav">${it.map(([k,l,i])=>k==='ai'?`<button class="ai" onclick="go('assistant')" aria-label="Ask Prodigy AI"><span class="orb"><img src="${LOGO_MARK}" alt=""></span></button>`:`<button class="${a===k?'on':''}" onclick="tab('${k}')">${ic(i)}${l}</button>`).join('')}</nav>`}
+function navBar(a){const it=[['home','Home','home'],['explore','Explore','compass'],['portfolio','Portfolio','pie'],['more','More','grid']];
+ return `<nav class="nav">${it.map(([k,l,i])=>`<button class="${a===k?'on':''}" onclick="tab('${k}')">${ic(i)}${l}</button>`).join('')}</nav>`}
 function hdr(t,o={}){return `<header class="hdr ${o.blue?'blue':''}">${o.noback?'':`<button class="ib" onclick="${o.onback||'back()'}" aria-label="Back">${ic('back')}</button>`}${o.left||''}<h1>${t}</h1>${o.right||''}</header>`}
 function sheet(t,b,o={}){closeSheet();const ov=document.createElement('div');ov.className='ov';ov.innerHTML=`<div class="sheet" role="dialog" aria-label="${esc(t)}"><div class="grab"></div><div class="sh"><h3>${t}</h3><button class="ib" onclick="closeSheet()" aria-label="Close">${ic('close')}</button></div><div class="sbody">${b}</div></div>`;ov.addEventListener('click',e=>{if(e.target===ov)closeSheet()});$('#phone').appendChild(ov);o.after&&o.after(ov)}
 function closeSheet(){$$('.ov').forEach(x=>x.remove())}
@@ -1326,13 +1335,14 @@ function recFunds(){const i=profIdx();const ids=i<=1?['icb','hliq','hbaf','nlc']
 /* family MF valuations: Self comes from the live portfolio, others are sample data */
 const FAMV=[null,{inv:420000,cur:512300,xirr:13.1},{inv:150000,cur:176400,xirr:11.8},{inv:0,cur:0,xirr:0}];
 function famVal(k){if(k===0){const T=totals();return{inv:T.inv,cur:T.cur,xirr:T.xirr}}return S.journey==='existing'&&FAMV[k]?FAMV[k]:{inv:0,cur:0,xirr:0}}
+function famToggle(h){const c=h.closest('.fam-c'),o=c.classList.toggle('open');h.setAttribute('aria-expanded',o)}
 function familySheet(){const V=S.members.map((_,k)=>famVal(k)),inv=V.reduce((a,v)=>a+v.inv,0),cur=V.reduce((a,v)=>a+v.cur,0),pl=cur-inv,xr=inv?V.reduce((a,v)=>a+v.xirr*v.inv,0)/inv:0;
  const pl1=v=>v.inv?`<span class="${cls(v.cur-v.inv)}">${S.hide?'••••':(v.cur>=v.inv?'+':'−')+inrS(Math.abs(v.cur-v.inv))} (${pct((v.cur-v.inv)/v.inv*100,1)})</span>`:'—';
  sheet(esc(S.family),`<div class="heroCard fam-tot"><div class="row sb"><span class="t-s mute">Family mutual fund portfolio</span><span class="t-xs mute">${S.members.length} members</span></div><div class="t-xl num mt4" style="font-size:32px">${money(cur)}</div>
   <div class="pf-split mt12" style="grid-template-columns:repeat(3,1fr)"><div><span class="k">Invested</span><b class="num">${money(inv)}</b></div><div><span class="k">Returns</span><b class="num ${pl>=0?'up':''}">${inv?(S.hide?'••••':(pl>=0?'+':'−')+inrS(Math.abs(pl))):'—'}</b></div><div><span class="k">XIRR</span><b class="num">${inv?xr.toFixed(1)+'%':'—'}</b></div></div></div>
  <div class="t-xs mute mt16" style="font-weight:600;letter-spacing:.02em">SWITCH INVESTOR PROFILE</div>
- <div class="col mt8" style="gap:10px">${S.members.map((m,k)=>{const v=V[k];return `<button class="fam-c ${m.on?'on':''}" onclick="S.members.forEach(x=>x.on=false);S.members[${k}].on=true;closeSheet();toast('Switched to ${esc(m.n)}')"><div class="row"><div class="amc sm" style="background:${['#3D4FD8','#08A35B','#F29A1F','#7C4DFF'][k%4]};border-radius:50%">${ini(m.n)}</div><div class="grow" style="min-width:0"><b class="t-s">${esc(m.n)}</b><div class="t-xs mute">${m.rel} · ${m.t}</div></div>${m.on?`<span class="tag b">${ic('check')}Viewing</span>`:''}</div>
-  ${v.inv?`<div class="fam-g mt12"><div><span>Current value</span><b class="num">${money(v.cur)}</b></div><div><span>Invested</span><b class="num">${money(v.inv)}</b></div><div><span>Abs. P/L</span><b class="num">${pl1(v)}</b></div><div><span>XIRR</span><b class="num ${v.xirr?'up':''}">${v.xirr?v.xirr.toFixed(1)+'%':'—'}</b></div></div>`:`<div class="t-xs mute mt8">No mutual fund investments yet</div>`}</button>`}).join('')}</div>
+ <div class="col mt8" style="gap:10px">${S.members.map((m,k)=>{const v=V[k];return `<div class="fam-c ${m.on?'on':''}"><div class="fam-h" role="button" tabindex="0" aria-expanded="false" onclick="famToggle(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();famToggle(this)}"><div class="amc sm" style="background:${['#3D4FD8','#08A35B','#F29A1F','#7C4DFF'][k%4]};border-radius:50%">${ini(m.n)}</div><div class="grow" style="min-width:0"><b class="t-s">${esc(m.n)}</b><div class="t-xs mute">${m.rel} · ${m.t}</div></div>${m.on?`<span class="tag b">${ic('check')}Viewing</span>`:`<button class="btn xs soft" onclick="event.stopPropagation();S.members.forEach(x=>x.on=false);S.members[${k}].on=true;closeSheet();toast('Switched to ${esc(m.n)}')">Switch</button>`}<span class="fam-chev">${ic('chevd')}</span></div>
+  <div class="fam-b"><div>${v.inv?`<div class="fam-g"><div><span>Current value</span><b class="num">${money(v.cur)}</b></div><div><span>Invested</span><b class="num">${money(v.inv)}</b></div><div><span>Abs. P/L</span><b class="num">${pl1(v)}</b></div><div><span>XIRR</span><b class="num ${v.xirr?'up':''}">${v.xirr?v.xirr.toFixed(1)+'%':'—'}</b></div></div>`:`<div class="t-xs mute">No mutual fund investments yet</div>`}</div></div></div>`}).join('')}</div>
  <p class="note mt12">Mutual funds only. Values as on 18 Oct 2026.</p>
  <button class="btn soft block mt8" onclick="go('family')">Manage family</button>`)}
 function notifSheet(){sheet('Notifications',[['SIP due on 5 Nov','₹5,000 for Nippon India Large Cap will be debited from HDFC Bank ••4521.','clock'],['Your analysis was refreshed','Portfolio data synced from your Account Aggregator consent.','refresh'],['New fund offer open','DSP Nifty Smallcap 250 Quality 50 Index Fund closes 28 Oct.','rocket']].map(n=>`<div class="li"><div class="ic">${ic(n[2])}</div><div class="grow"><b class="t-s">${n[0]}</b><div class="t-xs mute">${n[1]}</div></div></div>`).join(''))}
