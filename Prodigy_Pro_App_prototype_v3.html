@@ -354,6 +354,11 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover{transform:translateY(-2p
 .svc:hover .si{transform:translateY(-2px) scale(1.04)}
 .grid4 .svc:nth-child(8n+2) .si,.grid4 .svc:nth-child(8n+7) .si,.grid3 .svc:nth-child(3n+2) .si{background:var(--green-soft);color:var(--green)}
 .grid4 .svc:nth-child(8n+3) .si,.grid4 .svc:nth-child(8n+5) .si,.grid4 .svc:nth-child(8n) .si,.grid3 .svc:nth-child(3n) .si{background:var(--amber-soft);color:var(--amber)}
+.home-hdr{gap:12px;padding:10px 20px;min-height:64px;transition:box-shadow .2s}
+.home-hdr.scrolled{box-shadow:0 6px 18px rgba(17,19,24,.07)}
+.home-hdr .hh-b{width:42px;height:42px;border-radius:50%;background:var(--surface);box-shadow:var(--shadow);color:var(--ink-2)}
+.home-hdr .hh-b:hover{background:var(--brand-soft)}
+.home-hdr .bellb b{top:2px;right:2px}
 .hello{font-size:17px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .svc .soon{border-radius:999px;padding:1px 6px}
 .amc{border-radius:14px}
@@ -1756,14 +1761,13 @@ SCR.home=()=>{const T=totals(),isNew=T.n===0,act=S.sips.filter(s=>s.st==='active
   <div class="row sb mt12"><span class="t-s mute">Could be worth in ${2026+g.yrs}</span><b class="num t-m" data-cu="${nw}" data-f="inrS" data-from="${base}">${inrS(nw)}</b></div>
   ${S.hd?`<div class="t-xs up mt4">About ${inrS(nw-base)} more than today’s plan</div><div class="row mt12" style="gap:8px"><button class="btn sm grow" onclick="S.goals[0].sip+=S.hd;toast('Goal SIP raised by '+inr(S.hd));S.hd=0;rerender()">Apply to this goal</button><button class="btn sm soft grow" onclick="go('goal',{id:'${g.id}'})">Open goal</button></div>`:''}
   <p class="note mt8" style="margin-bottom:0">Illustration at 11% a year. Real returns vary and can be negative.</p></div>`})():'';
- return{sbar:'surface',nav:'home',html:`<div class="body">
- <div class="pad" style="padding-bottom:0">
-  <div class="row" style="gap:12px"><button class="amc" style="background:var(--ink);border-radius:50%;width:44px;height:44px" onclick="familySheet()" aria-label="Switch investor profile">${ini(S.full)}</button>
+ return{sbar:'surface',nav:'home',html:`<header class="hdr home-hdr"><button class="amc" style="background:var(--brand);color:#fff;border-radius:50%;width:42px;height:42px" onclick="familySheet()" aria-label="Switch investor profile">${ini(S.full)}</button>
    <button class="grow" style="text-align:left;min-width:0" onclick="familySheet()"><div class="t-xs mute row" style="gap:2px">${esc(S.family)}<span style="display:inline-flex">${ic('chevd')}</span></div><div class="hello">Hi, ${esc(S.name)} <span class="hi-wave">👋</span></div></button>
-   <button class="ib" style="background:var(--tint)" onclick="go('assistant')" aria-label="Ask Prodigy AI"><img src="${LOGO_MARK}" alt="" style="width:22px"></button><button class="ib bellb" onclick="S.unread=0;$('.bellb b')?.remove();notifSheet()" aria-label="Notifications">${ic('bell')}${S.unread?`<b>${S.unread}</b>`:''}</button></div>
-  ${isNew?`<div class="mt20 heroCard"><div class="t-s mute">Your portfolio</div><div class="t-xl num mt4" style="font-size:48px">₹0</div><p class="ink2 mt8" style="max-width:300px">Every big portfolio starts at zero, and that’s okay. ₹15,000 a month could grow to <b style="color:#fff">${inrS(fv(10000,10,10.2).v+fv(5000,10,6.8,0,100000).v)}</b> in 10 years.</p>
+   <button class="ib hh-b" onclick="go('assistant')" aria-label="Ask Prodigy AI"><img src="${LOGO_MARK}" alt="" style="width:22px;height:22px"></button><button class="ib hh-b bellb" onclick="S.unread=0;$('.bellb b')?.remove();notifSheet()" aria-label="Notifications">${ic('bell')}${S.unread?`<b>${S.unread}</b>`:''}</button></header><div class="body">
+ <div class="pad" style="padding-bottom:0">
+  ${isNew?`<div class="mt8 heroCard"><div class="t-s mute">Your portfolio</div><div class="t-xl num mt4" style="font-size:48px">₹0</div><p class="ink2 mt8" style="max-width:300px">Every big portfolio starts at zero, and that’s okay. ₹15,000 a month could grow to <b style="color:#fff">${inrS(fv(10000,10,10.2).v+fv(5000,10,6.8,0,100000).v)}</b> in 10 years.</p>
    <div class="row mt20" style="gap:10px"><button class="btn sm" onclick="go('analysis')">See my plan</button><button class="btn sm soft" onclick="tab('explore')">Explore funds</button></div></div>`
-  :`<div class="mt20 heroCard"><div class="row sb"><span class="t-s mute">Current value${S.pending.length?', incl. orders in progress':''}</span><button class="ib" style="width:34px;height:34px" onclick="S.hide=!S.hide;rerender()" aria-label="Hide values">${ic(S.hide?'eyeoff':'eye')}</button></div>
+  :`<div class="mt8 heroCard"><div class="row sb"><span class="t-s mute">Current value${S.pending.length?', incl. orders in progress':''}</span><button class="ib" style="width:34px;height:34px" onclick="S.hide=!S.hide;rerender()" aria-label="Hide values">${ic(S.hide?'eyeoff':'eye')}</button></div>
    <div class="t-xl num" style="font-size:42px"${cuA(T.cur)}>${money(T.cur)}</div>
    <div class="row t-s mt8" style="gap:6px"><span class="chg"><span class="${cls(T.d1)}">${S.hide?'••••':(T.d1>=0?'▲ ':'▼ ')+inr(Math.abs(T.d1))+' ('+pct(T.d1p)+')'}</span><span class="mute">1 day</span></span></div>
    <button class="row sb t-s mt20" style="width:100%;color:#fff;font-weight:600;padding-top:14px;border-top:1px solid rgba(255,255,255,.14)" onclick="tab('portfolio')"><span>View detailed portfolio</span>${ic('chev')}</button></div>`}
@@ -1877,6 +1881,7 @@ SCR.order=p=>{const o=S.orders.find(x=>x.id===p.id)||S.orders[0];if(!o)return SC
  <p class="note mt12">Cut-off is 3 pm on business days. Orders after cut-off or on holidays get the next business day’s NAV.</p></div>`}};
 const KINFO={abs:['Absolute return','Your total gain or loss as a percentage of what you invested, since you started. It does not account for how long your money was invested.'],xirr:['XIRR','Your yearly return, adjusted for when each instalment went in. It is the fairest way to compare returns across SIPs, lump sums and other investments.']};
 function kInfo(k){sheet(KINFO[k][0],`<p class="t-s ink2" style="margin:0">${KINFO[k][1]}</p><button class="btn block mt16" onclick="closeSheet()">Got it</button>`)}
+document.addEventListener('scroll',e=>{const b=e.target;if(!b.classList||!b.classList.contains('body'))return;const h=b.previousElementSibling;if(h&&h.classList.contains('home-hdr'))h.classList.toggle('scrolled',b.scrollTop>4)},true);
 function sipMore(k){const s=S.sips[k];sheet('SIP options',`${s.st==='active'?`<button class="li" onclick="closeSheet();pauseSip(${k})"><div class="ic">${ic('pause')}</div><div class="grow"><b class="t-s">Pause SIP</b><div class="t-xs mute">Skip 1 to 6 instalments, restarts automatically</div></div>${ic('chev','mute')}</button>`:`<button class="li" onclick="S.sips[${k}].st='active';closeSheet();rerender();toast('SIP resumed')"><div class="ic">${ic('play')}</div><div class="grow"><b class="t-s">Resume SIP</b><div class="t-xs mute">Restart from the next SIP date</div></div>${ic('chev','mute')}</button>`}<button class="li" onclick="closeSheet();stopSip(${k})"><div class="ic" style="background:var(--red-soft);color:var(--red)">${ic('stop')}</div><div class="grow"><b class="t-s dn">Cancel SIP</b><div class="t-xs mute">Stop future instalments. Units stay invested</div></div>${ic('chev','mute')}</button>`)}
 
 /* ---------- SIPs & top-up ---------- */
