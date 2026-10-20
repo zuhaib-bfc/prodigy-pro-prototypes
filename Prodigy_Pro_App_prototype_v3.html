@@ -532,6 +532,19 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover{transform:translateY(-2p
 .gbar{height:5px;border-radius:99px;background:var(--tint);overflow:hidden;max-width:160px}
 .gbar i{display:block;height:100%;border-radius:99px;animation:growW .9s cubic-bezier(.2,.8,.2,1) both .2s}
 .li.hold{align-items:center}
+.fp-card{background:linear-gradient(135deg,var(--surface) 55%,var(--brand-soft))}
+.fp-goals{display:flex;flex-wrap:wrap;gap:6px}
+.fp-goals span{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:var(--surface);box-shadow:0 0 0 1px var(--line) inset;font-size:12px;font-weight:500;color:var(--ink-2)}
+.fp-goals svg{width:14px;height:14px;color:var(--brand-fg)}
+.fp-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fp-opts .card+.card{margin-top:0}
+.fp-o{padding:16px;display:flex;flex-direction:column}
+.fp-o .btn{margin-top:auto}
+.fp-l{list-style:none;padding:0;margin:10px 0 12px;display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--ink-2)}
+.fp-l li{display:flex;align-items:center;gap:5px}
+.fp-bk{display:flex;align-items:center;gap:5px;margin-top:auto;font-size:11.5px;font-weight:600;color:var(--green)}
+.fp-bk svg{width:13px;height:13px;stroke-width:2.6;flex:none}
+.fp-l svg{width:13px;height:13px;color:var(--green);stroke-width:2.6}
 .wl-sum{width:100%;text-align:left;display:block}
 .wl-t{flex:none;width:136px;border-radius:20px;padding:14px;background:var(--surface);box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;gap:2px;transition:transform .15s,box-shadow .15s}
 .wl-t:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
@@ -1604,6 +1617,7 @@ SCR.assets=()=>{const L=Object.keys(FI).filter(k=>S.linked[k]).sort((x,y)=>asset
   ${L.length?`<div class="stack mt16" style="background:rgba(255,255,255,.12)">${L.map(k=>`<i style="width:${assetVal(k)/nw*100}%;background:${col(k)}"></i>`).join('')}</div>`:''}</div>
  ${L.length?`<div class="card mt12"><div class="row sb"><b>Where it sits</b><span class="t-xs mute">${L.length} asset types</span></div><div class="row mt12" style="gap:18px">${donut(L.map(k=>({v:assetVal(k),c:col(k),l:FI[k].n})),120,16,`<div><b class="t-s num">${inrS(nw)}</b><div class="t-xs mute">Total</div></div>`)}<div class="grow col gap8">${L.map(k=>`<div class="row t-s"><span class="dot" style="background:${col(k)}"></span><span class="grow ink2 ell">${FI[k].n}</span><b class="num">${Math.round(assetVal(k)/nw*100)}%</b></div>`).join('')}</div></div></div>
  <h2 class="sec">Linked assets</h2><div class="card" style="padding:4px 16px">${L.map(k=>`<button class="li" onclick="go('asset',{fi:'${k}'})"><span class="pill-ic" style="width:40px;height:40px;border-radius:12px;background:color-mix(in srgb,${col(k)} 16%,transparent);color:${col(k)}">${ic(FI[k].ic)}</span><div class="grow" style="min-width:0"><b class="t-s">${FI[k].n}</b><div class="t-xs mute ell">${linkCount(k)} · ${FI[k].acc.filter(a=>a[2]).map(a=>a[0]).filter((v,i,A)=>A.indexOf(v)===i).join(', ')}</div></div><div style="text-align:right"><b class="t-s num">${money(assetVal(k))}</b><div class="t-xs mute num">${Math.round(assetVal(k)/nw*100)}%</div></div></button>`).join('')}</div>`:`<div class="empty">${art('share',110).replace('class="art"','class="art" style="border-radius:22px"')}<div class="t-m mt16">Nothing linked yet</div><p class="mute t-s">Link your bank, FDs, stocks and more to see your full net worth.</p></div>`}
+ ${planSec(nw,L.length)}
  ${U.length?`<h2 class="sec">Link more <button onclick="linkSheet()">All options</button></h2><div class="card" style="padding:4px 16px">${U.flatMap(g=>g[1]).slice(0,4).map(k=>`<button class="li" onclick="go('aa',{fi:'${k}',next:'asset'})"><div class="ic">${ic(FI[k].ic)}</div><div class="grow"><b class="t-s">${FI[k].n}</b><div class="t-xs mute">${FI[k].acc.map(a=>a[0]).filter((v,i,A)=>A.indexOf(v)===i).slice(0,2).join(', ')}</div></div><span class="btn xs soft">Link</span></button>`).join('')}</div>`:''}
  <p class="note mt16">Values come from your linked accounts via the Account Aggregator and are refreshed up to once a day.</p></div>`}};
 SCR.asset=p=>{const f=FI[p.fi];return{sbar:'surface',html:`${hdr(f.n)}<div class="body pad">
@@ -1882,6 +1896,40 @@ SCR.order=p=>{const o=S.orders.find(x=>x.id===p.id)||S.orders[0];if(!o)return SC
 const KINFO={abs:['Absolute return','Your total gain or loss as a percentage of what you invested, since you started. It does not account for how long your money was invested.'],xirr:['XIRR','Your yearly return, adjusted for when each instalment went in. It is the fairest way to compare returns across SIPs, lump sums and other investments.']};
 function kInfo(k){sheet(KINFO[k][0],`<p class="t-s ink2" style="margin:0">${KINFO[k][1]}</p><button class="btn block mt16" onclick="closeSheet()">Got it</button>`)}
 document.addEventListener('scroll',e=>{const b=e.target;if(!b.classList||!b.classList.contains('body'))return;const h=b.previousElementSibling;if(h&&h.classList.contains('home-hdr'))h.classList.toggle('scrolled',b.scrollTop>4)},true);
+/* ---------- Comprehensive financial planning (wealth screen) ---------- */
+const LIFE=[['house','house','House','house'],['car','car','Car','car'],['wed','ring','Marriage','wed'],['edu','grad','Child education','edu'],['trip','plane','Foreign trips','trip'],['pre','umbrella','Pre-retirement','ret'],['post','coins','Post-retirement','ret']];
+S.adv=null;S.advG=['house','edu','pre'];
+function planSec(nw,n){const a=S.adv;
+ return `<h2 class="sec">Plan your complete financial life</h2>
+ <div class="card fp-card"><p class="t-s ink2" style="margin:0">${n?`You’re tracking <b>${money(nw)}</b> across ${n} asset type${n>1?"s":""}. Put all of it to work with one plan for every goal.`:'Link your assets and get one plan that covers every goal in your life.'}</p>
+  <div class="fp-goals mt12">${LIFE.map(g=>`<span>${ic(g[1])}${g[2]}</span>`).join('')}</div></div>
+ <div class="fp-opts mt12">
+  <div class="card fp-o"><div class="row sb"><span class="pill-ic" style="background:var(--brand-soft);color:var(--brand-fg)">${ic('sparkle')}</span><span class="tag g">Instant</span></div>
+   <b class="mt12" style="display:block">Plan in the app</b><p class="t-xs mute mt4" style="margin:4px 0 0">Prodigy AI builds goal-wise SIPs using your linked wealth. Invest with one tap, right here.</p>
+   <ul class="fp-l"><li>${ic('check')}Ready in 2 minutes</li><li>${ic('check')}Executes directly in the app</li></ul>
+   <button class="btn sm block mt12" onclick="diyPlanSheet()">Start planning</button></div>
+  <div class="card fp-o"><div class="row sb"><span class="pill-ic" style="background:var(--green-soft);color:var(--green)">${ic('users')}</span><span class="tag">Advisor-led</span></div>
+   <b class="mt12" style="display:block">Talk to a wealth advisor</b><p class="t-xs mute mt4" style="margin:4px 0 0">A SEBI-registered advisor reviews everything, including insurance, tax and estate.</p>
+   <ul class="fp-l"><li>${ic('check')}Free 30-min session</li><li>${ic('check')}Written plan; you act on it</li></ul>
+   ${a?`<div class="fp-bk">${ic('check')}Booked · ${a.slot}</div><button class="btn sm soft block" style="margin-top:8px" onclick="advBooked()">View booking</button>`:`<button class="btn sm line block mt12" onclick="advSheet()">Book a call</button>`}</div>
+ </div>
+ <p class="note mt8">In-app plans use mutual funds you can invest in directly. Advisor recommendations for other products are carried out by you or with your advisor’s help.</p>`}
+function diyPlanSheet(){sheet('Which goal first?',`<p class="t-s mute" style="margin:0 0 4px">Start with one. You can add the rest any time from Goals.</p><div class="col mt8">${LIFE.map(g=>`<button class="li" onclick="closeSheet();newGoal('${g[3]}')"><div class="ic">${ic(g[1])}</div><div class="grow"><b class="t-s">${g[2]}</b><div class="t-xs mute">${{house:'Down payment and home loan EMIs',car:'Pay cash or keep the loan small',wed:'Plan the celebration without debt',edu:'School and college costs, adjusted for inflation',trip:'Travel abroad, funded in advance',pre:'Build the corpus you need by retirement',post:'Turn your corpus into a monthly income'}[g[0]]}</div></div>${ic('chev','mute')}</button>`).join('')}</div>`)}
+function advSheet(){const slots=['Today, 5:00 pm','Tomorrow, 11:00 am','Tomorrow, 4:00 pm','Sat 24 Oct, 10:30 am'];let slot=slots[1],mode='Video call';
+ sheet('Talk to a wealth advisor',`<div class="card soft row" style="padding:12px 14px">${ic('shield','br')}<div class="t-xs ink2">BFC Capital’s SEBI-registered advisors (INA000021669). The first session is free, with no obligation to invest.</div></div>
+ <div class="t-s t-b mt16">What should we cover?</div><div class="row mt8" style="gap:8px;flex-wrap:wrap" id="advG">${LIFE.map(g=>`<button class="chip ${S.advG.includes(g[0])?'on':''}" data-g="${g[0]}" style="height:32px;font-size:12.5px">${g[2]}</button>`).join('')}</div>
+ <div class="t-s t-b mt16">Pick a time</div><div class="hs mt8" style="gap:8px;margin:0 -18px;padding:2px 18px 6px;scroll-padding:0 18px" id="advS">${slots.map(x=>`<button class="chip ${x===slot?'on':''}" data-s="${x}">${x}</button>`).join('')}</div>
+ <div class="t-s t-b mt12">How would you like to talk?</div><div class="seg mt8" id="advM">${['Video call','Phone call'].map(x=>`<button class="${x===mode?'on':''}" data-m="${x}">${x}</button>`).join('')}</div>
+ <p class="note mt12">Your linked assets and goals are shared with the advisor only for this session. Bring any loan or property details you want to include.</p>
+ <button class="btn block mt8" id="advGo">Confirm booking</button>`,{after:ov=>{
+  $$('#advG .chip',ov).forEach(c=>c.onclick=()=>{const g=c.dataset.g;S.advG=S.advG.includes(g)?S.advG.filter(x=>x!==g):[...S.advG,g];c.classList.toggle('on')});
+  $$('#advS .chip',ov).forEach(c=>c.onclick=()=>{slot=c.dataset.s;$$('#advS .chip',ov).forEach(x=>x.classList.toggle('on',x===c))});
+  $$('#advM button',ov).forEach(b=>b.onclick=()=>{mode=b.dataset.m;$$('#advM button',ov).forEach(x=>x.classList.toggle('on',x===b))});
+  $('#advGo',ov).onclick=()=>{if(!S.advG.length)return toast('Choose at least one topic');S.adv={slot,mode,goals:[...S.advG]};closeSheet();rerender();toast('Booked: '+slot)}}})}
+function advBooked(){const a=S.adv;sheet('Your advisor session',`<div class="card soft"><div class="row"><div class="amc" style="background:var(--green);border-radius:50%">RK</div><div class="grow"><b class="t-s">Rohan Kapoor, CFP</b><div class="t-xs mute">Senior wealth advisor, BFC Capital</div></div></div>
+ ${[['When',a.slot],['How',a.mode],['Topics',a.goals.map(g=>LIFE.find(x=>x[0]===g)[2]).join(', ')]].map(r=>`<div class="kv"><span>${r[0]}</span><span>${r[1]}</span></div>`).join('')}</div>
+ <div class="t-s t-b mt16">What happens next</div><div class="col gap8 mt8 t-s ink2">${['We’ll send a calendar invite and a reminder 30 minutes before','Your advisor reviews your linked wealth and goals in advance','You get a written plan within 3 working days. Mutual fund steps can be invested in the app, others are done with your advisor'].map((t,i)=>`<div class="row top" style="gap:10px"><span class="nd-ic" style="width:24px;height:24px;font-size:11px">${i+1}</span><span>${t}</span></div>`).join('')}</div>
+ <div class="row mt16" style="gap:8px"><button class="btn line grow" onclick="S.adv=null;closeSheet();rerender();toast('Session cancelled')">Cancel</button><button class="btn grow" onclick="closeSheet();advSheet()">Reschedule</button></div>`)}
 function sipMore(k){const s=S.sips[k];sheet('SIP options',`${s.st==='active'?`<button class="li" onclick="closeSheet();pauseSip(${k})"><div class="ic">${ic('pause')}</div><div class="grow"><b class="t-s">Pause SIP</b><div class="t-xs mute">Skip 1 to 6 instalments, restarts automatically</div></div>${ic('chev','mute')}</button>`:`<button class="li" onclick="S.sips[${k}].st='active';closeSheet();rerender();toast('SIP resumed')"><div class="ic">${ic('play')}</div><div class="grow"><b class="t-s">Resume SIP</b><div class="t-xs mute">Restart from the next SIP date</div></div>${ic('chev','mute')}</button>`}<button class="li" onclick="closeSheet();stopSip(${k})"><div class="ic" style="background:var(--red-soft);color:var(--red)">${ic('stop')}</div><div class="grow"><b class="t-s dn">Cancel SIP</b><div class="t-xs mute">Stop future instalments. Units stay invested</div></div>${ic('chev','mute')}</button>`)}
 
 /* ---------- SIPs & top-up ---------- */
