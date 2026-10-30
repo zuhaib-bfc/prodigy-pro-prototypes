@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prodigy Pro v4 notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap">
+<style>
+:root{--brand:#000e7c;--brand-fg:#1A2A9C;--brand-soft:#EEF0FF;--green:#08A35B;--green-soft:#E6F6EE;--amber:#C27803;--amber-soft:#FFF5E1;--red:#E0383E;--red-soft:#FDECEC;
+ --bg:#F5F6FA;--surface:#fff;--surface-2:#F5F6F8;--ink:#111318;--ink-2:#4A4E5A;--mute:#6E7280;--line:#E6E8EE;--c1:#3D4FD8;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--brand:#2a378b;--brand-fg:#A3B0FF;--brand-soft:#1A2150;--green:#2FC27C;--green-soft:#0F2A1E;--amber:#F2B144;--amber-soft:#2E2412;--red:#FF6369;--red-soft:#33171A;
+ --bg:#080B18;--surface:#10152B;--surface-2:#161C36;--ink:#F1F3FB;--ink-2:#C6CBE2;--mute:#8B91B0;--line:#242B4B;--c1:#6275F5;color-scheme:dark}}
+:root[data-theme="dark"]{--brand:#2a378b;--brand-fg:#A3B0FF;--brand-soft:#1A2150;--green:#2FC27C;--green-soft:#0F2A1E;--amber:#F2B144;--amber-soft:#2E2412;--red:#FF6369;--red-soft:#33171A;
+ --bg:#080B18;--surface:#10152B;--surface-2:#161C36;--ink:#F1F3FB;--ink-2:#C6CBE2;--mute:#8B91B0;--line:#242B4B;--c1:#6275F5;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.6 Outfit,system-ui,sans-serif}
+a{color:var(--brand-fg)}
+.wrap{max-width:860px;margin:0 auto;padding:32px 16px 80px}
+header.top{background:var(--brand);color:#fff;border-radius:24px;padding:28px 24px;position:relative;overflow:hidden}
+header.top::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:-70px;top:-90px;background:rgba(255,255,255,.08)}
+header.top h1{margin:0;font-size:28px;line-height:1.2}
+header.top p{margin:8px 0 0;opacity:.85}
+header.top .links{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+header.top .links a{color:#fff;background:rgba(255,255,255,.14);padding:6px 12px;border-radius:999px;text-decoration:none;font-size:14px;font-weight:500}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 4px}
+nav.toc a{font-size:13.5px;text-decoration:none;background:var(--surface);border:1px solid var(--line);padding:5px 11px;border-radius:999px;color:var(--ink-2)}
+nav.toc a:hover{border-color:var(--brand-fg);color:var(--brand-fg)}
+h2{font-size:22px;margin:44px 0 6px;line-height:1.3}
+h2 .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--brand-soft);color:var(--brand-fg);font-size:15px;margin-right:8px;vertical-align:2px}
+h3{font-size:16.5px;margin:24px 0 6px}
+p{margin:8px 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:14px 0}
+.ask{font-size:14px;color:var(--mute);margin:0}
+.verdict{border-left:4px solid var(--brand-fg);background:var(--brand-soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:12px 0}
+.verdict b{color:var(--brand-fg)}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.tag.g{background:var(--green-soft);color:var(--green)}.tag.a{background:var(--amber-soft);color:var(--amber)}.tag.r{background:var(--red-soft);color:var(--red)}.tag.b{background:var(--brand-soft);color:var(--brand-fg)}
+.tw{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font-size:12.5px;font-weight:600;color:var(--mute);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.hm td.num{font-weight:600}
+ul,ol{padding-left:22px;margin:8px 0}li{margin:4px 0}
+.note{font-size:13px;color:var(--mute)}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0}
+.flow div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14px}
+.flow b{display:block;font-size:13px;color:var(--brand-fg);margin-bottom:2px}
+.q2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.q2 div{border-radius:14px;padding:12px 14px;font-size:14px}
+.q2 b{display:block}
+.q-s{background:var(--amber-soft)}.q-k{background:var(--green-soft)}.q-r{background:var(--red-soft)}.q-w{background:var(--brand-soft)}
+.ax{display:flex;justify-content:space-between;font-size:12px;color:var(--mute)}
+code{font-size:13px;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+.formula{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--surface-2);border-radius:12px;padding:12px 14px;overflow-x:auto;white-space:pre;line-height:1.7}
+.oq li{margin:8px 0}
+footer{margin-top:48px;font-size:13px;color:var(--mute)}
+@media (max-width:560px){header.top h1{font-size:23px}.q2{grid-template-columns:1fr}h2{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+ <h1>Prodigy Pro v4: response to the RIA review</h1>
+ <p>What we changed in the prototype for each of the seven points, why, and what we still need to agree. 30 Oct 2026.</p>
+ <div class="links"><a href="Prodigy_Pro_App_prototype_v4.html">Open v4 prototype</a><a href="Prodigy_Pro_App_prototype_v3.html">Open v3 (before)</a></div>
+</header>
+
+<nav class="toc" aria-label="Sections">
+ <a href="#summary">Summary</a><a href="#p1">1 · Horizon &amp; risk profile</a><a href="#p2">2 · Asset mix &amp; 2×2</a><a href="#p3">3 · Tax</a><a href="#p4">4 · Smart Withdraw</a><a href="#p5">5 · Advisory headline</a><a href="#p6">6 · Visuals</a><a href="#p7">7 · Portfolio ratios</a><a href="#open">Open questions</a><a href="#where">Where to look in v4</a>
+</nav>
+
+<h2 id="summary">Summary</h2>
+<div class="tw"><table>
+ <tr><th>#</th><th>RIA point</th><th>Our position</th><th>In v4</th></tr>
+ <tr><td>1</td><td>Don’t use investment horizon in the risk profile; ask it before each suggestion</td><td><span class="tag g">Agree</span> Horizon stays mandatory, but it belongs to each goal, not to the person</td><td>7-factor profile; horizon asked in plan, recommendations, assistant and goals</td></tr>
+ <tr><td>2</td><td>Drop equity / debt / gold recommendations; fund holdings drift</td><td><span class="tag a">Agree in part</span> Keep allocation, but measure it look-through, in bands. Stop labelling funds as “the equity part”</td><td>Look-through mix, bands, model portfolios, 2×2 scheme review</td></tr>
+ <tr><td>3</td><td>Show tax impact on switch / redeem</td><td><span class="tag g">Agree</span> Everywhere a sale is suggested</td><td>FIFO tax on redeem, switch, holding, actions, tax snapshot</td></tr>
+ <tr><td>4</td><td>Redemption assistant</td><td><span class="tag g">Agree</span> Name: <b>Smart Withdraw</b></td><td>New screen</td></tr>
+ <tr><td>5</td><td>Headline “25% of schemes are non-performing”</td><td><span class="tag g">Agree</span> With a defined term, and the money share alongside the count</td><td>New headline on portfolio health</td></tr>
+ <tr><td>6</td><td>More visuals in portfolio review</td><td><span class="tag g">Agree</span></td><td>6 new visuals</td></tr>
+ <tr><td>7</td><td>Sharpe, Alpha, Beta, Sortino can’t be computed for a portfolio</td><td><span class="tag r">Disagree</span> They can, from the portfolio’s own return series. They can’t be averaged from fund factsheets.</td><td>Kept, with benchmark column and method sheet</td></tr>
+</table></div>
+
+<!-- ============================== 1 ============================== -->
+<h2 id="p1"><span class="n">1</span>Investment horizon and the risk profile</h2>
+<p class="ask">RIA view: if horizon is baked into the risk profile, a later goal with a different tenure gets a wrong suggestion. Profile on 7 factors instead, and ask horizon every time we suggest something.</p>
+<div class="verdict"><b>Both sides are right, about different things.</b> Horizon is a mandatory input for suitability, so your “golden standard” point holds. But it describes a pot of money, not the person. One investor can have a 2-year trip and a 24-year retirement at the same time, so no single horizon in their profile can be right for both.</div>
+
+<h3>How to justify it to compliance</h3>
+<ul>
+ <li>SEBI (Investment Advisers) Regulations, 2013, Reg. 16 (risk profiling) asks the adviser to obtain information including the client’s investment objectives, how long they wish to stay invested and the purpose of the investment. It requires us to <em>collect and use</em> horizon. It does not say horizon must be a weight inside one person-level score. <span class="note">(Please have compliance confirm the current wording.)</span></li>
+ <li>Asking for horizon at each point of advice, and storing it with that recommendation, gives a <b>stronger audit trail</b>: every suggestion records the profile <em>and</em> the horizon it was based on.</li>
+ <li>The RIAs’ seven factors line up closely with the other items Reg. 16 lists: age, objectives, income, existing investments, risk appetite and liabilities. Horizon and purpose are the two that belong to the goal.</li>
+</ul>
+
+<h3>Why not “recalculate the risk profile for each goal”?</h3>
+<p>We considered prompting “we need to recalculate your risk profile for this goal” and recommend against it:</p>
+<ul>
+ <li>Risk tolerance and capacity are properties of the person. If the profile changes every time a goal is created, the person ends up with several “profiles”, which confuses users and auditors.</li>
+ <li>It double-counts: the horizon would sit inside the score <em>and</em> in the goal tenure.</li>
+ <li>It adds friction (re-answering questions) at the moment the user is most motivated to invest.</li>
+</ul>
+<p>Instead: <b>the profile stays fixed and the mix is recalculated.</b> Target mix = f(risk profile, horizon of this money).</p>
+
+<h3>New risk profile: the RIAs’ 7 factors</h3>
+<div class="tw"><table>
+ <tr><th>#</th><th>Question</th><th>Measures</th></tr>
+ <tr><td>1</td><td>Loans and EMIs as a share of income</td><td>Capacity</td></tr>
+ <tr><td>2</td><td>Main investment objective</td><td>Tolerance</td></tr>
+ <tr><td>3</td><td>What you’d do in a 20% fall</td><td>Tolerance</td></tr>
+ <tr><td>4</td><td>Stability of income</td><td>Capacity</td></tr>
+ <tr><td>5</td><td>Age group: <b>filled from date of birth</b>, shown but not asked</td><td>Capacity</td></tr>
+ <tr><td>6</td><td>Emergency savings, in months of expenses</td><td>Capacity</td></tr>
+ <tr><td>7</td><td>Current investments</td><td>Capacity / experience</td></tr>
+</table></div>
+<p>Profile = the <b>lower</b> of tolerance (willingness) and capacity (ability), on a 5-step scale. The profile card shows both bars and says which one set the limit. “How many people depend on your income” from v3 is dropped. It is partly covered by EMIs and emergency savings, but the RIAs may want it back as a capacity factor.</p>
+
+<h3>Profile × horizon: equity we aim for (look-through)</h3>
+<div class="tw"><table class="hm">
+ <tr><th>Profile</th><th class="num">Under 1 yr</th><th class="num">1–3 yrs</th><th class="num">3–5 yrs</th><th class="num">5–7 yrs</th><th class="num">7+ yrs</th></tr>
+ <tr><td>Conservative</td><td class="num">0%</td><td class="num">0%</td><td class="num">15%</td><td class="num">20%</td><td class="num">20%</td></tr>
+ <tr><td>Moderately conservative</td><td class="num">0%</td><td class="num">5%</td><td class="num">25%</td><td class="num">35%</td><td class="num">40%</td></tr>
+ <tr><td>Moderate</td><td class="num">0%</td><td class="num">10%</td><td class="num">35%</td><td class="num">50%</td><td class="num">55%</td></tr>
+ <tr><td>Moderately aggressive</td><td class="num">0%</td><td class="num">15%</td><td class="num">45%</td><td class="num">60%</td><td class="num">70%</td></tr>
+ <tr><td>Aggressive</td><td class="num">0%</td><td class="num">20%</td><td class="num">55%</td><td class="num">70%</td><td class="num">80%</td></tr>
+</table></div>
+<p class="note">Band of ±5 around each figure. Gold: 10% from 5 years, 5% at 3–5 years, none below 3. The 7+ column equals v3’s profile mix, so long-term users see no change. <b>These numbers are placeholders for the investment committee to set.</b></p>
+
+<h3>User journey</h3>
+<div class="flow">
+ <div><b>Onboarding</b>7 factors → profile. No horizon question. The bot explains it will ask “when do you need the money” each time it suggests funds.</div>
+ <div><b>New-investor plan</b>“When will you need this money?” chips. Funds appear only after a choice.</div>
+ <div><b>Recommended funds / assistant SIP</b>Same question first; funds change with the answer.</div>
+ <div><b>Goals</b>Tenure is the horizon. The goal shows its own mix and expected return, and says “your profile hasn’t changed”.</div>
+ <div><b>Existing portfolio</b>Target mix = value-weighted blend of each goal’s mix. Money not linked to a goal is assumed long-term, with a nudge to link it.</div>
+ <div><b>Glide path</b>From 3 years before a goal date, new money and rebalancing move it to lower-risk funds.</div>
+</div>
+
+<!-- ============================== 2 ============================== -->
+<h2 id="p2"><span class="n">2</span>Equity / debt / gold recommendations and the 2×2 review</h2>
+<p class="ask">RIA view: holdings change daily, sometimes a lot in 1–6 months, and each fund has its own mix. So drop equity / debt / gold-wise recommendations.</p>
+<div class="verdict"><b>Right diagnosis, but dropping allocation is the wrong fix.</b> Asset allocation is what makes a recommendation suitable and what drives rebalancing, so we can’t advise without it. What has to go is the shortcut of treating a fund’s <em>category</em> as its asset class.</div>
+
+<h3>Why the drift concern is real but bounded</h3>
+<ul>
+ <li>AMCs disclose full portfolios <b>monthly</b> (debt schemes more often). Holdings change daily, but the latest disclosure is the best available input and it is refreshed every month.</li>
+ <li>For most equity and debt categories, SEBI’s categorisation rules cap the drift. For example, large cap funds keep at least 80% in large caps and flexi cap funds at least 65% in equity.</li>
+ <li>The big movers are a small set we can treat specially: balanced advantage / dynamic asset allocation (0–100% equity), multi-asset, equity savings, fund of funds, and funds holding high cash.</li>
+</ul>
+
+<h3>What v4 does instead</h3>
+<ol>
+ <li><b>Look-through mix.</b> The portfolio’s equity, debt &amp; cash and gold come from what each fund actually held at the last disclosure, stamped “as of 30 Sep 2026”. In the sample portfolio, look-through equity is 87% while category labels would say 92%.</li>
+ <li><b>Bands, not points.</b> Each target is ±5%. We act only when the portfolio is outside the band, so monthly drift doesn’t trigger churn. Even then, the first step is to redirect new SIPs, not to sell.</li>
+ <li><b>Model portfolios, not buckets.</b> For each profile × horizon the research team publishes a fund list with weights. The app shows the funds and one check line: “Looking inside these funds, about 45% is in equity today, within the 40–50% that suits money you need in 3 to 5 years.” Funds are never labelled “your equity fund”.</li>
+ <li><b>Dynamic funds carry a range</b> (“moves between 30% and 80% equity”) and are re-checked monthly.</li>
+</ol>
+
+<h3>What the industry does</h3>
+<ul>
+ <li><b>Category-based split</b> (fund category → asset class) is common in transactional apps. It is simple but wrong for hybrids and FoFs.</li>
+ <li><b>Look-through / X-ray</b> (Morningstar Portfolio X-Ray, Value Research’s portfolio tools) uses disclosed holdings. This is the standard for advice.</li>
+ <li>Data vendors such as Morningstar, Value Research, ACE MF, CMOTS and ICRA Analytics supply holdings-level data and look-through splits.</li>
+</ul>
+<p class="note">Please verify current competitor behaviour before quoting it externally; app features change often.</p>
+
+<h3>How to categorise the “other” categories</h3>
+<div class="tw"><table>
+ <tr><th>SEBI group / category</th><th>For allocation and risk</th><th>For tax</th></tr>
+ <tr><td>Equity (large, mid, small, flexi, multi, ELSS, sectoral, thematic …)</td><td>Look-through: mostly equity, plus cash; market-cap split</td><td>Equity-oriented</td></tr>
+ <tr><td>Debt (liquid, overnight, corporate bond, gilt …)</td><td>Debt &amp; cash</td><td>Slab rate (bought on or after 1 Apr 2023)</td></tr>
+ <tr><td>Conservative / balanced / aggressive hybrid</td><td>Look-through (about 10–25% / 40–60% / 65–80% equity)</td><td>By actual equity share</td></tr>
+ <tr><td>Balanced advantage / dynamic asset allocation</td><td>Look-through with a range; monthly re-check</td><td>Usually equity-oriented (gross equity incl. hedges)</td></tr>
+ <tr><td>Multi-asset allocation</td><td>Look-through across equity, debt and gold</td><td>Depends on equity share</td></tr>
+ <tr><td>Arbitrage, equity savings (hedged part)</td><td>Treat hedged equity as debt-like; count only net equity</td><td>Equity-oriented</td></tr>
+ <tr><td>Solution-oriented (retirement, children’s)</td><td>Look-through; flag lock-in</td><td>By equity share</td></tr>
+ <tr><td>Index funds / ETFs</td><td>By underlying index</td><td>By underlying</td></tr>
+ <tr><td>Fund of funds (domestic)</td><td>Look through to the underlying funds</td><td>Usually non-equity</td></tr>
+ <tr><td>International FoFs / overseas funds</td><td>Equity, tagged “international” (could become a 4th bucket later)</td><td>Non-equity: slab under 24 months, 12.5% over</td></tr>
+ <tr><td>Gold / silver ETFs and FoFs</td><td>Gold (or commodity)</td><td>Non-equity: as above (ETFs: 12 months)</td></tr>
+</table></div>
+
+<h3>The 2×2 scheme review</h3>
+<p>The RIAs’ four labels work well as a 2×2, but a 2×2 needs two named axes. We used <b>performance against the fund’s own category</b> (across) and <b>fit with this investor’s plan</b> (up):</p>
+<div class="q2">
+ <div class="q-s"><b>Switch</b>Weak performance, good fit. The job is right but the fund is wrong: move to a better fund in the same role.</div>
+ <div class="q-k"><b>Satisfactory</b>Strong performance, good fit. Keep it and keep the SIPs going.</div>
+ <div class="q-r"><b>Redeem</b>Weak performance, poor fit. Exit, timed for the lowest tax.</div>
+ <div class="q-w"><b>Under watch</b>Strong performance, poor fit (overlap, overweight, too risky for the goal). Don’t add money; trim when rebalancing.</div>
+</div>
+<div class="ax"><span>← weaker</span><span>Performance vs category</span><span>stronger →</span></div>
+<ul>
+ <li><b>Performance</b> = rank of 3-year rolling returns in its SEBI category over the last 12 quarters, plus downside capture. These are single-scheme metrics, so the RIAs agree they are valid.</li>
+ <li><b>Fit</b> = overlap with other holdings, weight against its band, risk against the linked goal’s horizon, and purpose (for example, ELSS for someone on the new tax regime).</li>
+ <li><b>Anti-churn rule:</b> a fund moves to Switch or Redeem only after two quarters in a row in the bottom half.</li>
+ <li>v4 has two views: a <b>Summary</b> grid with count, value and fund-house badges per quadrant, and an <b>Each fund</b> bubble chart (size = amount held, tap to open).</li>
+</ul>
+
+<!-- ============================== 3 ============================== -->
+<h2 id="p3"><span class="n">3</span>Tax on switch and redemption</h2>
+<div class="verdict"><b>Agree, and it should appear wherever we suggest selling:</b> redeem, switch, rebalancing actions, Smart Withdraw and the holding page. A switch is a sale for tax, even within the same fund house.</div>
+<h3>Rules used in v4 (units sold in FY 2026-27)</h3>
+<div class="tw"><table>
+ <tr><th>Fund type</th><th>Short-term</th><th>Long-term</th></tr>
+ <tr><td>Equity-oriented (65%+ Indian equity, incl. arbitrage and balanced advantage)</td><td>Up to 12 months: 20%</td><td>Over 12 months: 12.5% on gains above ₹1.25 L a year</td></tr>
+ <tr><td>Debt (bought on or after 1 Apr 2023)</td><td colspan="2">Slab rate, regardless of holding period</td></tr>
+ <tr><td>Gold, international, other non-equity funds</td><td>Up to 24 months: slab rate</td><td>Over 24 months: 12.5%</td></tr>
+</table></div>
+<p class="note">Plus 4% cess and any surcharge. The Income-tax Act, 2025 replaces the 1961 Act from 1 Apr 2026, so section references change; we have assumed rates carry over. <b>Please have a tax adviser confirm before launch.</b></p>
+<h3>What the engine does</h3>
+<ul>
+ <li><b>Lot-level FIFO</b> per folio and scheme: oldest units are sold first, as the law requires. Each SIP instalment has its own holding period and, for ELSS, its own 3-year lock-in.</li>
+ <li><b>Set-off:</b> short-term losses against any gain; long-term losses against long-term gains only. Then the ₹1.25 L exemption, net of gains already booked this financial year.</li>
+ <li><b>Exit load per lot</b>, shown separately. Exit load is deducted by the AMC; tax is not deducted for resident investors and is paid at filing. The UI says “Reaches your bank” and “Estimated tax” separately for this reason.</li>
+ <li><b>Combined effect:</b> on “Review changes”, the total tax considers all selected sales together, so booking the Tata Digital loss reduces tax on the small-cap trim.</li>
+</ul>
+<h3>Data needed for production</h3>
+<ul>
+ <li>Transaction-level history (purchase date, units, NAV) per folio, from the CAS, RTA feeds (CAMS / KFintech) or Account Aggregator MF data. Holdings alone are not enough.</li>
+ <li>Gains already realised this financial year (from the capital gains statement), to know how much of the ₹1.25 L is left.</li>
+ <li>The user’s tax slab (ask once, editable; v4 assumes 30%), residential status (NRIs have TDS), and grandfathered cost for equity units bought before 31 Jan 2018.</li>
+ <li>Pledged units (loan against MF) can’t be redeemed and must be excluded.</li>
+</ul>
+<p>Also worth adding: a <b>gain-harvesting nudge</b> in Feb–Mar (“you can book ₹13,000 more tax-free before 31 March”). v4 already shows this in the Tax snapshot.</p>
+
+<!-- ============================== 4 ============================== -->
+<h2 id="p4"><span class="n">4</span>Redemption assistant → <em>Smart Withdraw</em></h2>
+<p><b>Why this name:</b> “withdraw” is the user’s word (“I need ₹1 lakh”); “redeem” is industry jargon. “Smart” tells them the app is choosing for them. Alternatives: <i>Tax-smart Withdrawal</i>, <i>Withdraw Wisely</i>, <i>Cash-out Planner</i>.</p>
+<h3>Logic</h3>
+<ol>
+ <li><b>Inputs:</b> amount, purpose (planned expense / emergency / goal due / other), and a toggle to leave goal-linked funds alone.</li>
+ <li><b>Constraints:</b> FIFO within each fund, ELSS lock-in, pledged and in-process units are unavailable.</li>
+ <li><b>Cost of each next ₹ from each fund</b> = tax + exit load for the next FIFO units, adjusted by plan preferences:
+  <ul><li>Redeem and Switch quadrant funds go first, then Under watch.</li><li>Loss-making units are attractive because they offset gains.</li><li>Long-term equity gains are free until the ₹1.25 L limit is used.</li><li>Goal-linked funds are penalised when the toggle is on.</li><li>The emergency cushion (liquid / arbitrage) is penalised unless the purpose is an emergency.</li><li>When equity is above its band, equity funds get a small preference.</li></ul></li>
+ <li><b>Greedy allocation</b> in small steps, each step taking the cheapest fund. The output is grouped by fund, with a reason for each.</li>
+ <li><b>Proof of value:</b> a side-by-side with “sell evenly from every fund” (tax, exit load, number of funds touched), plus a list of what was left untouched and why.</li>
+ <li><b>Alternatives:</b> for a short-term need, suggest a loan against MF; for an emergency, explain payout timing and point to instant redemption from liquid funds.</li>
+</ol>
+<p class="note">Sample result: for ₹1 L the plan sells the underperforming ELSS (long-term units only) and the loss-making Tata Digital fund. Estimated tax is ₹0, against ₹1,700 when selling evenly.</p>
+<p>Production edge cases: amount above what’s redeemable, joint or minor folios, demat-held units, NRI TDS, cut-off times, and partial-unit rounding.</p>
+
+<!-- ============================== 5 ============================== -->
+<h2 id="p5"><span class="n">5</span>Advisory headline</h2>
+<div class="verdict"><b>Agree.</b> A scheme-level headline is more actionable than a rupee loss in a hypothetical fall. Two tweaks:</div>
+<ul>
+ <li>Say <b>“underperforming their category”</b>, not “non-performing”. “Non-performing” sounds like a bad loan (NPA) and is undefined.</li>
+ <li>Show the <b>money share</b> next to the count. Two small funds out of nine is a different story from two large ones.</li>
+</ul>
+<p>v4 copy: <i>“<b>22% of your schemes are underperforming</b> their category: 2 of 9, holding 14% of your money. 2 more are on watch. 5 changes could lift your score to 82.”</i></p>
+<p>Risk fit is still shown lower down, as a band (“Equity is 15% above your band”), because suitability against the profile is part of our RIA duty. It is no longer the headline.</p>
+
+<!-- ============================== 6 ============================== -->
+<h2 id="p6"><span class="n">6</span>More visuals in portfolio review</h2>
+<div class="tw"><table>
+ <tr><th>Visual</th><th>What it answers</th></tr>
+ <tr><td>2×2 scheme review (grid + bubble chart)</td><td>Which funds to keep, switch, watch or exit, and how much money is in each</td></tr>
+ <tr><td>Look-through mix vs target bands</td><td>Am I inside my band? Plus the category-label figure for contrast</td></tr>
+ <tr><td>Overlap heatmap (equity funds)</td><td>Which funds are near-duplicates</td></tr>
+ <tr><td>Quartile strip, last 8 quarters</td><td>Is performance consistent or a one-off?</td></tr>
+ <tr><td>Where gains came from (diverging bars)</td><td>Which funds drove returns; which are in loss</td></tr>
+ <tr><td>Market-cap split inside equity</td><td>Hidden small-cap exposure</td></tr>
+ <tr><td>Tax snapshot</td><td>Long-term / short-term gains, losses, ₹1.25 L limit used</td></tr>
+</table></div>
+<p>Further ideas: sector weights vs Nifty 500, rolling 3-year return vs benchmark, cost drag from expense ratios, fund-house concentration, and a goal coverage map (which money is working for which goal).</p>
+
+<!-- ============================== 7 ============================== -->
+<h2 id="p7"><span class="n">7</span>Sharpe, Alpha, Beta, Sortino for the whole portfolio</h2>
+<div class="verdict"><b>They can be calculated, and portfolio X-ray tools routinely do this.</b> What can’t be done is to <em>average</em> fund-level ratios from factsheets. Funds don’t move in step, so portfolio volatility is less than the weighted average of fund volatilities. That is probably the concern behind the RIAs’ point.</div>
+<h3>Method (to share with the RIAs)</h3>
+<ol>
+ <li><b>Build the portfolio’s return series.</b> Either <i>holdings-based</i> (today’s weights × each fund’s monthly NAV returns, for 36+ months, which answers “how risky is what I hold now”), or <i>returns-based</i> (time-weighted return of the actual account, which strips out SIP and withdrawal cash flows).</li>
+ <li><b>Use a matching benchmark:</b> the investor’s target blend, for example 67% Nifty 500 TRI + 23% CRISIL Composite Bond + 10% gold. A pure equity index makes a mixed portfolio look artificially safe.</li>
+ <li><b>Calculate</b> on that series:</li>
+</ol>
+<div class="formula">Volatility σp   = stdev(monthly Rp) × √12
+Sharpe          = (Rp − Rf) / σp
+Sortino         = (Rp − Rf) / downside deviation  (months below Rf only)
+Beta βp         = cov(Rp, Rb) / var(Rb)
+Alpha (Jensen)  = Rp − [Rf + βp × (Rb − Rf)]</div>
+<ul>
+ <li><b>Beta is the exception:</b> portfolio beta is the value-weighted average of fund betas, if every beta is measured against the same benchmark over the same period. Volatility, Sharpe and Sortino do not average.</li>
+ <li>Caveats: at least 36 monthly observations; funds younger than that need a shorter common window or a category proxy; XIRR is for the investor’s return, not an input to these ratios.</li>
+</ul>
+<p><b>In v4:</b> the table compares “Yours” with “Benchmark” (your blend) instead of the old “Suits you” column, which was not meaningful for alpha or Sharpe. Worst fall and downside capture are added because users understand them, and a “How it’s calculated” sheet explains the method.</p>
+
+<!-- ============================== open ============================== -->
+<h2 id="open">Open questions for the RIAs and compliance</h2>
+<ol class="oq">
+ <li><b>Compliance:</b> is capturing horizon per goal / per recommendation, and not in the profile score, acceptable under Reg. 16 and our risk-profiling policy? How should we store it in the advice record?</li>
+ <li><b>Investment committee:</b> sign off the profile × horizon equity table, the ±5% band and the gold rule.</li>
+ <li><b>Risk questionnaire:</b> exact answer options and scoring for the 7 factors. Should “dependants” come back as a capacity factor? Is “lower of tolerance and capacity” the rule we want?</li>
+ <li><b>Scheme review:</b> exact definitions and thresholds for “performance” and “fit”, and the anti-churn rule (2 quarters in the bottom half).</li>
+ <li><b>Model portfolios:</b> who curates the fund list per profile × horizon, and how often it changes.</li>
+ <li><b>Data:</b> which vendor supplies look-through holdings and category ranks, and do we get lot-level transactions via CAS / RTA / AA for every folio?</li>
+ <li><b>Tax:</b> tax adviser to confirm FY 2026-27 rates under the new Act; how we ask for the user’s slab; NRI handling.</li>
+ <li><b>Smart Withdraw:</b> is the order of preference right? Should goal-linked funds ever be sold automatically?</li>
+</ol>
+
+<!-- ============================== where ============================== -->
+<h2 id="where">Where to look in v4</h2>
+<p>Use the left-hand screen map, group <b>“New in v4 (RIA feedback)”</b>. Jumping there switches the investor type automatically.</p>
+<div class="tw"><table>
+ <tr><th>Screen</th><th>Shows</th></tr>
+ <tr><td>Risk profile: 7 factors</td><td>New questions, age auto-filled, tolerance vs capacity, horizon ladder</td></tr>
+ <tr><td>Portfolio review (existing investor)</td><td>New headline, 2×2 (grid and bubble), look-through mix with bands, overlap heatmap, quartiles, gains, market cap, tax snapshot, ratios vs benchmark, actions with tax</td></tr>
+ <tr><td>Plan asks the time frame (new investor)</td><td>Horizon chips, model portfolio, look-through check</td></tr>
+ <tr><td>Smart Withdraw</td><td>Amount and purpose, suggested sales with reasons, untouched funds, comparison</td></tr>
+ <tr><td>Holding: tax if you redeem</td><td>Long-term / short-term / locked split, tax, amount reaching the bank</td></tr>
+ <tr><td>Review changes, with tax</td><td>Per-action tax and exit load, combined total, loss offset</td></tr>
+ <tr><td>Goal mix by tenure</td><td>Goal-specific mix, expected return, glide-path note</td></tr>
+ <tr><td>Recommended: asks time frame</td><td>Funds change with horizon</td></tr>
+</table></div>
+<p class="note">Also changed: redeem and switch sheets show live tax estimates; the portfolio donut is look-through; the assistant asks the horizon before splitting a SIP; and the sample portfolio gains a ninth fund (Tata Digital India, in loss) so every quadrant and the loss-offset logic can be demonstrated. All fund data, ranks, overlaps and ratios are illustrative.</p>
+
+<footer>Prodigy Pro · BFC Capital · prototype notes, not investment or tax advice.</footer>
+</div>
+</body>
+</html>
