@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prodigy Pro v5 notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap">
+<style>
+:root{--brand:#000e7c;--brand-fg:#1A2A9C;--brand-soft:#EEF0FF;--green:#08A35B;--green-soft:#E6F6EE;--amber:#C27803;--amber-soft:#FFF5E1;--red:#E0383E;--red-soft:#FDECEC;
+ --bg:#F5F6FA;--surface:#fff;--surface-2:#F5F6F8;--ink:#111318;--ink-2:#4A4E5A;--mute:#6E7280;--line:#E6E8EE;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--brand:#2a378b;--brand-fg:#A3B0FF;--brand-soft:#1A2150;--green:#2FC27C;--green-soft:#0F2A1E;--amber:#F2B144;--amber-soft:#2E2412;--red:#FF6369;--red-soft:#33171A;
+ --bg:#080B18;--surface:#10152B;--surface-2:#161C36;--ink:#F1F3FB;--ink-2:#C6CBE2;--mute:#8B91B0;--line:#242B4B;color-scheme:dark}}
+:root[data-theme="dark"]{--brand:#2a378b;--brand-fg:#A3B0FF;--brand-soft:#1A2150;--green:#2FC27C;--green-soft:#0F2A1E;--amber:#F2B144;--amber-soft:#2E2412;--red:#FF6369;--red-soft:#33171A;
+ --bg:#080B18;--surface:#10152B;--surface-2:#161C36;--ink:#F1F3FB;--ink-2:#C6CBE2;--mute:#8B91B0;--line:#242B4B;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.6 Outfit,system-ui,sans-serif}
+a{color:var(--brand-fg)}
+.wrap{max-width:860px;margin:0 auto;padding:32px 16px 80px}
+header.top{background:var(--brand);color:#fff;border-radius:24px;padding:28px 24px;position:relative;overflow:hidden}
+header.top::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:-70px;top:-90px;background:rgba(255,255,255,.08)}
+header.top h1{margin:0;font-size:28px;line-height:1.2}
+header.top p{margin:8px 0 0;opacity:.85}
+header.top .links{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+header.top .links a{color:#fff;background:rgba(255,255,255,.14);padding:6px 12px;border-radius:999px;text-decoration:none;font-size:14px;font-weight:500}
+h2{font-size:22px;margin:40px 0 6px;line-height:1.3}
+h3{font-size:16.5px;margin:22px 0 6px}
+p{margin:8px 0}
+.verdict{border-left:4px solid var(--brand-fg);background:var(--brand-soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:12px 0}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.tag.g{background:var(--green-soft);color:var(--green)}.tag.a{background:var(--amber-soft);color:var(--amber)}.tag.r{background:var(--red-soft);color:var(--red)}.tag.b{background:var(--brand-soft);color:var(--brand-fg)}
+.tw{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font-size:12.5px;font-weight:600;color:var(--mute);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td s{color:var(--mute)}
+ul,ol{padding-left:22px;margin:8px 0}li{margin:4px 0}
+.note{font-size:13px;color:var(--mute)}
+.oq li{margin:8px 0}
+footer{margin-top:48px;font-size:13px;color:var(--mute)}
+@media (max-width:560px){header.top h1{font-size:23px}h2{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+ <h1>Prodigy Pro v5: simpler, more positive</h1>
+ <p>Changes to portfolio health, the portfolio screen and how we talk about risk. 2 Nov 2026.</p>
+ <div class="links"><a href="Prodigy_Pro_App_prototype_v5.html">Open v5 prototype</a><a href="Prodigy_Pro_App_prototype_v4.html">Open v4 (before)</a><a href="Prodigy_Pro_App_prototype_v4_notes.html">v4 notes</a></div>
+</header>
+
+<h2>What changed</h2>
+<div class="tw"><table>
+ <tr><th>#</th><th>Ask</th><th>Done in v5</th></tr>
+ <tr><td>1a</td><td>Scheme review below “Your funds”</td><td>Moved. The page now reads: score → your funds → what they mean.</td></tr>
+ <tr><td>1b</td><td>Simpler scheme review for new users</td><td>Four tappable boxes, good news first: <span class="tag g">Doing well</span> <span class="tag b">Under watch</span> <span class="tag a">Switch</span> <span class="tag r">Redeem</span>. Each shows an icon, the count, a 3-word action and the money in it. The axes, long descriptions and bubble chart are gone; “How we judge” keeps the method.</td></tr>
+ <tr><td>1c</td><td>Remove “Asset mix, looking inside your funds”</td><td>Removed. The look-through mix still drives the target; it shows on the Portfolio donut and in Investor profile.</td></tr>
+ <tr><td>1d</td><td>Remove “Consistency, last 8 quarters”</td><td>Removed. Quarterly ranks still feed the scheme review.</td></tr>
+ <tr><td>1e</td><td>Remove “How it handled past falls”</td><td>Removed. Worst fall is still a row in Return quality.</td></tr>
+ <tr><td>1f</td><td>Long descriptions behind “Know more” / info</td><td>Every section header has a <b>Know more</b> pill that opens a short sheet. Actions show only title + tax tags, with “Why this?” for the reasoning. The disclaimer is one line linking to “How we calculate this”.</td></tr>
+ <tr><td>1g</td><td>Info on the 4 scores; centre the 3 stats</td><td>One “What do these scores mean?” button under the four scores opens a single sheet explaining Diversity, Profile fit, Scheme quality and Costs together. Current value, Invested and XIRR are centred.</td></tr>
+ <tr><td>1h</td><td>Less “risk”, more positive</td><td>New vocabulary across health, profile, portfolio, onboarding and assistant (below).</td></tr>
+ <tr><td>1i</td><td>Lighter portfolio screen</td><td>Health score and Market exposure sit side by side as two compact tiles. Smart Withdraw is removed from Portfolio and the health page; it lives in <b>More → Tools</b> and in the <b>Redeem</b> sheet (“Not sure which fund to sell?”).</td></tr>
+</table></div>
+
+<h2>The “risk” vocabulary</h2>
+<div class="verdict">The aim is to describe the same thing in words that invite action instead of worry, without hiding anything. Each change keeps the meaning; it just leads with what the investor gains.</div>
+<div class="tw"><table>
+ <tr><th>Before (v4)</th><th>Now (v5)</th></tr>
+ <tr><td>Risk profile</td><td>Investor profile</td></tr>
+ <tr><td>Conservative · Moderately conservative · Moderate · Moderately aggressive · Aggressive</td><td>Safety first · Steady grower · Balanced grower · Growth seeker · Bold grower <span class="note">(SEBI category shown in fine print)</span></td></tr>
+ <tr><td>Willingness / ability to take risk</td><td>Comfort with ups and downs / Financial strength</td></tr>
+ <tr><td>Risk tolerance · capacity · need</td><td>Comfort with market ups and downs · Financial strength to stay invested · Growth your goals need</td></tr>
+ <tr><td>Retake risk quiz</td><td>Update my profile</td></tr>
+ <tr><td>Risk analysis (screen)</td><td>Investor profile / Portfolio fit</td></tr>
+ <tr><td>Portfolio risk score 74 · Above your comfort band</td><td>Market exposure 74 · Comfort zone 55–70</td></tr>
+ <tr><td>Risk fit (health score)</td><td>Profile fit</td></tr>
+ <tr><td>Risk check (Sharpe, Beta …)</td><td>Return quality: “There’s room to earn more for the ups and downs you ride.”</td></tr>
+ <tr><td>Where your risk is concentrated</td><td>Spread your money</td></tr>
+ <tr><td>Satisfactory</td><td>Doing well</td></tr>
+ <tr><td>Riskier than your profile</td><td>Bolder than your profile</td></tr>
+ <tr><td>Needs attention</td><td>Room to grow</td></tr>
+ <tr><td>If markets fall · Where risk is concentrated (High / Medium / Low)</td><td>If markets dip · Where you can spread out more (Act now / Review / Good)</td></tr>
+ <tr><td>How much risk these funds should carry</td><td>How growth-focused these funds should be</td></tr>
+</table></div>
+<h3>What we deliberately kept</h3>
+<ul>
+ <li><b>Fund riskometer and “Risk” labels on fund pages, compare and baskets.</b> These follow SEBI’s riskometer format and must read “risk”.</li>
+ <li><b>“Mutual fund investments are subject to market risks …”</b> is a mandatory disclaimer.</li>
+ <li><b>SEBI risk category</b> (e.g. “Moderately aggressive”) still shows under the profile name and must stay in the advice record. The friendly name is a display label only.</li>
+ <li>The underlying numbers, thresholds and recommendations are unchanged. Only wording and layout moved.</li>
+</ul>
+<p class="note">Please have compliance sign off the persona names. Some regulators expect the risk category to be shown clearly to the client; v5 shows it right below the name.</p>
+
+<h2>Things to decide</h2>
+<ol class="oq">
+ <li><b>Persona names.</b> Are “Safety first → Bold grower” the right tone for BFC? An alternative set: Protector, Planner, Balancer, Builder, Achiever.</li>
+ <li><b>“Market exposure”.</b> We replaced “portfolio risk score” with this. An option is “Growth level”, which sounds more positive but could be read as a promise of returns.</li>
+ <li><b>Health page length.</b> It is now about two-thirds of v4. If it should be shorter still, “Where your gains came from” and “Company size” could move into a “See more insights” expander.</li>
+ <li><b>“Doing well” vs “Satisfactory”.</b> The RIAs used “Satisfactory”; “Doing well” is warmer. Confirm with them.</li>
+</ol>
+
+<h2>Where to look</h2>
+<p>In the prototype’s left map, the <b>“Changed in v5”</b> group jumps to each screen: Portfolio health, Portfolio, Investor profile, Update profile (chat), More (Smart Withdraw) and a holding (tap Redeem to see the Smart Withdraw link).</p>
+
+<footer>Prodigy Pro · BFC Capital · prototype notes. All fund data is illustrative.</footer>
+</div>
+</body>
+</html>
