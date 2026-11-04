@@ -75,8 +75,8 @@ footer{margin-top:48px;font-size:13px;color:var(--mute)}
  <tr><td>Willingness / ability to take risk</td><td>Comfort with ups and downs / Financial strength</td></tr>
  <tr><td>Risk tolerance · capacity · need</td><td>Comfort with market ups and downs · Financial strength to stay invested · Growth your goals need</td></tr>
  <tr><td>Retake risk quiz</td><td>Update my profile</td></tr>
- <tr><td>Risk analysis (screen)</td><td>Investor profile / Portfolio fit</td></tr>
- <tr><td>Portfolio risk score 74 · Above your comfort band</td><td>Market exposure 74 · Comfort zone 55–70</td></tr>
+ <tr><td>Risk analysis (screen)</td><td>Risk appetite: your appetite, your portfolio against it, and what shapes it (risk tolerance, capacity and required, each explained in plain words)</td></tr>
+ <tr><td>Portfolio risk score 74 · Above your comfort band</td><td>Risk appetite: Growth seeker · “Portfolio at 74, a little above” (range 55–70)</td></tr>
  <tr><td>Risk fit (health score)</td><td>Profile fit</td></tr>
  <tr><td>Risk check (Sharpe, Beta …)</td><td>Return quality: “There’s room to earn more for the ups and downs you ride.”</td></tr>
  <tr><td>Where your risk is concentrated</td><td>Spread your money</td></tr>
@@ -98,10 +98,22 @@ footer{margin-top:48px;font-size:13px;color:var(--mute)}
 <h2>Things to decide</h2>
 <ol class="oq">
  <li><b>Persona names.</b> Are “Safety first → Bold grower” the right tone for BFC? An alternative set: Protector, Planner, Balancer, Builder, Achiever.</li>
- <li><b>“Market exposure”.</b> We replaced “portfolio risk score” with this. An option is “Growth level”, which sounds more positive but could be read as a promise of returns.</li>
+ <li><b>“Risk appetite”.</b> The portfolio tile and its details screen now use “risk appetite”, a familiar term that describes the investor rather than a danger. The questionnaire screens still say “investor profile”; decide whether to align them.</li>
  <li><b>Health page length.</b> It is now about two-thirds of v4. If it should be shorter still, “Where your gains came from” and “Company size” could move into a “See more insights” expander.</li>
  <li><b>“Doing well” vs “Satisfactory”.</b> The RIAs used “Satisfactory”; “Doing well” is warmer. Confirm with them.</li>
 </ol>
+
+<h2>Added in later v5 rounds</h2>
+<div class="tw"><table>
+ <tr><th>Area</th><th>Change</th></tr>
+ <tr><td>Recommended funds</td><td>Time-frame slider (1 year to “10 years or above”, default 7). Funds reload as it moves; 5–7 years now has its own, slightly steadier list.</td></tr>
+ <tr><td>Product baskets</td><td>Ideal investment period on every basket: header stat, a timeline card with the reason, and on list and Home cards. <span class="note">Periods are suggestions for the research team to confirm.</span></td></tr>
+ <tr><td>Portfolio holdings</td><td>Each row shows scheme, folio, category (Equity / Debt / Hybrid / Commodity / Other) and review tag. Search by scheme name or folio.</td></tr>
+ <tr><td>Goals: shortfall</td><td>The shortfall card offers “Link an asset” and “Add ₹X SIP”, with matching description. On-track goals unchanged.</td></tr>
+ <tr><td>Goals: link any asset</td><td>Link bank accounts, FDs, RDs, stocks, ETFs, bonds, G-Secs, NPS, insurance, REITs, InvITs and AIFs, not just mutual funds. Asset types are split into <b>Suggested for this goal</b> (different for retirement, education, house, emergency and short or long goals) and <b>Other assets</b>. Unconnected types run the Account Aggregator flow and return to the goal.</td></tr>
+ <tr><td>Calculators</td><td>14 calculators in three groups: SIP, step-up SIP, annual SIP, future value, cost of delay, SWP; target amount, education, marriage, retirement; EMI, loan tenure, FD, ELSS. Results update live (no Calculate step). Education, marriage and retirement goals open their planner pre-filled from the goal, and “Use as goal target” writes the result back. Other goals open the target amount calculator.</td></tr>
+</table></div>
+<p class="note">Education planner: fees keep rising each year of the course, so the corpus is ₹22.65 L for the reference example, against ₹21.43 L in the existing app design, which holds fees flat once college starts. Decide which the team wants.</p>
 
 <h2>Where to look</h2>
 <p>In the prototype’s left map, the <b>“Changed in v5”</b> group jumps to each screen: Portfolio health, Portfolio, Investor profile, Update profile (chat), More (Smart Withdraw) and a holding (tap Redeem to see the Smart Withdraw link).</p>
