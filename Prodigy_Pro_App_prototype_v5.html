@@ -776,6 +776,49 @@ h2.sec button{white-space:nowrap;flex:none;margin-left:8px}
 .cin input{border:0;outline:0;background:none;flex:1;height:100%;font-size:16px;min-width:0;color:var(--ink);font-variant-numeric:tabular-nums}
 .fld[hidden],.foot[hidden]{display:none}
 .ctile{font-size:12.5px;line-height:1.25}
+
+/* =====================================================================
+   v5 ART: duotone icons + onboarding illustrations (theme-aware)
+   ===================================================================== */
+:root{--il-b0:#ECEFFF;--il-b1:#DDF4E8;--il-n:#0A1784;--il-n2:#141A3A;--il-n3:#27326F;--il-u:#3D50E6;--il-u2:#3243CC;--il-s:#C3CCFF;--il-s2:#E3E8FF;--il-s3:#8C9AE8;
+ --il-g:#08A35B;--il-m:#D3F2E1;--il-y:#F6B73C;--il-y2:#FFEFD0;--il-p:#FFFFFF;--il-l:#E6E9F5;--il-h:#1A1D3A;--il-gr:#B7BCCB;--il-k1:#F3C9A8;--il-k2:#D69A6F;--il-k3:#9A6444;
+ --il-sh:rgba(10,23,132,.09);--il-w:#FFFFFF}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--il-b0:#18204A;--il-b1:#123426;--il-n:#5361EE;--il-n2:#0A0D20;--il-n3:#2B3678;--il-u:#6F7FFF;--il-u2:#5A6AF0;--il-s:#36428F;--il-s2:#262F66;--il-s3:#6371C9;
+ --il-g:#2FC27C;--il-m:#174B33;--il-y:#F2B144;--il-y2:#3D3018;--il-p:#1E2650;--il-l:#2E3870;--il-h:#0E1026;--il-gr:#A8AEC2;--il-sh:rgba(0,0,0,.35);--il-w:#FFFFFF}}
+:root[data-theme="dark"]{--il-b0:#18204A;--il-b1:#123426;--il-n:#5361EE;--il-n2:#0A0D20;--il-n3:#2B3678;--il-u:#6F7FFF;--il-u2:#5A6AF0;--il-s:#36428F;--il-s2:#262F66;--il-s3:#6371C9;
+ --il-g:#2FC27C;--il-m:#174B33;--il-y:#F2B144;--il-y2:#3D3018;--il-p:#1E2650;--il-l:#2E3870;--il-h:#0E1026;--il-gr:#A8AEC2;--il-sh:rgba(0,0,0,.35);--il-w:#FFFFFF}
+
+/* duotone icons: stroke = currentColor, tint mixed into the tile colour, one accent */
+.di{width:30px;height:30px;flex:none;display:block;overflow:visible;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+ --d-t:color-mix(in srgb,currentColor 22%,var(--d-o,var(--surface)))}
+.di .t{fill:var(--d-t);stroke:none}.di .T{fill:var(--d-t)}.di .ts{stroke:var(--d-t)}
+.di .o{fill:var(--d-o,var(--surface))}.di .f{fill:currentColor;stroke:none}
+.di .a{fill:var(--d-a,var(--green));stroke:none}.di .A{fill:var(--d-a,var(--green))}.di .as{stroke:var(--d-a,var(--green))}
+.svc .si{--d-o:var(--brand-soft);--d-a:var(--green)}
+.svc .si svg.di{width:31px;height:31px}
+.grid4 .svc:nth-child(8n+2) .si,.grid4 .svc:nth-child(8n+7) .si,.grid3 .svc:nth-child(3n+2) .si{--d-o:var(--green-soft);--d-a:var(--brand-fg)}
+.grid4 .svc:nth-child(8n+3) .si,.grid4 .svc:nth-child(8n+5) .si,.grid4 .svc:nth-child(8n) .si,.grid3 .svc:nth-child(3n) .si{--d-o:var(--amber-soft);--d-a:var(--brand-fg)}
+.svc .si.sel{--d-o:var(--brand)!important;--d-a:var(--il-y)!important}
+.svc .si[style*="44px"] svg.di{width:27px;height:27px}
+.svc:hover .si svg.di .a,.svc:hover .si svg.di .A{transition:transform .25s}
+
+/* illustrations */
+.il{display:block;width:100%;height:auto;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.il .b0{fill:var(--il-b0)}.il .b1{fill:var(--il-b1)}.il .sh{fill:var(--il-sh)}
+.il .n{fill:var(--il-n)}.il .n2{fill:var(--il-n2)}.il .n3{fill:var(--il-n3)}.il .u{fill:var(--il-u)}.il .u2{fill:var(--il-u2)}
+.il .s{fill:var(--il-s)}.il .s2{fill:var(--il-s2)}.il .s3{fill:var(--il-s3)}.il .g{fill:var(--il-g)}.il .m{fill:var(--il-m)}
+.il .y{fill:var(--il-y)}.il .y2{fill:var(--il-y2)}.il .p{fill:var(--il-p)}.il .l{fill:var(--il-l)}.il .h{fill:var(--il-h)}.il .gr{fill:var(--il-gr)}
+.il .k1{fill:var(--il-k1)}.il .k2{fill:var(--il-k2)}.il .k3{fill:var(--il-k3)}
+.il .wf{fill:var(--il-w)}.il .wh{fill:var(--il-w);opacity:.55}
+.il [class^="S"]{fill:none}
+.il .Sn{stroke:var(--il-n)}.il .Su{stroke:var(--il-u)}.il .Sg{stroke:var(--il-g)}.il .Sy{stroke:var(--il-y)}.il .Sl{stroke:var(--il-l)}
+.il .Ss{stroke:var(--il-s3)}.il .Ss3{stroke:var(--il-s3)}.il .Sn3{stroke:var(--il-n3)}.il .Sw{stroke:var(--il-w)}.il .Sh{stroke:var(--il-h)}
+.il .tx{font:600 9px Outfit,system-ui,sans-serif;fill:var(--il-n)}
+/* onboarding placements */
+.wk-art{background:var(--surface-2);box-shadow:none;margin-bottom:24px}
+.onb-hero{max-width:320px;margin:0 auto 4px}
+.wk-art .il{max-height:270px}
+
 .ybar{display:flex;align-items:flex-end;gap:3px;height:140px}
 .yb{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:2px;min-width:0}
 .yb i{display:block;border-radius:2px}.yb i:first-child{border-radius:4px 4px 2px 2px}
@@ -1045,13 +1088,13 @@ SCR.splash=()=>({sbar:'white',cls:'splash',html:`<div class="body" style="displa
 function countUp(el,to,f=v=>fmt(v),ms=900){if(!el)return;const from=+(el.dataset.v||0);el.dataset.v=to;const t0=performance.now();
  const step=t=>{if(!el.isConnected)return;const k=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-k,3);el.textContent=f(from+(to-from)*e);if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
 const WALK=[
- {art:'sip',t:'Your plan, built from your real money',d:'Prodigy AI builds a plan around your goals in under a minute.',pts:[['sparkle','Personal plan from your income and spending'],['target','Goals with a clear monthly amount']]},
- {art:'adv',t:'Real advice, not just a fund list',d:'Backed by BFC Capital’s SEBI-registered advisers, guiding families for 22+ years.',pts:[['shield','Funds picked for your investor profile'],['heartbeat','Regular portfolio health checks']]},
- {art:'share',t:'One login for the whole family',d:'Invest and track goals for your spouse, parents and children in one place.',pts:[['users','One family view of all investments'],['lock','Secure, consent-based data sharing']]}
+ {art:'sip',il:'plan',t:'Your plan, built from your real money',d:'Prodigy AI builds a plan around your goals in under a minute.',pts:[['sparkle','Personal plan from your income and spending'],['target','Goals with a clear monthly amount']]},
+ {art:'adv',il:'adv',t:'Real advice, not just a fund list',d:'Backed by BFC Capital’s SEBI-registered advisers, guiding families for 22+ years.',pts:[['shield','Funds picked for your investor profile'],['heartbeat','Regular portfolio health checks']]},
+ {art:'share',il:'family',t:'One login for the whole family',d:'Invest and track goals for your spouse, parents and children in one place.',pts:[['users','One family view of all investments'],['lock','Secure, consent-based data sharing']]}
 ];
 SCR.walk=(p)=>{const i=p.i||0,w=WALK[i],last=i===WALK.length-1;return{sbar:'surface',html:`<div class="body pad" style="display:flex;flex-direction:column;background:var(--bg)" id="wk">
  <div class="row sb"><img src="${LOGO_MARK}" alt="Prodigy Pro" style="width:34px"><button class="btn ghost sm" onclick="go('login',{},{replace:true})">Skip</button></div>
- <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:12px 0 20px"><div class="wk-art">${art(w.art,230)}</div>
+ <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:12px 0 20px"><div class="wk-art">${onb(w.il)}</div>
  <div class="t-l" style="font-size:26px">${w.t}</div><p class="ink2 mt8" style="line-height:1.5">${w.d}</p>
  <div class="col gap12 mt12">${w.pts.map(x=>`<div class="row t-s" style="gap:12px"><span class="pill-ic" style="background:var(--brand-soft);color:var(--brand-fg)">${ic(x[0])}</span><span class="ink2">${x[1]}</span></div>`).join('')}</div></div>
  <div class="row sb"><div class="row" style="gap:6px">${WALK.map((_,k)=>`<i style="width:${k===i?22:7}px;height:7px;border-radius:9px;background:${k===i?'var(--brand)':'var(--line)'}"></i>`).join('')}</div>
@@ -1061,7 +1104,8 @@ SCR.walk=(p)=>{const i=p.i||0,w=WALK[i],last=i===WALK.length-1;return{sbar:'surf
 
 /* ============ login + otp ============ */
 SCR.login=()=>({sbar:'surface',html:`<div class="body pad" style="background:var(--surface)">
- <img src="${LOGO_MARK}" alt="Prodigy Pro" style="width:48px;margin:18px 0 26px">
+ <img src="${LOGO_MARK}" alt="Prodigy Pro" style="width:40px;margin:6px 0 0">
+ <div class="onb-hero">${onb('login')}</div>
  <div class="t-l" style="font-size:28px">Let’s get you started</div><p class="mute mt8">Enter your mobile number. We’ll send a 4-digit code to verify it’s you.</p>
  <div class="fld mt24"><label for="mob">Mobile number</label><div class="row" style="gap:8px"><div class="inp pre" style="width:72px;display:grid;place-items:center;flex:none">+91</div><input class="inp" id="mob" inputmode="numeric" maxlength="10" placeholder="98765 43210" value=""></div><span class="err-t" id="merr"></span></div>
  <button class="btn block mt8" id="sendOtp" disabled>Send OTP</button>
@@ -1072,6 +1116,7 @@ SCR.login=()=>({sbar:'surface',html:`<div class="body pad" style="background:var
 function legal(t){sheet(t,`<p class="ink2">This is placeholder text for the ${t}. The live app will load the current version from BFC Capital’s website, including the investor charter, grievance redressal process and data retention policy.</p><button class="btn block mt12" onclick="closeSheet()">Done</button>`)}
 const mobF=()=>`+91 ${S.mobile.slice(0,5)} ${S.mobile.slice(5)}`;
 SCR.otp=()=>({sbar:'surface',html:`${hdr('')}<div class="body pad" style="background:var(--surface)">
+ <div class="onb-hero">${onb('otp')}</div>
  <div class="t-l" style="font-size:28px">Verify your number</div><p class="mute mt8">Enter the 4-digit code sent to <b class="ink2">${mobF()}</b> <a href="#" onclick="back();return false">Edit</a></p>
  <div class="mt24">${otpBoxes(4)}</div><p class="t-s mute mt16" style="text-align:center" id="rs">Resend code in 0:30</p>
  <button class="btn block mt16" id="vOtp" disabled>Verify OTP</button><p class="t-xs mute mt12" style="text-align:center">Prototype: any 4 digits work.</p></div>`,
@@ -1429,7 +1474,7 @@ SCR.home=()=>{const T=totals(),isNew=T.n===0,up=S.sips.filter(s=>s.st==='active'
 
   <h2 class="sec">Your dreams, on track <button onclick="go('goals')">View all</button></h2>
   ${S.goals.length?`<div class="hs">${S.goals.map(g=>{const pc=Math.round(g.cur/g.target*100);return `<button class="goalc" style="text-align:left" onclick="go('goal',{id:'${g.id}'})"><div class="row sb"><span class="br">${ic(GT[g.t][0])}</span><div style="position:relative">${ring(pc,44)}<span class="t-xs t-b" style="position:absolute;inset:0;display:grid;place-items:center">${pc}%</span></div></div><div class="t-b mt8 ell">${esc(g.n)}</div><div class="t-xs mute">${inrS(g.cur)} of ${inrS(g.target)}</div></button>`}).join('')}<button class="goalc" style="display:grid;place-items:center;border-style:dashed;color:var(--brand-fg)" onclick="newGoal()"><div style="text-align:center">${ic('plus')}<div class="t-s t-b mt4">New goal</div></div></button></div>`
-  :`<div class="card"><b>Plan for what matters</b><p class="t-s mute mt4">Name a goal, set an amount and date, and we’ll tell you exactly how much to invest each month.</p><div class="grid3 mt12">${['edu','house','car','ret','trip','wed'].map(t=>`<button class="svc" onclick="newGoal('${t}')"><span class="si" style="width:44px;height:44px">${ic(GT[t][0])}</span>${GT[t][1]}</button>`).join('')}</div></div>`}
+  :`<div class="card"><b>Plan for what matters</b><p class="t-s mute mt4">Name a goal, set an amount and date, and we’ll tell you exactly how much to invest each month.</p><div class="grid3 mt12">${['edu','house','car','ret','trip','wed'].map(t=>`<button class="svc" onclick="newGoal('${t}')"><span class="si" style="width:44px;height:44px">${di(DIK.g[t])}</span>${GT[t][1]}</button>`).join('')}</div></div>`}
 
   <h2 class="sec">Product baskets <button onclick="go('baskets')">View all</button></h2>
   <div class="hs">${BASKETS.map(b=>`<button class="basket" style="text-align:left" onclick="go('basket',{id:'${b.id}'})"><div class="row sb"><span style="width:36px;height:36px;border-radius:11px;background:${b.bg};display:grid;place-items:center;color:#fff">${ic('basket')}</span><span class="tag">${RISK[b.risk]}</span></div><div class="t-xs mute mt12">${b.tag}</div><div class="t-m mt4">${b.n}</div><div class="t-s" style="opacity:.85">${b.goal}</div><div class="row sb mt16"><div><div class="t-xs" style="opacity:.7">3Y returns</div><b class="num">${b.r3}% a year</b></div><div><div class="t-xs" style="opacity:.7">Invest for</div><b>${b.hz}</b></div><div style="text-align:right"><div class="t-xs" style="opacity:.7">Min. SIP</div><b class="num">${inr(b.min)}</b></div></div></button>`).join('')}</div>
@@ -1623,7 +1668,7 @@ SCR.goals=()=>({sbar:'surface',html:`${hdr('Goals',{right:`<button class="ib" on
  :`<div class="empty"><div class="pill-ic" style="width:64px;height:64px;margin:0 auto;background:var(--tint);color:var(--ink)">${ic('target')}</div><div class="t-m mt16">Let’s plan your first goal</div><p class="mute t-s">Investing for a reason makes it easier to stay invested.</p></div>`}
  <button class="btn soft block mt12" onclick="newGoal()">${ic('plus')}Create a goal</button></div>`});
 function newGoal(t){closeSheet();const st={t:t||'edu',n:t?GT[t][1]:'',amt:2000000,y:10};
- const body=()=>{const s=sipNeeded(st.amt,st.y,mixRet(st.y));return `<div class="grid4">${Object.keys(GT).map(k=>`<button class="svc" data-t="${k}" style="${st.t===k?'color:var(--brand)':''}"><span class="si" style="width:44px;height:44px;${st.t===k?'background:var(--brand);color:#fff':''}">${ic(GT[k][0])}</span>${GT[k][1]}</button>`).join('')}</div>
+ const body=()=>{const s=sipNeeded(st.amt,st.y,mixRet(st.y));return `<div class="grid4">${Object.keys(GT).map(k=>`<button class="svc" data-t="${k}" style="${st.t===k?'color:var(--brand)':''}"><span class="si${st.t===k?' sel':''}" style="width:44px;height:44px;${st.t===k?'background:var(--brand);color:#fff':''}">${di(DIK.g[k])}</span>${GT[k][1]}</button>`).join('')}</div>
  <div class="fld mt12"><label>Goal name</label><input class="inp" id="gn" value="${esc(st.n||GT[st.t][1])}"></div>
  <div class="fld"><label>How much will you need? <b class="ink2" id="ga">${inrS(st.amt)}</b></label><input type="range" class="sl" id="gar" min="100000" max="30000000" step="100000" value="${st.amt}">${['edu','wed','ret'].includes(st.t)?`<button class="t-xs br t-b" style="align-self:flex-start" onclick="closeSheet();go('calc1',{k:'${st.t}'})">Not sure how much? Use the ${CAL[st.t].n.toLowerCase()} ›</button>`:''}</div>
  <div class="fld"><label>In how many years? <b class="ink2" id="gy">${st.y} years</b></label><input type="range" class="sl" id="gyr" min="1" max="30" value="${st.y}"></div>
@@ -1833,6 +1878,170 @@ wed:['#FDE6E1','<circle cx="90" cy="56" r="20" fill="none" stroke="#F6B73C" stro
 const art=(k,h=96)=>{const a=ART_SRC[k]||ART_SRC.sip;return `<svg class="art" viewBox="0 0 210 96" width="100%" height="${h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="210" height="96" fill="${a[0]}"/>${a[1]}</svg>`};
 const GART={edu:'edu',house:'home',car:'car',ret:'retire',trip:'travel',wed:'wed'};
 
+/* =====================================================================
+   v5 ART: duotone icons (services, goals, calculators) and onboarding
+   illustrations. Every colour comes from CSS variables, so they follow
+   light / dark theme and the tile colour they sit on.
+   ===================================================================== */
+const _f=v=>+v.toFixed(1);
+const STARP=(cx,cy,R,r,n=5)=>{let d='';for(let i=0;i<n*2;i++){const a=(-90+i*180/n)*Math.PI/180,q=i%2?r:R;d+=(i?'L':'M')+_f(cx+q*Math.cos(a))+' '+_f(cy+q*Math.sin(a))}return d+'Z'};
+const SPK=(cx,cy,r)=>{const k=r*.22;return `M${cx} ${cy-r}C${cx+k} ${cy-k} ${cx+k} ${cy-k} ${cx+r} ${cy}C${cx+k} ${cy+k} ${cx+k} ${cy+k} ${cx} ${cy+r}C${cx-k} ${cy+k} ${cx-k} ${cy+k} ${cx-r} ${cy}C${cx-k} ${cy-k} ${cx-k} ${cy-k} ${cx} ${cy-r}Z`};
+const RUPP=(x,y,s=1,c='')=>`<path${c?` class="${c}"`:''} transform="translate(${x} ${y}) scale(${s})" d="M-3.6-5.2H3.6M-3.6-2H3.6M-1.4-5.2C1.6-5.2 2.6-3.7 2.6-2S1.4 1.2-1.4 1.2H-3.2L2.6 6"/>`;
+const SHIELD='M20 4.5 32 9v9.5c0 8-5.3 13.6-12 16.5C13.3 32.1 8 26.5 8 18.5V9z';
+
+/* ---------- duotone icons, 40 x 40 grid ----------
+   default: stroke only | t: tint fill | T: tint + stroke | o: tile colour + stroke
+   a: accent fill | A: accent + stroke | as: accent stroke | f: solid fill */
+const DI={
+ /* home services */
+ emergency:`<circle class="t" cx="20" cy="20" r="14"/><path class="as" stroke-width="4" stroke-linecap="butt" d="M10.1 10.1l5.3 5.3M29.9 10.1l-5.3 5.3M10.1 29.9l5.3-5.3M29.9 29.9l-5.3-5.3"/><circle cx="20" cy="20" r="14"/><circle class="o" cx="20" cy="20" r="6.5"/>`,
+ recommended:`<path class="T" d="M14.6 24 11 35l4.7-1.8 3 3.8 1.8-8M25.4 24 29 35l-4.7-1.8-3 3.8-1.8-8"/><circle class="o" cx="20" cy="17" r="11.5"/><circle class="t" cx="20" cy="17" r="7.6"/><path class="a" d="${STARP(20,17.6,5.4,2.3)}"/>`,
+ sif:`<path class="T" d="M20 6 33 12.5 20 19 7 12.5z"/><path class="as" d="M7 19l13 6.5L33 19"/><path d="M7 25.5 20 32l13-6.5"/><path class="a" d="${SPK(33,4.8,3.6)}"/>`,
+ nfo:`<g transform="rotate(45 20 20)"><path class="a" d="M16.8 27.5c0 3.6 1.4 6.4 3.2 8 1.8-1.6 3.2-4.4 3.2-8z"/><path class="T" d="M13.8 19.5 9.6 24v5.6l4.2-2.6M26.2 19.5l4.2 4.5v5.6l-4.2-2.6"/><path class="T" d="M20 4c4.2 3.2 6.2 8.4 6.2 14.6V28H13.8v-9.4C13.8 12.4 15.8 7.2 20 4z"/><circle class="o" cx="20" cy="15.5" r="3.2"/></g><circle class="a" cx="8" cy="9" r="1.6"/><circle class="a" cx="33" cy="31" r="1.4"/>`,
+ loan:`<circle class="T" cx="25" cy="11.5" r="7.5"/>${RUPP(25,11.4,.78,'as')}<path class="T" d="M4 23.5h5.5V35H4z"/><path class="o" d="M9.5 25.5h5.3c1.4 0 2.7.4 3.8 1.2l1 .8h5.2a2.3 2.3 0 0 1 0 4.6h-6.6M9.5 33.5h13.8l9.8-6.8a2.3 2.3 0 0 0-2.7-3.7l-6.4 4.3"/>`,
+ start100:`<circle class="A" cx="21" cy="6.8" r="4.3"/><path class="T" d="M8.5 20.5c0-5.5 5.2-9.3 12-9.3 5 0 9 2 11 5.3l2.9-.8v6l-2.6 1.2c-.6 2-2 3.8-4 5.1V32h-4.3v-2.6c-1 .2-2 .3-3 .3s-2.2-.1-3.2-.3V32H13v-4.4c-2.8-1.8-4.5-4.3-4.5-7.1z"/><path d="M8.5 20c-2 0-3.3-1-3.3-2.7M17.5 15h6.5"/><circle class="f" cx="27.4" cy="18.4" r="1.25"/>`,
+ tax:`<path class="T" d="M7.5 5h18v29l-3-2-3 2-3-2-3 2-3-2-3 2z"/><path d="M12 11h9M12 16h9M12 21h4.5"/><circle class="o" cx="28" cy="28" r="7.8"/><path class="as" d="M25 31l6-6"/><circle class="a" cx="25.4" cy="25.4" r="1.5"/><circle class="a" cx="30.6" cy="30.6" r="1.5"/>`,
+ insurance:`<path class="T" d="${SHIELD}"/><path class="a" d="M20 27s-6.6-4-6.6-8.6c0-2.2 1.7-3.9 3.7-3.9 1.2 0 2.3.6 2.9 1.6.6-1 1.7-1.6 2.9-1.6 2 0 3.7 1.7 3.7 3.9C26.6 23 20 27 20 27z"/>`,
+ /* goals */
+ edu:`<path class="T" d="M11 18.5v7.6c2.5 2.6 5.6 3.9 9 3.9s6.5-1.3 9-3.9v-7.6"/><path class="o" d="M20 8 36 15.6 20 23.2 4 15.6z"/><path class="as" d="M20 15.6l9.8 4.4v8"/><circle class="a" cx="29.8" cy="29.6" r="2.3"/>`,
+ house:`<path class="a" d="M26.5 13.4V8.5h4v8.2z"/><path class="T" d="M9 18.5V34h22V18.5L20 9z"/><path d="M5 21 20 7.5 35 21"/><path class="o" d="M16.5 34v-8a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5v8"/><path d="M6 34h28"/>`,
+ car:`<path class="T" d="M4.5 27.5v-5.4c0-1.4.9-2.6 2.3-2.9l5.4-1.3 4-5.1c.8-1 1.9-1.6 3.2-1.6h6.3c1.2 0 2.4.6 3.2 1.5l4.2 5.2 2.9.8c1.4.4 2.3 1.6 2.3 3v5.8z"/><path class="o" d="M14.6 17.8l2.8-3.6c.4-.5 1-.8 1.7-.8h1.6v4.4zM23.2 13.4h2.4c.7 0 1.3.3 1.7.8l2.9 3.6h-7z"/><path class="a" d="M32.4 20.6h3.2v3h-2.6z"/><circle class="o" cx="12" cy="27.5" r="4"/><circle class="o" cx="28" cy="27.5" r="4"/>`,
+ ret:`<rect class="T" x="11" y="5" width="5.2" height="16.5" rx="2.6"/><path d="M16.2 13.6h10.8v6.6M13.5 24.6 11 31.4M27.5 24.6l2.5 6.8"/><rect class="T" x="10.5" y="20" width="19.5" height="4.6" rx="2.3"/><path class="as" d="M5 30.2q15 7 30 0"/>`,
+ trip:`<path class="as" stroke-dasharray="2.6 3.2" d="M4 36c2-6 6-9.5 11.5-10.5"/><g transform="rotate(45 21 19)"><path class="T" d="M21 3c1.5 0 2.4 1.7 2.4 3.8V14l11.2 6.8V24l-11.2-3.4v7l3.7 2.8v2.4L21 31.3l-6.1 1.5v-2.4l3.7-2.8v-7L7.4 24v-3.2L18.6 14V6.8C18.6 4.7 19.5 3 21 3z"/></g>`,
+ wed:`<circle class="ts" cx="20" cy="25.5" r="10.5" stroke-width="5"/><circle cx="20" cy="25.5" r="13"/><circle cx="20" cy="25.5" r="8"/><path class="T" d="M14.6 9.6 17.4 5.2h5.2l2.8 4.4L20 15.8z"/><path d="M14.6 9.6h10.8M18 9.6l2 6.2 2-6.2"/><path class="a" d="${SPK(31.5,6,3.2)}"/><path class="a" d="${SPK(8,9,2.2)}"/>`,
+ /* calculators */
+ sip:`<rect class="o" x="4.5" y="8" width="25" height="24" rx="4"/><path class="t" d="M4.5 12a4 4 0 0 1 4-4h17a4 4 0 0 1 4 4v3.2h-25z"/><rect x="4.5" y="8" width="25" height="24" rx="4"/><path d="M4.5 15.2h25M11 5v5.5M23 5v5.5"/><circle class="f" cx="10.5" cy="21" r="1.4"/><circle class="f" cx="17" cy="21" r="1.4"/><circle class="f" cx="10.5" cy="26.5" r="1.4"/><path class="A" d="M24 26v7.2c0 1.4 2.7 2.6 6 2.6s6-1.2 6-2.6V26"/><path d="M24 29.6c0 1.4 2.7 2.6 6 2.6s6-1.2 6-2.6"/><ellipse class="A" cx="30" cy="26" rx="6" ry="2.6"/>`,
+ step:`<path class="T" d="M5 34.5V28h7.5v-6.5H20V15h7.5V8.5H35v26z"/><path class="as" d="M5.5 20.5 17 9M11 9h6v6"/>`,
+ annual:`<path d="M33.2 17.5A13.6 13.6 0 0 0 9 11.4"/><path d="M8.6 5.4v6.4H15"/><path d="M6.8 22.5A13.6 13.6 0 0 0 31 28.6"/><path d="M31.4 34.6v-6.4H25"/><circle class="T" cx="20" cy="20" r="7.2"/>${RUPP(20,19.8,.8,'as')}`,
+ lump:`<path class="T" d="M15.6 14.2C9.6 17.6 6 23 6 27.6 6 32 9.5 35 14 35h12c4.5 0 8-3 8-7.4 0-4.6-3.6-10-9.6-13.4z"/><path class="o" d="M15.6 14.2l-3.7-7.3c-.3-.7.3-1.5 1-1.3l3 .9L20 4.6l4.1 1.9 3-.9c.7-.2 1.3.6 1 1.3l-3.7 7.3z"/><path class="as" d="M14.6 14.2h10.8"/>${RUPP(20,25.2,1,'as')}`,
+ delay:`<path class="o" d="M12 5.5h16v4.4c0 3.4-2.5 6.3-6.2 8.5L20 20l1.8 1.6c3.7 2.2 6.2 5.1 6.2 8.5v4.4H12v-4.4c0-3.4 2.5-6.3 6.2-8.5L20 20l-1.8-1.6C14.5 16.2 12 13.3 12 9.9z"/><path class="a" d="M15.6 10.6h8.8c-.6 1.7-2.2 3.2-4.4 4.6-2.2-1.4-3.8-2.9-4.4-4.6zM14.8 33c.4-2.8 2.7-4.8 5.2-5.6 2.5.8 4.8 2.8 5.2 5.6z"/><path class="as" stroke-dasharray="1.4 2.2" d="M20 21v5"/><rect class="T" x="8.5" y="3" width="23" height="3.6" rx="1.8"/><rect class="T" x="8.5" y="33.4" width="23" height="3.6" rx="1.8"/>`,
+ swp:`<path class="o" d="M11 10h18v16.5a2 2 0 0 1-2 2H13a2 2 0 0 1-2-2z"/>${RUPP(20,19.4,.85,'as')}<rect class="T" x="4" y="5" width="32" height="8.5" rx="2.6"/><path d="M9.5 10h21"/><path class="as" d="M20 31.5v5.5M17 34l3 3 3-3"/>`,
+ target:`<circle class="T" cx="18" cy="22" r="13.5"/><circle class="o" cx="18" cy="22" r="8.6"/><circle class="A" cx="18" cy="22" r="3.8"/><path d="M18 22 31.5 8.5"/><path class="A" d="M28.6 6.6V11.4h4.8L37 7.8h-4V3.8z"/>`,
+ emi:`<rect class="o" x="8" y="4" width="24" height="32" rx="4"/><rect class="T" x="12" y="8.2" width="16" height="7.4" rx="1.6"/><path class="as" d="M21.5 11.9h3"/><circle class="f" cx="14" cy="21" r="1.45"/><circle class="f" cx="20" cy="21" r="1.45"/><circle class="f" cx="26" cy="21" r="1.45"/><circle class="f" cx="14" cy="26.5" r="1.45"/><circle class="f" cx="20" cy="26.5" r="1.45"/><circle class="f" cx="14" cy="32" r="1.45"/><circle class="f" cx="20" cy="32" r="1.45"/><rect class="a" x="23.9" y="24.6" width="4.2" height="9.2" rx="2.1"/>`,
+ tenure:`<path class="o" d="M7 6.5A2.5 2.5 0 0 1 9.5 4H22l7 7v22.5a2.5 2.5 0 0 1-2.5 2.5h-17A2.5 2.5 0 0 1 7 33.5z"/><path d="M22 4v7h7M11.5 16h10M11.5 21h6.5M11.5 26h4.5"/><circle class="T" cx="28.5" cy="28.5" r="8"/><path class="as" d="M28.5 24.4v4.3l2.9 1.9"/>`,
+ fd:`<rect class="T" x="5" y="5.5" width="30" height="26" rx="4"/><circle class="o" cx="19" cy="18.5" r="8.4"/><path class="as" d="M19 12.6v11.8M13.1 18.5h11.8M14.8 14.3l8.4 8.4M23.2 14.3l-8.4 8.4"/><circle class="A" cx="19" cy="18.5" r="2.6"/><path d="M30.5 14.5v8M10 31.5v3M30 31.5v3"/>`,
+ elss:`<path class="T" d="${SHIELD}"/><path class="as" d="M13.2 24.2l4.6-4.6 3.2 3.2 6-6.2M22.5 16.6H27V21"/>`
+};
+DI.target_g=DI.target;
+const DIK={g:{edu:'edu',house:'house',car:'car',ret:'ret',trip:'trip',wed:'wed',em:'emergency',other:'target'},
+ c:{sip:'sip',step:'step',annual:'annual',lump:'lump',delay:'delay',swp:'swp',target:'target',edu:'edu',wed:'wed',ret:'ret',emi:'emi',tenure:'tenure',fd:'fd',elss:'elss'}};
+function di(n,cls=''){const c=DI[n];if(!c)return ic(n,cls);return `<svg class="di ${cls}" viewBox="0 0 40 40" aria-hidden="true">${c}</svg>`}
+
+/* ---------- illustrations: a flat, faceless figure ---------- */
+/* o: {x,y feet centre, s scale, skin 1|2|3, hair style, top, pants, arms:[[elbow,hand],[elbow,hand]] in local coords, tie, flip} */
+function fig(o){const s=o.s||1,sk='k'+(o.skin||1),hc=o.hc||'h',tp=o.top||'u',pt=o.pants||'n';
+ const arm=(a,side)=>{const sx=side*13.5,[e,h]=a;return `<path class="S${tp}" stroke-width="8.5" fill="none" stroke-linecap="round" stroke-linejoin="round" d="M${sx} -79 L${e[0]} ${e[1]} L${h[0]} ${h[1]}"/><circle class="${sk}" cx="${h[0]}" cy="${h[1]}" r="4.4"/>`};
+ const A=o.arms||[[[-18,-62],[-19,-46]],[[18,-62],[19,-46]]];
+ const hairB={long:`<path class="${hc}" d="M-12.5-99c0-9.5 5.5-14 12.5-14s12.5 4.5 12.5 14v20c0 2-1.6 3.4-3.6 3.4H-8.9c-2 0-3.6-1.4-3.6-3.4z"/>`,bun:`<circle class="${hc}" cx="0" cy="-113.5" r="5.6"/>`}[o.hair]||'';
+ const hairT={short:`<path class="${hc}" d="M-11.2-98.5c-1.2-8.6 4.2-14 11.2-14s12.4 5.4 11.2 14c-1.4-3.9-4.7-6.3-9.4-6.3-3.4 0-6.4 1.2-8.4 3.4-1.4 1.5-3 2.4-4.6 2.9z"/>`,
+  long:`<path class="${hc}" d="M-11.4-98c-1-8.8 4.4-14.4 11.4-14.4S12.4-106.8 11.4-98c-5.2-.4-10.2-2.6-13.2-6.6-1.8 3.6-5.4 6-9.6 6.6z"/>`,
+  bun:`<path class="${hc}" d="M-11.2-99c-.8-8.2 4.6-13.4 11.2-13.4S12-107.2 11.2-99c-3.6-2.8-7-4.2-11.2-4.2s-7.6 1.4-11.2 4.2z"/>`,
+  bald:`<path class="${hc}" d="M-10.8-97.4c-1-2.4-.6-5 .2-6.8 1 2 2.6 3.2 4 3.6M10.8-97.4c1-2.4.6-5-.2-6.8-1 2-2.6 3.2-4 3.6"/>`}[o.hair||'short'];
+ return `<g transform="translate(${o.x} ${o.y}) scale(${o.flip?-s:s} ${s})">
+ <ellipse class="sh" cx="0" cy="0" rx="20" ry="3.6"/>
+ ${hairB}
+ <path class="${pt}" d="M-13.5-50h27l-1.4 45.5a2.5 2.5 0 0 1-2.5 2.4h-6.4a2.5 2.5 0 0 1-2.5-2.3L0-34.5l-1.7 30.1a2.5 2.5 0 0 1-2.5 2.3h-6.4a2.5 2.5 0 0 1-2.5-2.4z"/>
+ <path class="n2" d="M-13-4h11.6v1.6a2 2 0 0 1-2 2h-11.6c0-2 .8-3.6 2-3.6zM13-4H1.4v1.6a2 2 0 0 0 2 2H15c0-2-.8-3.6-2-3.6z"/>
+ <rect class="${sk}" x="-3.8" y="-92" width="7.6" height="9" rx="2"/>
+ <path class="${tp}" d="M-15.5-76.5c0-4.8 3.2-8.2 8-8.2h15c4.8 0 8 3.4 8 8.2V-48h-31z"/>
+ ${o.tie?`<path class="p" d="M-4.6-84.7 0-76.6l4.6-8.1z"/><path class="${o.tie}" d="M-1.6-80h3.2l1.4 15-3 3.6-3-3.6z"/>`:`<path class="${sk}" d="M-4.2-84.7h8.4L0-79.6z"/>`}
+ ${arm(A[0],-1)}${arm(A[1],1)}
+ <circle class="${sk}" cx="0" cy="-100" r="10.6"/>
+ ${hairT}
+ ${o.glasses?`<g class="Sh" fill="none" stroke-width="1.3"><circle cx="-4.6" cy="-99" r="3"/><circle cx="4.6" cy="-99" r="3"/><path d="M-1.6-99.4h3.2"/></g>`:''}
+ </g>`}
+
+const ILW='viewBox="0 0 360 240"';
+const il=(body,lbl,vb=ILW)=>`<svg class="il" ${vb} role="img" aria-label="${lbl}">${body}</svg>`;
+const spk=(x,y,r,c='y')=>`<path class="${c}" d="${SPK(x,y,r)}"/>`;
+
+/* phone with the AI plan, money flowing in from bank and spending cards */
+function ilPlan(){return il(`
+ <circle class="b0" cx="182" cy="128" r="104"/><circle class="b1" cx="306" cy="58" r="30"/>
+ <ellipse class="sh" cx="182" cy="226" rx="148" ry="6"/>
+ <path class="Ss" fill="none" stroke-width="2" stroke-dasharray="4 5" stroke-linecap="round" d="M104 84c14 2 20 8 26 16M98 176c14-2 22-10 30-20"/>
+ <g transform="translate(18 44) rotate(-8)">
+  <rect class="u" width="98" height="60" rx="11"/><rect class="u2" x="0" y="40" width="98" height="20" rx="0"/><rect class="u" x="0" y="0" width="98" height="40" rx="11"/>
+  <rect class="y" x="11" y="12" width="15" height="11" rx="2.5"/><path class="Sw" fill="none" stroke-width="1.4" d="M18.5 12v11M11 17.5h15"/>
+  <circle class="wf" cx="80" cy="18" r="9"/>${RUPP(80,17.8,1.05,'Su')}
+  <rect class="wf" x="11" y="44" width="40" height="5" rx="2.5"/><rect class="wh" x="58" y="44" width="28" height="5" rx="2.5"/>
+ </g>
+ <g transform="translate(24 146) rotate(5)">
+  <rect class="p" width="82" height="56" rx="11"/><rect class="l" x="10" y="10" width="34" height="5" rx="2.5"/>
+  <rect class="s" x="10" y="38" width="9" height="10" rx="2"/><rect class="u" x="23" y="30" width="9" height="18" rx="2"/><rect class="s" x="36" y="34" width="9" height="14" rx="2"/><rect class="g" x="49" y="24" width="9" height="24" rx="2"/><rect class="s" x="62" y="32" width="9" height="16" rx="2"/>
+ </g>
+ <g transform="translate(130 18)">
+  <rect class="n" width="106" height="202" rx="20"/><rect class="p" x="5" y="5" width="96" height="192" rx="15.5"/><rect class="n" x="40" y="10" width="26" height="5.5" rx="2.75"/>
+  <rect class="n" x="15" y="26" width="46" height="6.5" rx="3.25"/><rect class="l" x="15" y="37" width="30" height="4.5" rx="2.25"/>
+  <g transform="translate(53 78) rotate(-90)" fill="none" stroke-width="11">
+   <circle class="Sl" r="22"/><circle class="Sg" r="22" stroke-dasharray="58 140"/><circle class="Su" r="22" stroke-dasharray="40 140" stroke-dashoffset="-61"/><circle class="Sy" r="22" stroke-dasharray="30 140" stroke-dashoffset="-104"/>
+  </g>
+  <rect class="n" x="44" y="74" width="18" height="4.5" rx="2.25"/><rect class="l" x="46" y="81" width="14" height="3.5" rx="1.75"/>
+  ${[[116,'m','g',36,'g'],[142,'s2','u',24,'u'],[168,'y2','y',44,'y']].map(r=>`<circle class="${r[1]}" cx="22" cy="${r[0]+6}" r="9"/><circle class="${r[2]}" cx="22" cy="${r[0]+6}" r="3.4"/><rect class="n" x="37" y="${r[0]}" width="34" height="4.5" rx="2.25"/><rect class="l" x="37" y="${r[0]+9}" width="52" height="4.5" rx="2.25"/><rect class="${r[4]}" x="37" y="${r[0]+9}" width="${r[3]}" height="4.5" rx="2.25"/>`).join('')}
+ </g>
+ <g transform="translate(232 36)"><circle class="g" r="16"/><path class="wf" d="${SPK(-1,1,8.5)}"/><path class="wf" d="${SPK(7,-7,3.6)}"/></g>
+ ${fig({x:296,y:224,skin:2,hair:'long',top:'g',pants:'n',arms:[[[-26,-70],[-48,-84]],[[17,-62],[19,-46]]]})}
+ ${spk(120,26,8)}${spk(330,128,6,'g')}${spk(262,92,4.5,'u')}${spk(116,212,5,'u')}
+`,'An AI-built plan on a phone, drawing on your bank balance and spending')}
+
+/* SEBI-registered adviser explaining a portfolio health check */
+function ilAdvice(){return il(`
+ <circle class="b0" cx="180" cy="124" r="104"/><circle class="b1" cx="54" cy="56" r="26"/>
+ <ellipse class="sh" cx="180" cy="226" rx="150" ry="6"/>
+ <g transform="translate(116 30)">
+  <rect class="p" width="128" height="104" rx="16"/><rect class="l" x="14" y="14" width="44" height="6" rx="3"/>
+  <path class="Sl" fill="none" stroke-width="12" stroke-linecap="round" d="M30 78a34 34 0 0 1 68 0"/>
+  <path class="Sg" fill="none" stroke-width="12" stroke-linecap="round" d="M30 78a34 34 0 0 1 57.9-24"/>
+  <path class="Sn" stroke-width="4" stroke-linecap="round" d="M64 78l15-20"/><circle class="n" cx="64" cy="78" r="6"/>
+  <rect class="n" x="49" y="90" width="30" height="5" rx="2.5"/>
+ </g>
+ <g transform="translate(250 34)"><path class="g" d="M0-14 14-8.6V2C14 11 7.8 17 0 20-7.8 17-14 11-14 2V-8.6z"/><path class="Sw" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" d="M-6 2.5l4.2 4.2L6.6-2"/></g>
+ <g transform="translate(176 150)"><rect class="u" x="-28" y="0" width="56" height="26" rx="13"/><circle class="wf" cx="-12" cy="13" r="3.2"/><circle class="wf" cx="0" cy="13" r="3.2"/><circle class="wf" cx="12" cy="13" r="3.2"/><path class="u" d="M-12 24l-6 10 14-8z"/></g>
+ ${fig({x:86,y:224,skin:1,hair:'short',top:'n',pants:'n3',tie:'g',glasses:1,arms:[[[24,-80],[38,-98]],[[-17,-62],[-19,-46]]]})}
+ <g transform="translate(272 224)">${fig({x:0,y:0,skin:3,hair:'bun',top:'y',pants:'u',arms:[[[-20,-62],[-12,-58]],[[18,-62],[19,-46]]]})}<g transform="translate(-14 -66) rotate(-14)"><rect class="n" x="-6.5" y="-11" width="13" height="22" rx="3"/><rect class="s" x="-4.6" y="-8.8" width="9.2" height="17.6" rx="1.8"/></g></g>
+ ${spk(104,40,7)}${spk(320,112,5.5,'g')}${spk(34,150,5,'u')}
+`,'A SEBI-registered adviser walking an investor through a portfolio health check')}
+
+/* the whole family under one roof, one login */
+function ilFamily(){return il(`
+ <circle class="b0" cx="180" cy="126" r="104"/><circle class="b1" cx="312" cy="70" r="24"/>
+ <ellipse class="sh" cx="180" cy="226" rx="150" ry="6"/>
+ <path class="p" d="M88 104h184v100H88z"/><path class="n" d="M74 108 180 38l106 70c2.6 1.7 1.4 5.8-1.8 5.8H75.8c-3.2 0-4.4-4.1-1.8-5.8z"/>
+ <rect class="s2" x="104" y="126" width="30" height="26" rx="5"/><rect class="s2" x="226" y="126" width="30" height="26" rx="5"/>
+ <g transform="translate(180 82)"><circle class="g" r="17"/><rect class="wf" x="-7.5" y="-2" width="15" height="12" rx="2.5"/><path class="Sw" fill="none" stroke-width="2.6" d="M-4.2-2v-3.6a4.2 4.2 0 0 1 8.4 0V-2"/></g>
+ <g transform="translate(34 70) rotate(-6)"><rect class="p" width="52" height="46" rx="10"/><circle class="m" cx="26" cy="18" r="10"/><path class="g" d="M26 11.5l9 4.3-9 4.3-9-4.3z"/><rect class="l" x="10" y="33" width="32" height="5" rx="2.5"/><rect class="g" x="10" y="33" width="20" height="5" rx="2.5"/></g>
+ <g transform="translate(276 128) rotate(6)"><rect class="p" width="52" height="46" rx="10"/><circle class="y2" cx="26" cy="18" r="10"/>${RUPP(26,17.8,1,'Sy')}<rect class="l" x="10" y="33" width="32" height="5" rx="2.5"/><rect class="y" x="10" y="33" width="26" height="5" rx="2.5"/></g>
+ ${fig({x:112,y:224,s:.94,skin:2,hair:'bald',hc:'gr',top:'s3',pants:'n3',glasses:1,arms:[[[-18,-62],[-19,-46]],[[18,-62],[22,-48]]]})}
+ ${fig({x:160,y:224,s:1.02,skin:1,hair:'short',top:'u',pants:'n',arms:[[[-18,-62],[-14,-46]],[[19,-66],[30,-80]]]})}
+ ${fig({x:212,y:224,skin:3,hair:'long',top:'g',pants:'n3',arms:[[[-19,-64],[-22,-50]],[[18,-60],[30,-50]]]})}
+ ${fig({x:254,y:224,s:.66,skin:1,hair:'short',top:'y',pants:'u',arms:[[[-19,-60],[-26,-46]],[[18,-62],[20,-48]]]})}
+ ${spk(66,40,6)}${spk(300,40,7,'g')}${spk(46,196,5,'u')}
+`,'A family of four in front of their home, sharing one secure login')}
+
+/* login: phone with a shield and a code bubble */
+function ilLogin(){return il(`
+ <circle class="b0" cx="160" cy="76" r="66"/><circle class="b1" cx="236" cy="34" r="16"/>
+ <ellipse class="sh" cx="160" cy="146" rx="90" ry="4.5"/>
+ <g transform="translate(120 14)"><rect class="n" width="78" height="132" rx="15"/><rect class="p" x="4" y="4" width="70" height="124" rx="11.5"/><rect class="n" x="28" y="8" width="22" height="4.5" rx="2.25"/>
+  <rect class="l" x="13" y="28" width="38" height="5" rx="2.5"/><rect class="s2" x="13" y="44" width="52" height="16" rx="5"/><text x="20" y="56" class="tx">+91</text><rect class="n" x="36" y="50" width="22" height="4" rx="2"/><rect class="u" x="13" y="68" width="52" height="14" rx="7"/></g>
+ <g transform="translate(212 74)"><path class="g" d="M0-24 21-15.6V-1C21 13 11.6 22.6 0 27-11.6 22.6-21 13-21-1V-15.6z"/><path class="Sw" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M-8.5 1.5l5.8 5.8L9.4-4.4"/></g>
+ <g transform="translate(78 54)"><rect class="u" x="-30" y="-16" width="60" height="32" rx="16"/><path class="u" d="M14 12l10 12-2-14z"/>${[-15,-5,5,15].map(x=>`<circle class="wf" cx="${x}" cy="0" r="3.2"/>`).join('')}</g>
+ ${spk(100,18,6)}${spk(252,118,5,'u')}${spk(70,120,4.5,'g')}
+`,'A phone with a secure one-time code','viewBox="0 0 320 152"')}
+
+/* otp: envelope with code, check badge */
+function ilOtp(){return il(`
+ <circle class="b0" cx="160" cy="76" r="66"/><circle class="b1" cx="90" cy="34" r="15"/>
+ <ellipse class="sh" cx="160" cy="146" rx="90" ry="4.5"/>
+ <g transform="translate(96 40)"><rect class="u" width="128" height="88" rx="14"/><path class="u2" d="M0 74V20l64 40 64-40v54a14 14 0 0 1-14 14H14A14 14 0 0 1 0 74z"/><path class="p" d="M14 0h100c6 0 9.4 6.6 5.6 11.4L74 50.4a14 14 0 0 1-20 0L8.4 11.4C4.6 6.6 8 0 14 0z"/>
+  ${[34,52,70,88].map((x,i)=>`<rect class="${i<3?'n':'l'}" x="${x-6}" y="12" width="12" height="15" rx="3.5"/>`).join('')}</g>
+ <g transform="translate(222 46)"><circle class="g" r="18"/><path class="Sw" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M-7.5.5l5 5L8-5"/></g>
+ ${spk(84,96,6)}${spk(252,120,5,'u')}${spk(134,22,4.5,'g')}
+`,'An SMS code arriving, ready to verify','viewBox="0 0 320 152"')}
+
+const ONB={plan:ilPlan,adv:ilAdvice,family:ilFamily,login:ilLogin,otp:ilOtp};
+const onb=k=>(ONB[k]||ilPlan)();
+
 /* ---------- small helpers ---------- */
 const RM=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 const cuA=(v,f='inr')=>S.hide?'':` data-cu="${Math.round(v)}" data-f="${f}"`;
@@ -1883,11 +2092,11 @@ SCR.home=()=>{const T=totals(),isNew=T.n===0,act=S.sips.filter(s=>s.st==='active
  <div class="pad" style="padding-top:0">
   ${nds.length?`<h2 class="sec">For you</h2><div class="hs">${nds.map(n=>`<div class="nd t-${n[5]}"><button class="x" aria-label="Dismiss" onclick="S.nd.push('${n[0]}');const c=this.closest('.nd');c.classList.add('bye');setTimeout(rerender,260)">${ic('close')}</button><span class="nd-ic">${ic(n[1])}</span><b class="t-s" style="display:block;padding-right:18px;margin-top:10px">${n[2]}</b><button class="btn xs soft mt12" onclick="${n[4]}">${n[3]} ${ic('chev')}</button></div>`).join('')}</div>`:''}
   <h2 class="sec">What would you like to do?</h2>
-  <div class="grid4">${[['umbrella','Emergency fund',"go('emergency')"],['star','Recommended funds',"go('recommended')"],['layers','SIF',"go('sif')"],['rocket','NFOs',"go('nfo')"],['hand','Loan against MF',"go('loan')"],['coins','Start with ₹100',"go('explore',{f:'sip100'},{reset:true})"],['shield','Tax saver',"go('explore',{cat:'ELSS'},{reset:true})"],['heart','Insurance',"go('ins')"]].map(s=>`<button class="svc" onclick="${s[2]}"><span class="si">${ic(s[0])}</span>${s[1]}</button>`).join('')}</div>
+  <div class="grid4">${[['emergency','Emergency fund',"go('emergency')"],['recommended','Recommended funds',"go('recommended')"],['sif','SIF',"go('sif')"],['nfo','NFOs',"go('nfo')"],['loan','Loan against MF',"go('loan')"],['start100','Start with ₹100',"go('explore',{f:'sip100'},{reset:true})"],['tax','Tax saver',"go('explore',{cat:'ELSS'},{reset:true})"],['insurance','Insurance',"go('ins')"]].map(s=>`<button class="svc" onclick="${s[2]}"><span class="si">${di(s[0])}</span>${s[1]}</button>`).join('')}</div>
 
   <h2 class="sec">Your dreams, on track <button onclick="go('goals')">View all</button></h2>
   ${S.goals.length?`<div class="hs">${S.goals.map(x=>{const pc=Math.min(100,Math.round(x.cur/x.target*100));return `<button class="gart" onclick="go('goal',{id:'${x.id}'})">${art(GART[x.t]||'sip',64)}<div style="padding:10px 12px 12px;text-align:left"><b class="t-s ell" style="display:block">${esc(x.n)}</b><div class="bar mt8" style="height:6px"><i style="width:${pc}%"></i></div><div class="t-xs mute mt4">${pc}% · ${inr(x.sip)}/mo</div></div></button>`}).join('')}<button class="gart add" onclick="newGoal()">${ic('plus')}<b class="t-s">New goal</b></button></div>${goalWhatIf}`
-  :`<div class="card"><b>Plan for what matters</b><p class="t-s mute mt4">Name a goal, set an amount and date, and we’ll tell you exactly how much to invest each month.</p><div class="grid3 mt12">${['edu','house','car','ret','trip','wed'].map(t=>`<button class="svc" onclick="newGoal('${t}')"><span class="si" style="width:44px;height:44px">${ic(GT[t][0])}</span>${GT[t][1]}</button>`).join('')}</div></div>`}
+  :`<div class="card"><b>Plan for what matters</b><p class="t-s mute mt4">Name a goal, set an amount and date, and we’ll tell you exactly how much to invest each month.</p><div class="grid3 mt12">${['edu','house','car','ret','trip','wed'].map(t=>`<button class="svc" onclick="newGoal('${t}')"><span class="si" style="width:44px;height:44px">${di(DIK.g[t])}</span>${GT[t][1]}</button>`).join('')}</div></div>`}
 
 
   <h2 class="sec">Product baskets <button onclick="go('baskets')">View all</button></h2>
@@ -2597,7 +2806,7 @@ function calcFld(f,V){const [k,l,t,,mn,mx,opts,hint]=f,v=V[k];
  if(t==='yr')return `<div class="fld"><label>${l}<b class="ink2" id="cv_${k}">${yrsL(v)}</b></label><input type="range" class="sl" data-k="${k}" data-t="yr" min="${mn}" max="${mx}" step="1" value="${v}" aria-label="${l}"><div class="row sb t-xs mute"><span>${yrsL(mn)}</span><span>${yrsL(mx)}</span></div></div>`;
  return `<div class="fld" data-f="${k}"><label>${l}</label><div class="row inp cin" style="gap:6px;padding:0 14px">${t==='inr'?'<span class="mute">₹</span>':''}<input data-k="${k}" data-t="${t}" inputmode="decimal" value="${t==='inr'?fmt(v):v}" aria-label="${l}">${t==='pct'?'<span class="mute">%</span>':''}</div>${hint?`<div class="t-xs mute">${hint}</div>`:''}</div>`}
 function calcPrefill(k,g){const a=ageOf(S.dob);return{target:{T:g.target,y:g.yrs},edu:{ca:Math.max(0,18-g.yrs),st:Math.max(0,18-g.yrs)+g.yrs},wed:{ca:Math.max(0,25-g.yrs),ma:Math.max(0,25-g.yrs)+g.yrs},ret:{age:a,ra:Math.min(75,a+g.yrs),sv:g.sip,cp:g.cur}}[k]||{}}
-SCR.calc=()=>({sbar:'surface',html:`${hdr('Financial calculators')}<div class="body pad">${CALG.map((G,gi)=>`<h2 class="sec" style="${gi?'':'margin-top:4px'}">${G[0]}</h2><div class="grid3">${G[1].map(k=>`<button class="svc ctile" onclick="go('calc1',{k:'${k}'})"><span class="si">${ic(CAL[k].ic)}</span>${CAL[k].n}</button>`).join('')}</div>`).join('')}
+SCR.calc=()=>({sbar:'surface',html:`${hdr('Financial calculators')}<div class="body pad">${CALG.map((G,gi)=>`<h2 class="sec" style="${gi?'':'margin-top:4px'}">${G[0]}</h2><div class="grid3">${G[1].map(k=>`<button class="svc ctile" onclick="go('calc1',{k:'${k}'})"><span class="si">${di(DIK.c[k])}</span>${CAL[k].n}</button>`).join('')}</div>`).join('')}
  <p class="note mt16">Illustrations only. Returns are assumptions, not guarantees, and markets can fall.</p></div>`});
 SCR.calc1=p=>{const c=CAL[p.k],g=p.gid&&S.goals.find(x=>x.id===p.gid),key=p.k+(g?'@'+g.id:'');
  if(!CV[key]){CV[key]={};c.f.forEach(f=>CV[key][f[0]]=f[3]);if(g)Object.assign(CV[key],calcPrefill(p.k,g))}const V=CV[key];
