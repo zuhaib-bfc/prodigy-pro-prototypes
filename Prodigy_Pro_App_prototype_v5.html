@@ -782,10 +782,16 @@ h2.sec button{white-space:nowrap;flex:none;margin-left:8px}
 .ybl{display:flex;gap:3px;margin-top:4px}.ybl span{flex:1;text-align:center;font-size:10px;color:var(--mute)}
 .rdh{background:var(--surface-2);border-radius:14px;padding:10px 12px;gap:6px}
 .rdh .k{font-size:11.5px}
+.twin-btn{display:flex;width:100%;margin-top:12px;gap:8px}
+.twin-fab{position:fixed;top:16px;right:16px;z-index:5;display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;background:var(--brand);color:#fff;font-weight:600;font-size:14px;box-shadow:var(--brand-glow)}
+.twin-fab:hover{background:var(--brand-d)}
+.twin-fab svg{width:18px;height:18px}
+@media (max-width:860px){.twin-fab{display:none}}
 </style>
 </head>
 <body>
 <aside class="map" id="map"></aside>
+<button class="twin-fab" id="twinFab" onclick="openTwin()">Open web version</button>
 <div class="phone" id="phone">
   <div class="sbar" id="sbar"><span>9:41</span><i>●●● ◔ ▮</i></div>
   <div id="view"></div>
@@ -1791,6 +1797,7 @@ function jump(n,p){closeSheet();if(p&&p.j&&S.journey!==p.j){S.journey=p.j;S.link
  const tabs=['home','explore','portfolio','more'];go(n,p||{},{reset:true})}
 function mapHTML(){return `<h3>Prodigy Pro prototype · v5</h3><div class="t-xs mute">All fund data is illustrative</div>
  <div class="row mt8" style="gap:6px;flex-wrap:wrap"><a class="tag b" style="text-decoration:none" href="Prodigy_Pro_App_prototype_v5_notes.html" target="_blank" rel="noopener">v5 notes ↗</a></div>
+ <button class="btn sm soft twin-btn" onclick="openTwin()">${ic(TWIN.ic)}${TWIN.label}</button>
  <div class="grp">Scenario</div><div class="tg"><span class="t-s">Investor type</span><div class="seg" style="width:150px">${['new','existing'].map(j=>`<button class="${S.journey===j?'on':''}" style="height:28px;font-size:12px" onclick="S.journey='${j}';S.linked={DEPOSIT:${j==='new'},MUTUAL_FUNDS:${j==='existing'}};seedGoals();buildMap();render('',true)">${j==='new'?'New':'Existing'}</button>`).join('')}</div></div>
  <div class="tg"><span class="t-s">KYC compliant</span><div class="seg" style="width:150px">${[true,false].map(k=>`<button class="${S.kyc===k?'on':''}" style="height:28px;font-size:12px" onclick="S.kyc=${k};buildMap();if(['kyc'].includes(cur().n))render('',true)">${k?'Yes':'No'}</button>`).join('')}</div></div>
  <div class="tg"><span class="t-s">Theme</span><div class="seg" style="width:150px">${['light','dark'].map(t=>`<button class="${S.theme===t?'on':''}" style="height:28px;font-size:12px" onclick="setTheme('${t}');buildMap();render('',true)">${t==='light'?'Light':'Dark'}</button>`).join('')}</div></div>
@@ -2658,8 +2665,24 @@ const _port5=SCR.portfolio;SCR.portfolio=p=>{const r=_port5(p);
    $('#hcount',el).textContent=q?`${k} of ${n} funds`:`${n} funds`;$('#hnone',el).hidden=k>0;rows[0].closest('.card').hidden=!k};
   i.oninput=()=>{S.pq=i.value;f()};f()};return r};
 
+/* ============ link to the web design ============ */
+const TWIN={href:'Prodigy_Pro_App_prototype_v5_web.html',label:'Open web version',ic:'monitor'};
+IC.monitor='<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>';
+/* ============ mobile ⇄ web switch: opens the same screen, scenario and theme in the other design ============ */
+function twinURL(){const c=cur()||{n:'home',p:{}};let n=c.n,p=c.p||{};if(['review','done'].includes(n)){n='invest';p={}}
+ const q=new URLSearchParams({s:n,p:JSON.stringify(p),j:S.journey,k:S.kyc?'1':'0',th:S.theme});return TWIN.href+'#'+q.toString()}
+function openTwin(){location.href=twinURL()}
+function bootFromHash(){const h=location.hash.slice(1);if(!h)return false;let q;try{q=new URLSearchParams(h)}catch(e){return false}
+ const n=q.get('s');if(!n||!SCR[n])return false;try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+ const th=q.get('th');if(th==='light'||th==='dark')setTheme(th);if(q.get('k'))S.kyc=q.get('k')==='1';
+ const j=q.get('j');if(j&&j!==S.journey&&['new','existing'].includes(j)){S.journey=j;S.linked={DEPOSIT:j==='new',MUTUAL_FUNDS:j==='existing'};seedGoals()}
+ let p={};try{p=JSON.parse(q.get('p')||'{}')}catch(e){}
+ try{jump(n,p)}catch(e){console.warn('Could not open '+n+' here, showing home',e);ST=[];go('home',{},{reset:true})}
+ buildMap();return true}
+
 /* ============ init ============ */
-buildMap();go('splash');
+$('#twinFab').innerHTML=ic('monitor')+'Open web version';
+buildMap();if(!bootFromHash())go('splash');
 </script>
 </body>
 </html>
