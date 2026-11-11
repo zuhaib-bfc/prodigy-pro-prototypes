@@ -969,6 +969,29 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover,.gart:hover,.wl-t:hover,
 .twin-fab:hover{background:var(--brand-d)}
 .twin-fab svg{width:18px;height:18px}
 @media (max-width:860px){.twin-fab{display:none}}
+
+/* =====================================================================
+   v6.1 — Prodigy AI chat
+   · replies dock to the bottom of the screen, outside the scrolling chat
+   · answer options read as buttons: soft brand tint, no hard edges
+   · the investor profile result is a compact card; detail sits in a sheet
+   ===================================================================== */
+.dock{flex:none;position:relative;z-index:2;background:var(--surface);box-shadow:0 -1px 0 var(--line),0 -10px 24px rgba(17,19,24,.04);padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:66%;overflow-y:auto;scrollbar-width:none}
+.dock:empty{display:none}
+.dock .reply{margin:0;padding:0;background:none;border:0;border-radius:0;box-shadow:none;animation:dockin .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes dockin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.chat{padding-bottom:20px}
+.opt{background:var(--brand-soft);border:1.5px solid color-mix(in srgb,var(--brand-fg) 14%,transparent);font-weight:500;box-shadow:0 1px 2px color-mix(in srgb,var(--brand) 8%,transparent)}
+.opt b{background:var(--surface);color:var(--brand-fg)}
+.opt::after{content:"";flex:none;width:7px;height:7px;margin-right:2px;border-right:1.5px solid var(--brand-fg);border-top:1.5px solid var(--brand-fg);transform:rotate(45deg);opacity:.45;transition:opacity .15s,transform .15s}
+.opt:hover,.opt:focus-visible{border-color:color-mix(in srgb,var(--brand-fg) 55%,transparent);background:color-mix(in srgb,var(--brand-fg) 13%,var(--surface))}
+.opt:hover::after,.opt:focus-visible::after{opacity:.9;transform:translateX(2px) rotate(45deg)}
+.opt:active{transform:scale(.985)}
+.rpm{min-width:232px}
+.rpm .risk-m{gap:4px}
+.rpm .risk-m i{height:10px;border-radius:5px;animation:rpin .4s ease both;animation-delay:calc(var(--k)*90ms + .15s)}
+@keyframes rpin{from{transform:scaleY(.3);opacity:0}}
+@media (prefers-reduced-motion:reduce){.dock .reply,.rpm .risk-m i{animation:none}}
 </style>
 </head>
 <body>
@@ -1286,6 +1309,8 @@ SCR.otp=()=>({sbar:'surface',html:`${hdr('')}<div class="body pad" style="backgr
 let chatRun=0;
 function chatAPI(box,scroller){
  const run=++chatRun;const alive=()=>run===chatRun&&document.body.contains(box);
+ /* v6.1: replies sit in a dock pinned under the chat, so inputs stay at the bottom */
+ const dock=$('.dock',scroller.parentElement)||(d=>{d.className='dock';scroller.after(d);return d})(document.createElement('div'));
  const down=()=>setTimeout(()=>scroller.scrollTo({top:scroller.scrollHeight,behavior:'smooth'}),30);
  function row(html,wide){const last=box.lastElementChild;if(last&&last.classList.contains('botrow'))$('.av',last).classList.add('ghost');
    const r=document.createElement('div');r.className='botrow';r.innerHTML=`<div class="av"><img src="${LOGO_MARK}" alt=""></div><div class="msg bot ${wide?'wide':''}">${html}</div>`;box.appendChild(r);down();return r}
@@ -1293,7 +1318,7 @@ function chatAPI(box,scroller){
   async bot(html,o={}){if(!alive())throw 'stop';const t=row('<div class="typing"><i></i><i></i><i></i></div>');$('.msg',t).style.padding='0';
     await sleep((o.wait??500)+Math.min(html.replace(/<[^>]+>/g,'').length*9,1100));if(!alive())throw 'stop';t.remove();return row(html,o.wide)},
   me(t){const m=document.createElement('div');m.className='msg me';m.textContent=t;box.appendChild(m);down()},
-  ask(html,wire){if(!alive())throw 'stop';return new Promise(res=>{const el=document.createElement('div');el.className='reply';el.innerHTML=html;box.appendChild(el);down();wire(el,v=>{el.remove();res(v)})})},
+  ask(html,wire){if(!alive())throw 'stop';return new Promise(res=>{const el=document.createElement('div');el.className='reply';el.innerHTML=html;dock.replaceChildren(el);down();wire(el,v=>{el.remove();down();res(v)})})},
   text(o){return this.ask(`${o.top||''}<div class="row" style="gap:8px"><input class="inp" placeholder="${o.ph}" ${o.max?`maxlength="${o.max}"`:''} ${o.mode?`inputmode="${o.mode}"`:''} autocomplete="off" style="${o.upper?'text-transform:uppercase;letter-spacing:.08em':''}"><button class="btn" style="width:52px;padding:0;flex:none" aria-label="Send">${ic('send')}</button></div><div class="err-t mt8" hidden></div>${o.hint?`<div class="t-xs mute mt8">${o.hint}</div>`:''}`,
     (el,done)=>{const i=$('input',el),b=$('button',el),e=$('.err-t',el);setTimeout(()=>i.focus(),100);const sub=()=>{let v=i.value.trim();if(o.upper)v=v.toUpperCase();const er=o.validate?o.validate(v):'';if(er){e.hidden=false;e.textContent=er;i.classList.add('err');return}done(v)};b.onclick=sub;i.onkeydown=k=>{if(k.key==='Enter')sub()};i.oninput=()=>{e.hidden=true;i.classList.remove('err')}})},
   opts(list,o={}){return this.ask(`${o.top||''}${list.map((x,k)=>`<button class="opt" data-k="${k}">${o.letters?`<b>${'ABCD'[k]}</b>`:''}<span class="grow">${x}</span></button>`).join('')}`,(el,done)=>$$('.opt',el).forEach(b=>b.onclick=()=>done(+b.dataset.k)))}
@@ -1316,43 +1341,36 @@ function riskCard(){const i=profIdx();return `<div class="t-s mute">Your investo
  ${S.limit?`<p class="t-xs mute mt8" style="margin-bottom:0">We matched your profile to your ${S.limit==='cap'?'finances today':'comfort level'}, so your plan stays easy to stick with.</p>`:''}
  <div class="hr"></div><b class="t-s">Your mix depends on when you need the money</b><div class="t-xs mute mt4">Equity we’d aim for at your profile</div>${hzLadder()}
  <p class="t-xs mute mt8" style="margin-bottom:0">We’ll ask when you need the money each time we suggest funds: for a goal, your plan or a new SIP.</p>`}
+/* v6.1: compact result for the chat; the full breakdown opens in a sheet */
+const RP_LINE=['Safety first, with a little growth on top.','Steady progress, with some equity for the long run.','A balance of growth and a smoother ride.','Growth first, and fine with ups and downs.','All in on long-term growth.'];
+function riskMini(){const i=profIdx();return `<div class="rpm"><div class="t-xs mute">Your investor profile</div><div class="t-l mt4">${S.profile}</div>
+ <div class="risk-m mt12" role="img" aria-label="Level ${i+1} of 5">${PROFILES.map((_,k)=>`<i class="${k===i?'on':''}" style="--k:${k};background:${['#08A35B','#7CC243','#E3C11B','#F29A1F','#E8622C'][k]}"></i>`).join('')}</div>
+ <p class="t-s ink2 mt12" style="margin-bottom:0">${RP_LINE[i]}</p><button class="btn xs soft mt12" onclick="riskSheet()">See details</button></div>`}
+function riskSheet(){sheet('Investor profile',`${riskCard()}<p class="t-xs mute mt12" style="margin-bottom:0">Retake anytime from More → Investor profile.</p><button class="btn block mt16" onclick="closeSheet()">Got it</button>`)}
 function ageOf(d){const b=new Date(d);let a=today.getFullYear()-b.getFullYear();if(today<new Date(today.getFullYear(),b.getMonth(),b.getDate()))a--;return a}
 SCR.onboard=()=>({sbar:'surface',html:`<header class="hdr"><div class="av" style="width:40px;height:40px;border-radius:13px"><img src="${LOGO_MARK}" alt="" style="width:28px;height:28px"></div><div class="grow"><div class="t-b" style="font-size:17px">Prodigy AI</div><div class="t-xs up row" style="gap:5px"><span class="dot" style="background:var(--green);border-radius:50%;width:7px;height:7px"></span>Your money co-pilot</div></div></header><div class="ailine"></div>
  <div class="body"><div class="chat" id="chat"></div></div>`,after:el=>runOnboard($('#chat',el),$('.body',el))});
 async function runOnboard(box,sc){const C=chatAPI(box,sc);try{
  await C.bot('Hi, I’m <b>Prodigy AI</b> 👋');
- await C.bot('I’m here to help you make smarter money decisions, plan for the things that matter to you, and grow your wealth at a pace you’re comfortable with.');
- await C.bot('Before we begin, what should I call you on this journey?');
+ await C.bot('What should I call you?',{wait:200});
  const nm=await C.text({ph:'Your full name',validate:v=>v.length<2?'Please enter your name.':/^[a-zA-Z .']+$/.test(v)?'':'Use letters only.'});
  S.full=nm.replace(/\b\w/g,c=>c.toUpperCase());S.name=S.full.split(' ')[0];C.me(S.full);
- await C.bot(`Lovely to meet you, ${S.name}! Here’s how we’ll build your plan in the next 5 minutes:`);
- await C.bot(`<div class="col gap12">${[['Get to know you','Seven quick questions about your finances and how you like to invest'],['Understand your money','Secure, view-only access through an Account Aggregator'],['Build your plan','Funds, SIP amounts and goals that fit your life']].map((s,k)=>`<div class="row top"><div class="pill-ic" style="background:var(--tint);color:var(--ink);font-weight:700;width:28px;height:28px;font-size:13px">${k+1}</div><div><b>${s[0]}</b><div class="t-s mute">${s[1]}</div></div></div>`).join('')}</div>`,{wide:true});
- await C.opts(['I’m ready, let’s go']);C.me('I’m ready, let’s go');
- await C.bot('Do you already invest in mutual funds anywhere, through another app, your bank or an advisor?');
- const ex=await C.opts(['Yes, I already invest','No, I’m just getting started']);C.me(['Yes, I already invest','No, I’m just getting started'][ex]);S.journey=ex===0?'existing':'new';seedGoals();
- await C.bot(ex===0?'Great, that gives us a head start. Later I’ll check how healthy your current portfolio is and what’s worth changing.':'Perfect time to start. We’ll build your first portfolio the right way, from day one.');
- await C.bot('To set up your account I’ll need your PAN. It’s encrypted and used only for KYC and your investment account.');
- const pan=await C.text({ph:'ABCPE1234F',max:10,upper:true,hint:'Only individual PANs are accepted (4th letter is P).',validate:v=>{if(!/^[A-Z]{5}\d{4}[A-Z]$/.test(v))return 'That doesn’t look like a valid PAN. It should be 5 letters, 4 numbers, 1 letter.';if(v[3]!=='P')return `This PAN belongs to a ${({C:'company',H:'HUF',F:'firm',A:'association of persons',T:'trust',B:'body of individuals',G:'government body',L:'local authority',J:'juridical person'})[v[3]]||'non-individual'}. Please use your personal PAN.`;return ''}});
+ await C.bot(`Nice to meet you, ${S.name}! Do you already invest in mutual funds?`);
+ const ex=await C.opts(['Yes, I do','Not yet']);C.me(['Yes, I do','Not yet'][ex]);S.journey=ex===0?'existing':'new';seedGoals();
+ await C.bot(`${ex===0?'Great, I’ll review them in a bit.':'No problem, we’ll start fresh.'} First, your PAN please.`);
+ const pan=await C.text({ph:'ABCPE1234F',max:10,upper:true,hint:'Encrypted. Used only for KYC.',validate:v=>{if(!/^[A-Z]{5}\d{4}[A-Z]$/.test(v))return 'That doesn’t look like a valid PAN. It should be 5 letters, 4 numbers, 1 letter.';if(v[3]!=='P')return `This PAN belongs to a ${({C:'company',H:'HUF',F:'firm',A:'association of persons',T:'trust',B:'body of individuals',G:'government body',L:'local authority',J:'juridical person'})[v[3]]||'non-individual'}. Please use your personal PAN.`;return ''}});
  S.pan=pan;C.me(pan.slice(0,5)+'••••'+pan[9]);
- await C.bot('Thanks! And your date of birth, as printed on your PAN?');
+ await C.bot('And your date of birth?');
  const y0=today.getFullYear()-18;
- const dob=await C.ask(`<div class="grid3"><select class="inp" aria-label="Day"><option value="">Day</option>${Array.from({length:31},(_,i)=>`<option>${i+1}</option>`).join('')}</select><select class="inp" aria-label="Month"><option value="">Month</option>${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m,i)=>`<option value="${i}">${m}</option>`).join('')}</select><select class="inp" aria-label="Year"><option value="">Year</option>${Array.from({length:y0-1939},(_,i)=>`<option>${y0-i}</option>`).join('')}</select></div><div class="err-t mt8" hidden></div><button class="btn block mt12">Confirm date of birth</button><div class="t-xs mute mt8">You must be 18 or older to open an account. For a child, add them later as a minor from Family.</div>`,
+ const dob=await C.ask(`<div class="grid3"><select class="inp" aria-label="Day"><option value="">Day</option>${Array.from({length:31},(_,i)=>`<option>${i+1}</option>`).join('')}</select><select class="inp" aria-label="Month"><option value="">Month</option>${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m,i)=>`<option value="${i}">${m}</option>`).join('')}</select><select class="inp" aria-label="Year"><option value="">Year</option>${Array.from({length:y0-1939},(_,i)=>`<option>${y0-i}</option>`).join('')}</select></div><div class="err-t mt8" hidden></div><button class="btn block mt12">Confirm</button>`,
   (el,done)=>{$('button',el).onclick=()=>{const [d,m,y]=$$('select',el).map(s=>s.value),e=$('.err-t',el);if(!d||m===''||!y){e.hidden=false;e.textContent='Select day, month and year.';return}const dt=new Date(+y,+m,+d);if(dt.getDate()!=+d){e.hidden=false;e.textContent='That date doesn’t exist.';return}if(ageOf(dt)<18){e.hidden=false;e.textContent='You need to be at least 18 years old.';return}done(dt)}});
  S.dob=`${dob.getFullYear()}-${String(dob.getMonth()+1).padStart(2,'0')}-${String(dob.getDate()).padStart(2,'0')}`;C.me(dob.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}));
- await C.bot('Now, seven quick questions about your finances and how you like to invest. I can fill one in from your date of birth. There are no right or wrong answers.');
- await askRisk(C,dob);
- await C.bot('Got it. Give me a second to put this together…');
- await C.bot(riskCard(),{wide:true,wait:900});
- await C.bot('One thing I didn’t ask: <b>when you’ll need the money</b>. That’s different for each goal, so I’ll ask whenever I suggest funds and set the mix to match.',{wait:200});
- await C.bot(`You can retake this anytime from <b>More → Investor profile</b>.`,{wait:200});
- if(S.journey==='existing'){
-  await C.bot(`Now the interesting part, ${S.name}. Let me look at your existing mutual funds so I can check your portfolio’s health against your ${S.profile.toLowerCase()} profile.`);
- }else{
-  await C.bot(`Now the interesting part, ${S.name}. To suggest how much you can comfortably invest, I’d like to understand your income and spending from your bank statements.`);
- }
- await C.ask(`<div class="row top gap12"><div class="pill-ic" style="background:var(--tint);color:var(--ink)">${ic('lock')}</div><div><b>${S.journey==='existing'?'Share your mutual fund portfolio':'Share your bank statements'}</b><div class="t-s mute mt4">${S.journey==='existing'?'All folios from CAMS and KFintech, across every app and advisor':'Last 12 months, from the bank accounts you choose'}</div></div></div>
-  <div class="col gap8 mt12 t-s ink2"><div class="row">${ic('check','up')}View-only. No one can move your money.</div><div class="row">${ic('check','up')}Through OneMoney, an RBI-regulated Account Aggregator</div><div class="row">${ic('check','up')}You can revoke access anytime</div></div>
-  <button class="btn block mt16">Continue with OneMoney</button><button class="btn ghost block sm mt4" id="whysafe">How does this work?</button>`,
+ await C.bot('Thanks! Six quick questions now. No right or wrong answers.');
+ for(;;){await askRisk(C,dob);await C.bot(riskMini(),{wait:700});
+  const ok=await C.opts(['Looks right','Retake the questions']);C.me(['Looks right','Retake the questions'][ok]);if(ok===0)break;await C.bot('Sure, let’s go again.')}
+ await C.bot(S.journey==='existing'?'Next, let me check your existing funds against this.':'Next, a quick look at your income and spending, so I know what you can comfortably invest.');
+ await C.ask(`<div class="row gap12"><div class="pill-ic" style="background:var(--tint);color:var(--ink)">${ic('lock')}</div><div><b>${S.journey==='existing'?'Share your mutual fund portfolio':'Share your bank statements'}</b><div class="t-xs mute mt4">View-only · RBI-regulated · Revoke anytime</div></div></div>
+  <button class="btn block mt12">Continue with OneMoney</button><button class="btn ghost block sm mt4" id="whysafe">How does this work?</button>`,
   (el,done)=>{$('.btn',el).onclick=()=>done(1);$('#whysafe',el).onclick=aaInfo});
  go('aa',{fi:S.journey==='existing'?'MUTUAL_FUNDS':'DEPOSIT',next:'analysing'});
  }catch(e){if(e!=='stop')console.error(e)}}
@@ -2019,9 +2037,9 @@ SCR.recommended=()=>{const y=S.hzRec;return{sbar:'surface',html:`${hdr('Recommen
 
 /* ============ risk profile retake ============ */
 SCR.retake=()=>({sbar:'surface',html:`${hdr('Investor profile')}<div class="body"><div class="chat" id="chat"></div></div>`,after:async el=>{const C=chatAPI($('#chat',el),$('.body',el));try{
- await C.bot(riskCard(),{wide:true,wait:100});await C.bot('Things change: a new job, a family, a big goal. Want to update your profile?',{wait:200});
+ await C.bot(riskMini(),{wait:100});await C.bot('Things change: a new job, a family, a big goal. Want to update your profile?',{wait:200});
  const a=await C.opts(['Update it now','Keep my current profile']);if(a===1){back();return}C.me('Update it now');const old=S.profile;await askRisk(C,S.dob);
- await C.bot(riskCard(),{wide:true});await C.bot(old===S.profile?'Your profile hasn’t changed. Your plan stays the same.':`Your profile changed from ${old.toLowerCase()} to ${S.profile.toLowerCase()}. Your goals’ mixes and your analysis now use it.`);
+ await C.bot(riskMini());await C.bot(old===S.profile?'Your profile hasn’t changed. Your plan stays the same.':`Your profile changed from ${old.toLowerCase()} to ${S.profile.toLowerCase()}. Your goals’ mixes and your analysis now use it.`);
  await C.ask(`<button class="btn block">See my updated analysis</button>`,(e,d)=>$('button',e).onclick=()=>d(1));go('analysis')}catch(e){if(e!=='stop')console.error(e)}}});
 
 /* ============ in-app assistant ============ */
@@ -2037,7 +2055,7 @@ async function reply(C,q){const T=totals();
  if(/portfolio|analy|health|review/.test(q)){if(!T.n){await C.bot('You haven’t invested yet, so there’s no portfolio to analyse. Your plan suggests ₹5,000 for an emergency fund and ₹10,000 for growth each month.');await C.bot(`<button class="btn sm" onclick="go('analysis')">Open my plan</button>`,{wait:0});return}
   await C.bot(`Your portfolio is worth <b>${inrS(T.cur)}</b>, up ${pct(T.abs,1)} overall with an XIRR of ${T.xirr}%.`);
   await C.bot(S.journey==='existing'?`Its health score is <b>64/100</b>. The main issues: ${hlHead()}, equity is ${Math.round(lookThrough()[0])}% against a ${band(alloc()[0]).join('–')}% band for your goals, and two large cap funds overlap 68%.<div class="row mt12" style="gap:8px"><button class="btn xs" onclick="go('analysis')">Full analysis</button><button class="btn xs soft" onclick="go('actions')">Fix these</button></div>`:`Your orders are being processed. Once units are allotted I’ll track performance and flag anything that needs attention.`,{wide:true});return}
- if(/risk|profile/.test(q)){await C.bot(riskCard(),{wide:true});await C.bot(`<button class="btn xs soft" onclick="go('retake')">Update my profile</button>`,{wait:0});return}
+ if(/risk|profile/.test(q)){await C.bot(riskMini());await C.bot(`<button class="btn xs soft" onclick="go('retake')">Update my profile</button>`,{wait:0});return}
  if(/basket/.test(q)){await C.bot('Here are our curated baskets. Each is a ready-made portfolio for one goal.');await C.bot(BASKETS.slice(0,3).map(b=>`<button class="li" onclick="go('basket',{id:'${b.id}'})"><div class="pill-ic" style="background:${b.bg};color:#fff">${ic('basket')}</div><div class="grow"><b class="t-s">${b.n}</b><div class="t-xs mute">${b.goal}, 3Y ${b.r3}%</div></div></button>`).join(''),{wide:true,wait:0});return}
  if(/create|new goal/.test(q)){await C.bot('Let’s set it up. Pick the kind of goal, how much you need and by when.');newGoal();return}
  if(/goal/.test(q)){if(!S.goals.length){await C.bot('You don’t have any goals yet. Shall we create one?');await C.bot(`<button class="btn xs" onclick="newGoal()">Create a goal</button>`,{wait:0});return}
@@ -2332,9 +2350,6 @@ SCR.portfolio=p=>{const t=p.t||'hold',T=totals(),H=holdings(),hid=S.hide;
  const ltm=lookThrough(H),prof=alloc(),eqP=T.cur?Math.round((cats.find(x=>x.c==='Equity')||{v:0}).v/T.cur*100):0,risk=S.journey==='existing'?74:0;
  const V={keep:['Keep','g'],review:['Review','a'],switch:['Switch','r']};
  const sorted=[...H].sort(S.psort==='gain'?(a,b)=>(b.cur/b.inv)-(a.cur/a.inv):S.psort==='name'?(a,b)=>fund(a.fid).n.localeCompare(fund(b.fid).n):(a,b)=>b.cur-a.cur);
- /* portfolio value vs invested, same model as the holding chart */
- const pDays=Math.max(60,...H.map(x=>x.days||0)),psr=series(41,40,0,2.6),pnz=psr.map((v,i)=>v-(psr[0]+(psr[39]-psr[0])*i/39));
- const pi=pnz.map((_,i)=>T.inv*(.55+.45*i/39)),pv=pnz.map((n,i)=>pi[i]*(1+(T.inv?T.cur/T.inv-1:0)*i/39)+n*T.inv/250);
  let b='';
  if(t==='hold')b=H.length?`<div class="row inp hsrch mt4" style="gap:8px;padding:0 12px">${ic('search','mute')}<input id="hq" type="search" style="border:0;outline:0;background:none;flex:1;height:100%;font-size:15px;min-width:0" placeholder="Search by scheme name or folio" value="${esc(S.pq||'')}" aria-label="Search holdings by scheme name or folio" autocomplete="off"></div>
   <div class="row sb mt12"><span class="t-xs mute" id="hcount">${H.length} funds</span><div class="row" style="gap:6px">${[['value','Value'],['gain','Returns'],['name','A–Z']].map(s=>`<button class="chip ${S.psort===s[0]?'on':''}" style="height:28px;padding:0 10px;font-size:12px" onclick="S.psort='${s[0]}';rerender()">${s[1]}</button>`).join('')}</div></div>
@@ -2351,7 +2366,6 @@ SCR.portfolio=p=>{const t=p.t||'hold',T=totals(),H=holdings(),hid=S.hide;
   <div class="heroCard"><div class="row sb"><span class="t-s mute">Current value</span><span class="t-xs mute">As on 18 Oct 2026</span></div>
    <div class="t-xl num mt4" style="font-size:38px"${cuA(T.cur)}>${money(T.cur)}</div>
    ${T.cur?`<div class="row t-s mt8" style="gap:8px;flex-wrap:wrap"><span class="chg"><span class="up">${hid?'••••':'▲ '+inr(T.d1)+' ('+pct(T.d1p)+')'}</span><span class="mute">1 day</span></span>${S.pending.length?`<span class="chg"><span class="mute">${S.pending.length} order${S.pending.length>1?'s':''} processing</span></span>`:''}</div>
-   ${T.inv?`<div class="mt12">${lineChart([{d:pv,c:'#fff',fill:1,n:'Value'},{d:pi,c:'rgba(255,255,255,.6)',dash:1,n:'Invested'}],{h:130,fmt:hid?()=>'••••':v=>inr(Math.round(v)),ax:hid?()=>'••':fCompact,x:xDates(pDays/365),title:'Portfolio value'})}</div>`:''}
    <div class="pf-split mt12"><div><span class="k">Invested</span><b class="num">${money(T.inv)}</b></div><div><span class="k">Total returns</span><b class="num up">${hid?'••••':(T.pl>=0?'+':'')+inr(T.pl)}</b></div><div><span class="k">Absolute return<button class="kinfo" onclick="kInfo('abs')" aria-label="What is absolute return?">${ic('info')}</button></span><b class="num ${cls(T.abs)}">${hid?'••':pct(T.abs,1)}</b></div><div><span class="k">XIRR<button class="kinfo" onclick="kInfo('xirr')" aria-label="What is XIRR?">${ic('info')}</button></span><b class="num ${T.xirr?'up':''}">${T.xirr?T.xirr+'%':'—'}</b></div></div>`:`<p class="t-s ink2 mt8" style="margin:0">Your first investment will appear here within a day of allotment.</p>`}</div>
   ${T.cur?`
   <div class="card"><div class="row sb"><b>Where your money is</b><span class="t-xs mute">Inside your funds</span></div><div class="row mt12" style="gap:18px">${donut(ltm.map((v,k)=>({v,c:LTC[k][1],l:LTC[k][0]})).filter(s=>s.v>.5),132,18,`<div><b class="t-m num">${Math.round(ltm[0])}%</b><div class="t-xs mute">Equity</div></div>`)}<div class="grow col gap8">${ltm.map((v,k)=>v>.5?`<div class="row t-s"><span class="dot" style="background:${LTC[k][1]}"></span><span class="grow ink2">${LTC[k][0]}</span><b class="num">${Math.round(v)}%</b></div>`:'').join('')}</div></div></div>`:''}
@@ -2717,8 +2731,10 @@ const ageAns=d=>{const a=ageOf(d);return a>55?0:a>45?1:a>30?2:3};
 function scoreRisk(ans){const t=[],c=[];RQ.forEach((q,k)=>(q[2]==='tol'?t:c).push(ans[k]));const av=a=>a.reduce((s,v)=>s+v,0)/a.length/3;
  S.tolP=Math.round(av(t)*100);S.capP=Math.round(av(c)*100);const ti=Math.round(av(t)*4),ci=Math.round(av(c)*4);
  S.profile=PROFILES[Math.min(ti,ci)][0];S.limit=ti>ci?'cap':ti<ci?'tol':''}
-async function askRisk(C,dob){const ans=[];for(let q=0;q<RQ.length;q++){const Q=RQ[q],top=`<div class="qprog mb8"><span>Question ${q+1} of ${RQ.length}</span><div class="bar"><i style="width:${(q+1)/RQ.length*100}%"></i></div></div>`;
-  if(Q[3]==='age'){const a=ageAns(dob);await C.bot(`${top}${Q[0]}: <b>${Q[1][a]}</b><div class="t-xs mute mt4">Taken from your date of birth, nothing to answer here.</div>`,{wait:250});ans.push(a);continue}
+/* v6.1: the age band is worked out from the date of birth and scored silently; only the other six are asked */
+async function askRisk(C,dob){const ans=[],n=RQ.filter(Q=>Q[3]!=='age').length;let k=0;
+ for(const Q of RQ){if(Q[3]==='age'){ans.push(ageAns(dob));continue}
+  k++;const top=`<div class="qprog mb8"><span>Question ${k} of ${n}</span><div class="bar"><i style="width:${k/n*100}%"></i></div></div>`;
   await C.bot(Q[0],{wait:250});const a=await C.opts(Q[1],{letters:true,top});C.me(Q[1][a]);ans.push(a)}
  S.riskAns=ans;scoreRisk(ans)}
 
