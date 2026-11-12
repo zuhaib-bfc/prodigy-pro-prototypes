@@ -473,6 +473,13 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover{transform:translateY(-2p
 .pf-split b{color:#fff;font-size:15px}
 .heroCard .pf-split b.up{color:#9BF2C6}
 .pf-split{row-gap:12px}
+/* portfolio hero: label left, value right, one row each */
+.pf-rows{background:rgba(255,255,255,.10);border-radius:18px;padding:4px 14px}
+.pf-rows>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+.pf-rows>div+div{border-top:1px solid rgba(255,255,255,.12)}
+.pf-rows .k{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:rgba(255,255,255,.78)}
+.pf-rows b{color:#fff;font-size:15px;text-align:right}
+.pf-rows b.up{color:#9BF2C6}.pf-rows b.dn{color:#FFC2C4}
 .kinfo{display:inline-grid;place-items:center;width:18px;height:18px;margin-left:3px;vertical-align:-4px;color:rgba(255,255,255,.78);border-radius:50%}
 .kinfo:hover{color:#fff;background:rgba(255,255,255,.14)}
 .kinfo svg{width:14px;height:14px}
@@ -992,6 +999,11 @@ button.card:hover,.goalc:hover,.basket:hover,.vid:hover,.gart:hover,.wl-t:hover,
 .rpm .risk-m i{height:10px;border-radius:5px;animation:rpin .4s ease both;animation-delay:calc(var(--k)*90ms + .15s)}
 @keyframes rpin{from{transform:scaleY(.3);opacity:0}}
 @media (prefers-reduced-motion:reduce){.dock .reply,.rpm .risk-m i{animation:none}}
+/* answer options: a softer fill in light mode */
+:root{--opt-bg:#F7F8FF}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--opt-bg:var(--brand-soft)}}
+:root[data-theme="dark"]{--opt-bg:var(--brand-soft)}
+.opt{background:var(--opt-bg)}
 </style>
 </head>
 <body>
@@ -1352,25 +1364,33 @@ SCR.onboard=()=>({sbar:'surface',html:`<header class="hdr"><div class="av" style
  <div class="body"><div class="chat" id="chat"></div></div>`,after:el=>runOnboard($('#chat',el),$('.body',el))});
 async function runOnboard(box,sc){const C=chatAPI(box,sc);try{
  await C.bot('Hi, I’m <b>Prodigy AI</b> 👋');
- await C.bot('What should I call you?',{wait:200});
+ await C.bot('I’m here to help you make smarter money decisions, plan for the things that matter to you, and grow your wealth at a pace you’re comfortable with.');
+ await C.bot('Before we begin, what should I call you on this journey?');
  const nm=await C.text({ph:'Your full name',validate:v=>v.length<2?'Please enter your name.':/^[a-zA-Z .']+$/.test(v)?'':'Use letters only.'});
  S.full=nm.replace(/\b\w/g,c=>c.toUpperCase());S.name=S.full.split(' ')[0];C.me(S.full);
- await C.bot(`Nice to meet you, ${S.name}! Do you already invest in mutual funds?`);
- const ex=await C.opts(['Yes, I do','Not yet']);C.me(['Yes, I do','Not yet'][ex]);S.journey=ex===0?'existing':'new';seedGoals();
- await C.bot(`${ex===0?'Great, I’ll review them in a bit.':'No problem, we’ll start fresh.'} First, your PAN please.`);
- const pan=await C.text({ph:'ABCPE1234F',max:10,upper:true,hint:'Encrypted. Used only for KYC.',validate:v=>{if(!/^[A-Z]{5}\d{4}[A-Z]$/.test(v))return 'That doesn’t look like a valid PAN. It should be 5 letters, 4 numbers, 1 letter.';if(v[3]!=='P')return `This PAN belongs to a ${({C:'company',H:'HUF',F:'firm',A:'association of persons',T:'trust',B:'body of individuals',G:'government body',L:'local authority',J:'juridical person'})[v[3]]||'non-individual'}. Please use your personal PAN.`;return ''}});
+ await C.bot(`Lovely to meet you, ${S.name}! Here’s how we’ll build your plan in the next 5 minutes:`);
+ await C.bot(`<div class="col gap12">${[['Get to know you','Six quick questions about your finances and how you like to invest'],['Understand your money','Secure, view-only access through an Account Aggregator'],['Build your plan','Funds, SIP amounts and goals that fit your life']].map((s,k)=>`<div class="row top"><div class="pill-ic" style="background:var(--tint);color:var(--ink);font-weight:700;width:28px;height:28px;font-size:13px">${k+1}</div><div><b>${s[0]}</b><div class="t-s mute">${s[1]}</div></div></div>`).join('')}</div>`,{wide:true});
+ await C.opts(['I’m ready, let’s go']);C.me('I’m ready, let’s go');
+ await C.bot('Do you already invest in mutual funds anywhere, through another app, your bank or an advisor?');
+ const ex=await C.opts(['Yes, I already invest','No, I’m just getting started']);C.me(['Yes, I already invest','No, I’m just getting started'][ex]);S.journey=ex===0?'existing':'new';seedGoals();
+ await C.bot(ex===0?'Great, that gives us a head start. Later I’ll check how healthy your current portfolio is and what’s worth changing.':'Perfect time to start. We’ll build your first portfolio the right way, from day one.');
+ await C.bot('To set up your account I’ll need your PAN. It’s encrypted and used only for KYC and your investment account.');
+ const pan=await C.text({ph:'ABCPE1234F',max:10,upper:true,hint:'Only individual PANs are accepted (4th letter is P).',validate:v=>{if(!/^[A-Z]{5}\d{4}[A-Z]$/.test(v))return 'That doesn’t look like a valid PAN. It should be 5 letters, 4 numbers, 1 letter.';if(v[3]!=='P')return `This PAN belongs to a ${({C:'company',H:'HUF',F:'firm',A:'association of persons',T:'trust',B:'body of individuals',G:'government body',L:'local authority',J:'juridical person'})[v[3]]||'non-individual'}. Please use your personal PAN.`;return ''}});
  S.pan=pan;C.me(pan.slice(0,5)+'••••'+pan[9]);
- await C.bot('And your date of birth?');
+ await C.bot('Thanks! And your date of birth, as printed on your PAN?');
  const y0=today.getFullYear()-18;
- const dob=await C.ask(`<div class="grid3"><select class="inp" aria-label="Day"><option value="">Day</option>${Array.from({length:31},(_,i)=>`<option>${i+1}</option>`).join('')}</select><select class="inp" aria-label="Month"><option value="">Month</option>${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m,i)=>`<option value="${i}">${m}</option>`).join('')}</select><select class="inp" aria-label="Year"><option value="">Year</option>${Array.from({length:y0-1939},(_,i)=>`<option>${y0-i}</option>`).join('')}</select></div><div class="err-t mt8" hidden></div><button class="btn block mt12">Confirm</button>`,
+ const dob=await C.ask(`<div class="grid3"><select class="inp" aria-label="Day"><option value="">Day</option>${Array.from({length:31},(_,i)=>`<option>${i+1}</option>`).join('')}</select><select class="inp" aria-label="Month"><option value="">Month</option>${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m,i)=>`<option value="${i}">${m}</option>`).join('')}</select><select class="inp" aria-label="Year"><option value="">Year</option>${Array.from({length:y0-1939},(_,i)=>`<option>${y0-i}</option>`).join('')}</select></div><div class="err-t mt8" hidden></div><button class="btn block mt12">Confirm date of birth</button><div class="t-xs mute mt8">You must be 18 or older to open an account. For a child, add them later as a minor from Family.</div>`,
   (el,done)=>{$('button',el).onclick=()=>{const [d,m,y]=$$('select',el).map(s=>s.value),e=$('.err-t',el);if(!d||m===''||!y){e.hidden=false;e.textContent='Select day, month and year.';return}const dt=new Date(+y,+m,+d);if(dt.getDate()!=+d){e.hidden=false;e.textContent='That date doesn’t exist.';return}if(ageOf(dt)<18){e.hidden=false;e.textContent='You need to be at least 18 years old.';return}done(dt)}});
  S.dob=`${dob.getFullYear()}-${String(dob.getMonth()+1).padStart(2,'0')}-${String(dob.getDate()).padStart(2,'0')}`;C.me(dob.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}));
- await C.bot('Thanks! Six quick questions now. No right or wrong answers.');
+ await C.bot('Now, six quick questions about your finances and how you like to invest. There are no right or wrong answers.');
  for(;;){await askRisk(C,dob);await C.bot(riskMini(),{wait:700});
   const ok=await C.opts(['Looks right','Retake the questions']);C.me(['Looks right','Retake the questions'][ok]);if(ok===0)break;await C.bot('Sure, let’s go again.')}
- await C.bot(S.journey==='existing'?'Next, let me check your existing funds against this.':'Next, a quick look at your income and spending, so I know what you can comfortably invest.');
- await C.ask(`<div class="row gap12"><div class="pill-ic" style="background:var(--tint);color:var(--ink)">${ic('lock')}</div><div><b>${S.journey==='existing'?'Share your mutual fund portfolio':'Share your bank statements'}</b><div class="t-xs mute mt4">View-only · RBI-regulated · Revoke anytime</div></div></div>
-  <button class="btn block mt12">Continue with OneMoney</button><button class="btn ghost block sm mt4" id="whysafe">How does this work?</button>`,
+ await C.bot('One thing I didn’t ask: <b>when you’ll need the money</b>. That’s different for each goal, so I’ll ask whenever I suggest funds and set the mix to match.',{wait:200});
+ await C.bot(`You can retake this anytime from <b>More → Investor profile</b>.`,{wait:200});
+ await C.bot(S.journey==='existing'?`Now the interesting part, ${S.name}. Let me look at your existing mutual funds so I can check your portfolio’s health against your ${S.profile.toLowerCase()} profile.`:`Now the interesting part, ${S.name}. To suggest how much you can comfortably invest, I’d like to understand your income and spending from your bank statements.`);
+ await C.ask(`<div class="row gap12"><div class="pill-ic" style="background:var(--tint);color:var(--ink)">${ic('lock')}</div><div><b>${S.journey==='existing'?'Share your mutual fund portfolio':'Share your bank statements'}</b><div class="t-s mute mt4">${S.journey==='existing'?'All folios from CAMS and KFintech, across every app and advisor':'Last 12 months, from the bank accounts you choose'}</div></div></div>
+  <div class="col gap8 mt12 t-s ink2"><div class="row">${ic('check','up')}View-only. No one can move your money.</div><div class="row">${ic('check','up')}Through OneMoney, an RBI-regulated Account Aggregator</div><div class="row">${ic('check','up')}You can revoke access anytime</div></div>
+  <button class="btn block mt16">Continue with OneMoney</button><button class="btn ghost block sm mt4" id="whysafe">How does this work?</button>`,
   (el,done)=>{$('.btn',el).onclick=()=>done(1);$('#whysafe',el).onclick=aaInfo});
  go('aa',{fi:S.journey==='existing'?'MUTUAL_FUNDS':'DEPOSIT',next:'analysing'});
  }catch(e){if(e!=='stop')console.error(e)}}
@@ -2366,7 +2386,7 @@ SCR.portfolio=p=>{const t=p.t||'hold',T=totals(),H=holdings(),hid=S.hide;
   <div class="heroCard"><div class="row sb"><span class="t-s mute">Current value</span><span class="t-xs mute">As on 18 Oct 2026</span></div>
    <div class="t-xl num mt4" style="font-size:38px"${cuA(T.cur)}>${money(T.cur)}</div>
    ${T.cur?`<div class="row t-s mt8" style="gap:8px;flex-wrap:wrap"><span class="chg"><span class="up">${hid?'••••':'▲ '+inr(T.d1)+' ('+pct(T.d1p)+')'}</span><span class="mute">1 day</span></span>${S.pending.length?`<span class="chg"><span class="mute">${S.pending.length} order${S.pending.length>1?'s':''} processing</span></span>`:''}</div>
-   <div class="pf-split mt12"><div><span class="k">Invested</span><b class="num">${money(T.inv)}</b></div><div><span class="k">Total returns</span><b class="num up">${hid?'••••':(T.pl>=0?'+':'')+inr(T.pl)}</b></div><div><span class="k">Absolute return<button class="kinfo" onclick="kInfo('abs')" aria-label="What is absolute return?">${ic('info')}</button></span><b class="num ${cls(T.abs)}">${hid?'••':pct(T.abs,1)}</b></div><div><span class="k">XIRR<button class="kinfo" onclick="kInfo('xirr')" aria-label="What is XIRR?">${ic('info')}</button></span><b class="num ${T.xirr?'up':''}">${T.xirr?T.xirr+'%':'—'}</b></div></div>`:`<p class="t-s ink2 mt8" style="margin:0">Your first investment will appear here within a day of allotment.</p>`}</div>
+   <div class="pf-rows mt12"><div><span class="k">Invested</span><b class="num">${money(T.inv)}</b></div><div><span class="k">Total returns</span><b class="num ${cls(T.pl)}">${hid?'••••':(T.pl>=0?'+':'−')+inr(Math.abs(T.pl))+' ('+pct(T.abs,1)+')'}</b></div><div><span class="k">XIRR<button class="kinfo" onclick="kInfo('xirr')" aria-label="What is XIRR?">${ic('info')}</button></span><b class="num ${T.xirr?'up':''}">${T.xirr?T.xirr+'%':'—'}</b></div></div>`:`<p class="t-s ink2 mt8" style="margin:0">Your first investment will appear here within a day of allotment.</p>`}</div>
   ${T.cur?`
   <div class="card"><div class="row sb"><b>Where your money is</b><span class="t-xs mute">Inside your funds</span></div><div class="row mt12" style="gap:18px">${donut(ltm.map((v,k)=>({v,c:LTC[k][1],l:LTC[k][0]})).filter(s=>s.v>.5),132,18,`<div><b class="t-m num">${Math.round(ltm[0])}%</b><div class="t-xs mute">Equity</div></div>`)}<div class="grow col gap8">${ltm.map((v,k)=>v>.5?`<div class="row t-s"><span class="dot" style="background:${LTC[k][1]}"></span><span class="grow ink2">${LTC[k][0]}</span><b class="num">${Math.round(v)}%</b></div>`:'').join('')}</div></div></div>`:''}
   ${S.journey==='existing'&&T.cur?`<div class="grid2 mt12"><button class="card tile" onclick="go('analysis')"><span class="t-xs mute">Health score</span><span class="row" style="gap:3px;align-items:baseline"><b class="t-l num">64</b><span class="t-xs mute">/100</span></span><span class="bar mt8"><i style="width:64%;background:var(--amber)"></i></span><span class="t-xs br t-b mt8">${ACTS.length} ways to improve ›</span></button>
