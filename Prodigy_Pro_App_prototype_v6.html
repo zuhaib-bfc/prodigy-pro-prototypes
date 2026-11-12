@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Prodigy Pro — App prototype v5</title>
+<title>Prodigy Pro — App prototype v6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -1980,7 +1980,7 @@ SCR.more=()=>{const row=(i,t,s,on)=>`<button class="li" onclick="${on}"><div cla
  <h2 class="sec">Tools</h2><div class="card" style="padding:4px 16px">${row('shield','Investor profile',S.profile+'. Update anytime',"go('retake')")}${row('calc','Financial calculators','SIP, lump sum, step-up, goal',"go('calc')")}${row('basket','Product baskets','',"go('baskets')")}${row('swap','Compare funds','',"go('compare')")}${row('grid','Add-on products','Insurance, FDs, gold, NPS and more',"go('products')")}</div>
  <h2 class="sec">Services</h2><div class="card" style="padding:4px 16px">${row('umbrella','Emergency fund','Instant withdrawal up to ₹50,000',"go('emergency')")}${row('hand','Loan against mutual funds','',"go('loan')")}${row('rocket','New fund offers','',"go('nfo')")}${row('layers','Specialised Investment Funds','',"go('sif')")}${row('brief','PMS and AIF','Coming soon',"go('soon')")}</div>
  <h2 class="sec">Help</h2><div class="card" style="padding:4px 16px">${row('q','Help and support','Chat, call or email your advisor',"go('assistant')")}${row('doc','Disclosures and investor charter','',"disclosures()")}${row('grid','Prototype screen map','Jump to any screen',"mapSheet()")}${row('logout','Log out','',"go('login',{},{reset:true})")}</div>
- <p class="note mt16" style="text-align:center">Prodigy Pro, version 5.0 prototype<br>BFC Capital Private Limited, SEBI RIA INA000021669</p></div>`}};
+ <p class="note mt16" style="text-align:center">Prodigy Pro, version 6.0 prototype<br>BFC Capital Private Limited, SEBI RIA INA000021669</p></div>`}};
 function renameFamily(){sheet('Name your family',`<p class="t-s mute">Shown on your family dashboard and reports.</p><div class="fld"><input class="inp" id="fn" value="${esc(S.family)}"></div><button class="btn block" onclick="S.family=$('#fn').value||'My Family';closeSheet();rerender()">Save</button>`)}
 function addMember(){sheet('Add a family member',`<b class="t-s">Create a new investor account</b>${[['user','Individual','Spouse, parent or adult child with their own PAN'],['heart','Minor','A child under 18, with you as guardian'],['users','Joint account','Two or three holders, anyone or survivor']].map(o=>`<button class="li" onclick="closeSheet();toast('Starts KYC and account setup for the ${o[1].toLowerCase()}')"><div class="ic">${ic(o[0])}</div><div class="grow"><b class="t-s">${o[1]}</b><div class="t-xs mute">${o[2]}</div></div><span class="chev">${ic('chev')}</span></button>`).join('')}
  <div class="hr"></div><b class="t-s">Link an existing investor</b><p class="t-xs mute">Already invests with BFC Capital or elsewhere? Link with their PAN and an OTP sent to them.</p><div class="fld mt8"><input class="inp" placeholder="Their PAN" style="text-transform:uppercase" maxlength="10" id="lp"></div><button class="btn block" onclick="if(!/^[A-Za-z]{3}[Pp][A-Za-z]\\d{4}[A-Za-z]$/.test($('#lp').value)){toast('Enter a valid individual PAN');return}closeSheet();otpSheet('Their consent','Enter the OTP sent to the investor’s registered mobile.','Link account',()=>{S.members.push({n:'Sunita Mehta',rel:'Mother',t:'Individual'});go('more',{},{reset:true});toast('Sunita Mehta linked to your family')})">Send OTP to them</button>`)}
@@ -2087,7 +2087,7 @@ async function reply(C,q){const T=totals();
  await C.bot('I can help you review your portfolio, check your investor profile, find funds, track or create goals, explore baskets, or start a SIP. Try one of the suggestions below.')}
 
 /* ============ prototype map ============ */
-const MAP=[['Changed in v5',[['Portfolio health (simpler)','analysis',{j:'existing'}],['Portfolio (compact)','portfolio',{j:'existing'}],['Risk appetite','risk',{j:'existing'}],['Update profile (chat)','retake'],['Smart Withdraw in More','more',{j:'existing'}],['Calculators (14)','calc'],['Retirement goal → planner','calc1',{k:'ret',gid:'g2',j:'existing'}],['Goal → education planner','goal',{id:'g1',j:'existing'}],['Redeem → Smart Withdraw','holding',{id:'nsc',j:'existing'}],['Fund: returns calculator','fund',{id:'pfc'}],['Home: family switcher values','home',{j:'existing'}]]],
+const MAP=[['From v5',[['Portfolio health (simpler)','analysis',{j:'existing'}],['Portfolio (compact)','portfolio',{j:'existing'}],['Risk appetite','risk',{j:'existing'}],['Update profile (chat)','retake'],['Smart Withdraw in More','more',{j:'existing'}],['Calculators (14)','calc'],['Retirement goal → planner','calc1',{k:'ret',gid:'g2',j:'existing'}],['Goal → education planner','goal',{id:'g1',j:'existing'}],['Redeem → Smart Withdraw','holding',{id:'nsc',j:'existing'}],['Fund: returns calculator','fund',{id:'pfc'}],['Home: family switcher values','home',{j:'existing'}]]],
  ['From v4 (RIA feedback)',[['Investor profile: 7 factors','retake'],['Portfolio review: scheme review, tax','analysis',{j:'existing'}],['Plan asks the time frame','analysis',{j:'new'}],['Smart Withdraw','withdraw',{j:'existing'}],['Holding: tax if you redeem','holding',{id:'aelss',j:'existing'}],['Review changes, with tax','actions',{j:'existing'}],['Goal mix by tenure','goal',{id:'g3',j:'existing'}],['Recommended: asks time frame','recommended'],['Risk appetite','risk',{j:'existing'}]]],
  ['Onboarding',[['Splash','splash'],['Walkthrough','walk'],['Login','login'],['Verify OTP','otp'],['Prodigy AI onboarding','onboard'],['Account Aggregator consent','aa',{fi:'DEPOSIT',next:'analysing'}],['Analysing data','analysing'],['KYC check','kyc'],['eKYC (HyperVerge)','ekyc'],['Investment account form','ucc',{step:0}],['Authorise account','uccauth'],['Account ready','ready']]],
  ['Analysis',[['Plan or portfolio health','analysis',{first:1}],['Health: detailed analysis','healthx',{j:'existing'}],['Plan: how we built it','planx',{j:'new'}],['Act on recommendations','actions']]],
@@ -2095,8 +2095,7 @@ const MAP=[['Changed in v5',[['Portfolio health (simpler)','analysis',{j:'existi
  ['More',[['More','more'],['Profile and settings','profile'],['Data and consents','consents'],['Linked assets','assets'],['Emergency fund','emergency'],['Loan against MF','loan'],['NFOs','nfo'],['SIF','sif'],['Calculators','calc'],['Update investor profile','retake'],['Referral','refer'],['Insurance','ins'],['Add-on products','products'],['Product detail','prod',{id:'fd'}]]]];
 function jump(n,p){closeSheet();if(p&&p.j&&S.journey!==p.j){S.journey=p.j;S.linked={DEPOSIT:p.j==='new',MUTUAL_FUNDS:p.j==='existing'};seedGoals();buildMap()}if(n==='invest'&&!INV){startInvest([['pfc',5000],['nlc',3000]],'sip');return}if(['ucc','uccauth','profile'].includes(n))uccInit();if(['ucc','kyc','ekyc','uccauth'].includes(n)&&!aaT&&S.aaProg<100)startAA();
  const tabs=['home','explore','portfolio','more'];go(n,p||{},{reset:true})}
-function mapHTML(){return `<h3>Prodigy Pro prototype · v5</h3><div class="t-xs mute">All fund data is illustrative</div>
- <div class="row mt8" style="gap:6px;flex-wrap:wrap"><a class="tag b" style="text-decoration:none" href="Prodigy_Pro_App_prototype_v5_notes.html" target="_blank" rel="noopener">v5 notes ↗</a></div>
+function mapHTML(){return `<h3>Prodigy Pro prototype · v6</h3><div class="t-xs mute">All fund data is illustrative</div>
  <button class="btn sm soft twin-btn" onclick="openTwin()">${ic(TWIN.ic)}${TWIN.label}</button>
  <div class="grp">Scenario</div><div class="tg"><span class="t-s">Investor type</span><div class="seg" style="width:150px">${['new','existing'].map(j=>`<button class="${S.journey===j?'on':''}" style="height:28px;font-size:12px" onclick="S.journey='${j}';S.linked={DEPOSIT:${j==='new'},MUTUAL_FUNDS:${j==='existing'}};seedGoals();buildMap();render('',true)">${j==='new'?'New':'Existing'}</button>`).join('')}</div></div>
  <div class="tg"><span class="t-s">KYC compliant</span><div class="seg" style="width:150px">${[true,false].map(k=>`<button class="${S.kyc===k?'on':''}" style="height:28px;font-size:12px" onclick="S.kyc=${k};buildMap();if(['kyc'].includes(cur().n))render('',true)">${k?'Yes':'No'}</button>`).join('')}</div></div>
@@ -3119,7 +3118,7 @@ const _port5=SCR.portfolio;SCR.portfolio=p=>{const r=_port5(p);
   i.oninput=()=>{S.pq=i.value;f()};f()};return r};
 
 /* ============ link to the web design ============ */
-const TWIN={href:'Prodigy_Pro_App_prototype_v5_web.html',label:'Open web version',ic:'monitor'};
+const TWIN={href:'Prodigy_Pro_App_prototype_v6_web.html',label:'Open web version',ic:'monitor'};
 IC.monitor='<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>';
 /* ============ mobile ⇄ web switch: opens the same screen, scenario and theme in the other design ============ */
 function twinURL(){const c=cur()||{n:'home',p:{}};let n=c.n,p=c.p||{};if(['review','done'].includes(n)){n='invest';p={}}
